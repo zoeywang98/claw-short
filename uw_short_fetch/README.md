@@ -9,7 +9,9 @@
 
 ```bash
 cd uw_short_fetch
-python3 fetch.py --tickers NBIS,AXTI                  # 默认取最近一个交易日
+python3 fetch.py                                      # 默认名单 23 个票，最近一个交易日
+python3 fetch.py --group optics,ai_infra              # 只跑指定分组
+python3 fetch.py --tickers NBIS,AXTI                  # 指定票（不用默认名单）
 python3 fetch.py --tickers NBIS --date 2026-09-24     # 历史日期（只提供实时数据的端点会记 FAIL）
 python3 fetch.py --tickers NBIS,AXTI --date 2026-09-24 --asof 09:35   # 时间点快照：只用截至 9:35 ET 已经能拿到的数据
 python3 fetch.py --tickers-file list.txt --universe-file breaker35.txt
@@ -19,6 +21,17 @@ python3 -m unittest discover -s tests                # 离线测试，不调用 
 API token 先读环境变量 `UW_API_TOKEN`，没有的话再读 `~/.openclaw/.env`。token 不会写进日志、raw 文件或缓存。
 
 退出码：0 表示每个票的核心层都是 8/8；1 表示有核心层 FAIL；2 表示参数错误。
+
+## 默认名单（`uwsf/watchlist.py`）
+
+- optics 光模块/光学：LITE COHR AAOI GLW AEHR
+- ai_infra AI基建/电力：VRT NVT NBIS DELL FLEX
+- software 软件/企服：MSFT META IBM NOW DDOG MDB
+- pharma 医药：MRK RVMD CRVS VKTX TEVA VTRS
+- commodity_etf 商品ETF：SLV
+
+每次运行都会按分组统计负 gamma 的名字数（取各票 greek-exposure 当天的 net gamma），写进 run_log 和 `group_gamma.json`。这只是数据，不做熔断判定。
+熔断池仍按 UW 的板块分类（取候选所在板块市值前 35），传了 `--universe-file` 就用文件里的名单。
 
 ## 时间点模式（`--asof HH:MM`）
 

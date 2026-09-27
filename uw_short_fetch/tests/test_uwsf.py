@@ -287,6 +287,26 @@ class Layers(unittest.TestCase):
         self.assertEqual(list(r.data["contracts"]), ["TEST261016C00250000"])
 
 
+class Watchlist(unittest.TestCase):
+    def test_default_list(self):
+        from uwsf import watchlist as W
+        all_t = W.tickers_of(W.resolve_groups())
+        self.assertEqual(len(all_t), 23)
+        self.assertEqual(len(set(all_t)), 23)
+        self.assertTrue(all(t == t.upper() for t in all_t))
+        self.assertEqual(W.tickers_of(W.resolve_groups("optics,商品ETF")), ["LITE", "COHR", "AAOI", "GLW", "AEHR", "SLV"])
+        self.assertEqual(W.group_of("NBIS"), "AI基建/电力")
+        with self.assertRaises(SystemExit):
+            W.resolve_groups("nope")
+
+    def test_group_gamma(self):
+        from uwsf.pipeline import group_gamma
+        g = {x["group"]: x for x in group_gamma({"LITE": -1.0, "COHR": 2.0, "AAOI": None, "SLV": 3.0})}
+        self.assertEqual((g["optics"]["negative"], g["optics"]["n"], g["optics"]["missing"]), (1, 2, ["AAOI"]))
+        self.assertEqual(g["commodity_etf"]["negative"], 0)
+        self.assertNotIn("pharma", g)
+
+
 class PointInTime(unittest.TestCase):
     """--asof: rows after the cutoff are dropped; end-of-day sources use K = prior session."""
 

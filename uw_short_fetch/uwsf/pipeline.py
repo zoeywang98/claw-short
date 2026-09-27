@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from . import __version__
 from . import layers as L
+from . import watchlist as W
 from .client import UWClient, load_token
 from .layers import CORE_LAYERS, NY, Calendar, Config, Ctx, LayerResult, run_layer, rows_of
 
@@ -54,8 +55,10 @@ SCREENER = "/api/screener/stocks"
 def parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
     ap = argparse.ArgumentParser(prog="fetch.py", description=(
         "Fetch every Unusual Whales input SHORT_ENGINE.md needs. Data only: no veto, breaker or fingerprint verdicts."))
-    ap.add_argument("--tickers", default="", help="comma-separated candidates, e.g. NBIS,AXTI")
+    ap.add_argument("--tickers", default="", help="comma-separated candidates, e.g. NBIS,AXTI (default: the built-in watchlist)")
     ap.add_argument("--tickers-file", help="file with candidates (comma / whitespace / newline separated, # comments)")
+    ap.add_argument("--group", default="", help="watchlist groups to run when no tickers are given: "
+                    + ", ".join(f"{k} ({v['label']})" for k, v in W.WATCHLIST.items()))
     ap.add_argument("--date", help="target trading date YYYY-MM-DD (default: latest trading day)")
     ap.add_argument("--asof", help="point-in-time cutoff HH:MM (New York time) on --date; drops data after it "
                                    "and uses the prior session for end-of-day-only sources")
@@ -236,6 +239,20 @@ def run_ticker(ctx: Ctx, screener: LayerResult, skip: set) -> Tuple[Dict[str, La
     return res, derived
 
 
+def group_gamma(net_gamma: Dict[str, Optional[float]]) -> List[Dict[str, Any]]:
+    """Negative-gamma count per watchlist group, from each fetched ticker's greek-exposure row (data only)."""
+    out = []
+    for slug, g in W.WATCHLIST.items():
+        names = [t for t in g["tickers"] if t in net_gamma]  # type: ignore[union-attr]
+        if not names:
+            continue
+        have = {t: net_gamma[t] for t in names if net_gamma[t] is not None}
+        neg = [t for t, v in have.items() if v < 0]
+        out.append({"group": slug, "label": g["label"], "n": len(have), "negative": len(neg), "negative_names": neg,
+                    "missing": [t for t in names if net_gamma[t] is None], "net_gamma": have})
+    return out
+
+
 def session_so_far(ctx: Ctx, m5: Optional[LayerResult], daily: Optional[LayerResult]) -> Optional[Dict[str, Any]]:
     """D's session from 5-minute bars (up to the cutoff in point-in-time mode) vs the previous close."""
     if not (m5 and m5.ok):
@@ -333,8 +350,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         with open(os.path.expanduser(args.tickers_file)) as fh:
             tickers += [t for t in read_names(fh.read()) if t not in tickers]
     if not tickers:
-        print("no tickers: use --tickers or --tickers-file", file=sys.stderr)
-        return 2
+        tickers = W.tickers_of(W.resolve_groups(args.group))
     skip = {s.strip() for s in args.skip.split(",") if s.strip()}
     cfg = Config(dp_days=max(22, args.dp_days), gex_days=max(2, args.gex_days), flow_days=max(1, args.flow_days),
                  block_shares=args.block_shares, block_premium=args.block_premium, flow_min_premium=args.flow_min_premium,
@@ -382,6 +398,7 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     all_lines: List[str] = []
     summary: Dict[str, Any] = {}
+    net_gamma: Dict[str, Optional[float]] = {}
     all_core_ok = True
     for i, T in enumerate(tickers, 1):
         before = client.network_requests
@@ -389,9 +406,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         res, derived = run_ticker(ctx, screener, skip)
         lines, core_ok, sup_ok, sup_n = ticker_log(T, res, derived, pit=cutoff is not None)
         all_core_ok &= core_ok == len(CORE_LAYERS)
+        ge = res.get("greek-exposure")
+        net_gamma[T] = ge.data["today"]["net_gamma"] if (ge and ge.ok) else None
         order = CORE_LAYERS + [n for n in res if n not in CORE_LAYERS]
         write_json(os.path.join(out_dir, T, "snapshot.json"), {
-            "ticker": T, "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
+            "ticker": T, "group": W.group_of(T) or None, "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
             "prior_session": ctx.K if cutoff else None,
             "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
             "tool_version": __version__,
@@ -425,6 +444,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         else:
             head.append(u.log_line())
         head += [f"     note: {n}" for n in u.notes]
+    groups = group_gamma(net_gamma)
+    for g in groups:
+        head.append(f"watchlist group [{g['label']}] net gamma < 0 → {g['negative']}/{g['n']}"
+                    + (f" ({', '.join(g['negative_names'])})" if g["negative_names"] else "")
+                    + (f"; missing {', '.join(g['missing'])}" if g["missing"] else ""))
     for r in (screener, corr, etf):
         head.append(r.log_line())
         head += [f"     note: {n}" for n in r.notes]
@@ -433,6 +457,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     with open(os.path.join(out_dir, "run_log.txt"), "w") as fh:
         fh.write(log_text)
     write_json(os.path.join(out_dir, "universe_gamma.json"), [u.to_json() for u in universes], indent=1)
+    write_json(os.path.join(out_dir, "group_gamma.json"), groups, indent=1)
     write_json(os.path.join(out_dir, "market.json"), {
         "target_date": D, "calendar_flags": flags, "screener_batch": screener.to_json(),
         "correlations": corr.to_json(), "sector_etf_flows": etf.to_json()}, indent=1)
