@@ -8,7 +8,7 @@ import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time as dtime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import __version__
@@ -43,6 +43,8 @@ PHASE_A = [
     ("net-prem-ticks", False, L.layer_net_prem_ticks),
     ("greek-exposure-strike", False, L.layer_greek_exposure_strike),
     ("offlit-levels", False, L.layer_offlit_levels),
+    ("flow-alerts", False, L.layer_flow_alerts),
+    ("spot-gex", False, L.layer_spot_gex),
 ]
 PHASE_B = ["contract-history", "rr-skew"]
 SCREENER = "/api/screener/stocks"
@@ -55,6 +57,8 @@ def parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
     ap.add_argument("--tickers", default="", help="comma-separated candidates, e.g. NBIS,AXTI")
     ap.add_argument("--tickers-file", help="file with candidates (comma / whitespace / newline separated, # comments)")
     ap.add_argument("--date", help="target trading date YYYY-MM-DD (default: latest trading day)")
+    ap.add_argument("--asof", help="point-in-time cutoff HH:MM (New York time) on --date; drops data after it "
+                                   "and uses the prior session for end-of-day-only sources")
     ap.add_argument("--universe-file", help="circuit-breaker names (default: top --universe-size by market cap in each candidate's sector)")
     ap.add_argument("--universe-size", type=int, default=35)
     ap.add_argument("--out", default=os.path.join(PROJECT_DIR, "data"))
@@ -87,17 +91,21 @@ def read_names(text: str) -> List[str]:
 
 # --------------------------------------------------------------------------- market level
 def fetch_screener_batch(ctx: Ctx, tickers: List[str]) -> LayerResult:
-    rows = rows_of(ctx.get("screener_candidates", SCREENER, {"ticker": ",".join(tickers), "date": ctx.D, "limit": 500}))
+    # end-of-day snapshot: point-in-time uses the prior session K
+    rows = rows_of(ctx.get(f"screener_candidates_{ctx.K}", SCREENER, {"ticker": ",".join(tickers), "date": ctx.K, "limit": 500}))
     by_t = {r.get("ticker"): L.screener_subset(r) for r in rows if r.get("ticker")}
     if not by_t:
         return L.FAIL("empty payload")
     missing = [t for t in tickers if t not in by_t]
     dates = sorted({v.get("date") for v in by_t.values() if v.get("date")})
     return LayerResult(ok=True, as_of=dates[-1] if dates else None, rows=len(by_t), data=by_t,
-                       notes=[f"missing from screener: {', '.join(missing)}"] if missing else [])
+                       notes=([f"missing from screener: {', '.join(missing)}"] if missing else [])
+                       + L.pit_note(ctx, f"screener rows are end-of-day snapshots; using {ctx.K}"))
 
 
 def fetch_universes(ctx: Ctx, universe_file: Optional[str], sectors: List[str]) -> List[LayerResult]:
+    """Circuit-breaker pool. Gamma is read for D (UW computes daily gamma from OI at the open);
+    in point-in-time mode the top-N membership comes from the prior session's market caps."""
     specs: List[Tuple[str, str, Dict[str, Any], List[str]]] = []
     if universe_file:
         with open(os.path.expanduser(universe_file)) as fh:
@@ -106,14 +114,21 @@ def fetch_universes(ctx: Ctx, universe_file: Optional[str], sectors: List[str]) 
                       {"ticker": ",".join(names), "date": ctx.D, "limit": 500}, names))
     else:
         for s in sectors:
-            specs.append((f"{s} · top {ctx.cfg.universe_size} by market cap", f"universe_{s}",
-                          {"sectors[]": s, "order": "marketcap", "order_direction": "desc",
-                           "limit": ctx.cfg.universe_size, "date": ctx.D}, []))
+            params = {"sectors[]": s, "order": "marketcap", "order_direction": "desc",
+                      "limit": ctx.cfg.universe_size, "date": ctx.K}
+            if ctx.pit:
+                members = [r.get("ticker") for r in rows_of(ctx.get(f"universe_members_{s}_{ctx.K}", SCREENER, params)) if r.get("ticker")]
+                specs.append((f"{s} · top {ctx.cfg.universe_size} by market cap on {ctx.K}", f"universe_{s}",
+                              {"ticker": ",".join(members), "date": ctx.D, "limit": 500}, members))
+            else:
+                specs.append((f"{s} · top {ctx.cfg.universe_size} by market cap", f"universe_{s}", params, []))
     if not specs:
         return [L.FAIL("no universe: pass --universe-file, or candidates need a screener sector", name="universe")]
     out = []
     for label, raw, params, names in specs:
         def one() -> LayerResult:
+            if "ticker" in params and not params["ticker"]:
+                return L.FAIL("no universe members")
             rows = rows_of(ctx.get(raw, SCREENER, params))
             if not rows:
                 return L.FAIL("empty payload")
@@ -138,26 +153,28 @@ def fetch_correlations(ctx: Ctx, tickers: List[str], sectors: List[str]) -> Laye
     names = list(dict.fromkeys(tickers + [L.SECTOR_ETF[s] for s in sectors if s in L.SECTOR_ETF]))
     if len(names) < 2:
         return L.FAIL("needs at least two tickers")
-    start = (date.fromisoformat(ctx.D) - timedelta(days=31)).isoformat()
+    end = ctx.K  # daily closes: point-in-time stops at the prior session
+    start = (date.fromisoformat(end) - timedelta(days=31)).isoformat()
     rows = rows_of(ctx.get("correlations", "/api/market/correlations",
-                           {"tickers": ",".join(names), "start_date": start, "end_date": ctx.D}))
+                           {"tickers": ",".join(names), "start_date": start, "end_date": end}))
     if not rows:
         return L.FAIL("empty payload")
     pairs = [{"a": r.get("fst"), "b": r.get("snd"), "correlation": L.num(r.get("correlation")), "n": L.inum(r.get("rows")),
               "from": r.get("min_date"), "to": r.get("max_date")} for r in rows]
-    return LayerResult(ok=True, as_of=max((p["to"] or "") for p in pairs) or ctx.D, rows=len(pairs),
-                       data={"tickers": names, "window": [start, ctx.D], "pairs": pairs})
+    return LayerResult(ok=True, as_of=max((p["to"] or "") for p in pairs) or end, rows=len(pairs),
+                       data={"tickers": names, "window": [start, end], "pairs": pairs})
 
 
 def fetch_etf_flows(ctx: Ctx, sectors: List[str]) -> LayerResult:
-    start = (date.fromisoformat(ctx.D) - timedelta(days=45)).isoformat()
+    end = ctx.K
+    start = (date.fromisoformat(end) - timedelta(days=45)).isoformat()
     out: Dict[str, Any] = {}
     for s in sectors:
         etf = L.SECTOR_ETF.get(s)
         if not etf:
             continue
-        rows = rows_of(ctx.get(f"etf_in_outflow_{etf}", f"/api/etfs/{etf}/in-outflow", {"start_date": start, "end_date": ctx.D}))
-        rows = sorted((r for r in rows if r.get("date") and r["date"] <= ctx.D), key=lambda r: r["date"])[-30:]
+        rows = rows_of(ctx.get(f"etf_in_outflow_{etf}", f"/api/etfs/{etf}/in-outflow", {"start_date": start, "end_date": end}))
+        rows = sorted((r for r in rows if r.get("date") and r["date"] <= end), key=lambda r: r["date"])[-30:]
         if rows:
             out[etf] = {"sector": s, "series": [{"date": r["date"], "change": L.num(r.get("change")),
                                                  "change_prem": L.num(r.get("change_prem")), "volume": L.inum(r.get("volume")),
@@ -208,14 +225,45 @@ def run_ticker(ctx: Ctx, screener: LayerResult, skip: set) -> Tuple[Dict[str, La
     dp = res.get("darkpool")
     spot = dp.data.get("spot") if (dp and dp.ok) else None
     ges, gex = res.get("greek-exposure-strike"), res.get("gex-levels")
-    gex_oi = gex.data.get("today_oi") if (gex and gex.ok) else None
+    gex_oi = gex.data.get("latest_oi") if (gex and gex.ok) else None
     derived = {
         "spot": spot,
         "spot_rth_close": dp.data.get("spot_rth_close") if (dp and dp.ok) else None,
+        "session_so_far": session_so_far(ctx, res.get("ohlc-5m"), res.get("ohlc-daily")),
         "block_participation": participation(dp, res.get("lit-blocks")),
         "walls_crosscheck": L.oi_basis_walls(ges.data["strikes"], spot["mid"], gex_oi) if (ges and ges.ok and spot) else None,
     }
     return res, derived
+
+
+def session_so_far(ctx: Ctx, m5: Optional[LayerResult], daily: Optional[LayerResult]) -> Optional[Dict[str, Any]]:
+    """D's session from 5-minute bars (up to the cutoff in point-in-time mode) vs the previous close."""
+    if not (m5 and m5.ok):
+        return None
+    bars = m5.data["days"].get(ctx.D) or []
+    pre = [b for b in bars if b[6] == "pr"]
+    rth = [b for b in bars if b[6] == "r"]
+    prev_close = None
+    if daily and daily.ok:
+        closes = [(b[0], b[4]) for b in daily.data["bars"] if b[0] < ctx.D]
+        prev_close = closes[-1][1] if closes else None
+    last = bars[-1][4] if bars else None
+    end = L.parse_ts(bars[-1][0]) + timedelta(minutes=5) if bars else None
+    out = {
+        "through": end.strftime("%Y-%m-%dT%H:%M:%SZ") if end else None, "prev_close": prev_close,
+        "premarket_volume": sum(b[5] or 0 for b in pre),
+        "premarket_high": max((b[2] for b in pre if b[2] is not None), default=None),
+        "premarket_low": min((b[3] for b in pre if b[3] is not None), default=None),
+        "rth_open": rth[0][1] if rth else None,
+        "rth_high": max((b[2] for b in rth if b[2] is not None), default=None),
+        "rth_low": min((b[3] for b in rth if b[3] is not None), default=None),
+        "rth_volume": sum(b[5] or 0 for b in rth),
+        "last": last,
+    }
+    if prev_close:
+        out["gap_open_vs_prev_close"] = (out["rth_open"] / prev_close - 1) if out["rth_open"] else None
+        out["last_vs_prev_close"] = (last / prev_close - 1) if last else None
+    return out
 
 
 # --------------------------------------------------------------------------- output
@@ -223,7 +271,7 @@ def _fmt_pct(x: Optional[float]) -> str:
     return f"{x:.1%}" if isinstance(x, (int, float)) else "n/a"
 
 
-def ticker_log(T: str, res: Dict[str, LayerResult], derived: Dict[str, Any]) -> Tuple[List[str], int, int, int]:
+def ticker_log(T: str, res: Dict[str, LayerResult], derived: Dict[str, Any], pit: bool = False) -> Tuple[List[str], int, int, int]:
     lines = ["", f"== {T} =="]
     core_ok = 0
     for name in CORE_LAYERS:
@@ -244,6 +292,11 @@ def ticker_log(T: str, res: Dict[str, LayerResult], derived: Dict[str, Any]) -> 
         close = derived.get("spot_rth_close")
         lines.append(f"spot {spot['mid']} (DP NBBO mid @ {spot['as_of']})"
                      + (f" · last RTH mid {close['mid']} @ {close['as_of']}" if close else ""))
+    ss = derived.get("session_so_far")
+    if ss and ss.get("through"):
+        lines.append(f"session through {ss['through']}: prev close {ss['prev_close']} · premarket vol {ss['premarket_volume']:,} · "
+                     f"RTH open {ss['rth_open']} · last {ss['last']} ({_fmt_pct(ss.get('last_vs_prev_close'))} vs prev close) · "
+                     f"RTH vol {ss['rth_volume']:,}")
     bp = derived.get("block_participation")
     if bp:
         e = bp["either"]
@@ -251,7 +304,14 @@ def ticker_log(T: str, res: Dict[str, LayerResult], derived: Dict[str, Any]) -> 
                      f"dark {_fmt_pct(e['pct_dark'])} + lit {_fmt_pct(e['pct_lit'])} = {_fmt_pct(e['pct_total'])} of day volume {bp['day_volume']:,}"
                      if bp.get("day_volume") else "block participation: day volume unavailable")
     wc = derived.get("walls_crosscheck")
-    if wc and wc.get("vs_gex_levels_oi"):
+    if wc and pit:
+        g = res["gex-levels"].data if res.get("gex-levels") and res["gex-levels"].ok else {}
+        lv, lo = g.get("latest") or {}, g.get("latest_oi") or {}
+        lines.append(f"walls at cutoff (today's opening OI, spot {wc['spot']}): call {wc['call_wall']} / put {wc['put_wall']} / "
+                     f"magnet {wc['gamma_magnet']} · prior-session gex-levels {g.get('levels_date')}: "
+                     f"vol call {lv.get('call_wall')} / put {lv.get('put_wall')} / flip {lv.get('gamma_flip')}; "
+                     f"oi call {lo.get('call_wall')} / put {lo.get('put_wall')}")
+    elif wc and wc.get("vs_gex_levels_oi"):
         diff = [f"{k} {v['gex_levels']} vs {v['strike_table']}" for k, v in wc["vs_gex_levels_oi"].items() if not v["agree"]]
         lines.append("walls cross-check (gex-levels oi vs greek-exposure/strike): " + ("agree" if not diff else "differ: " + "; ".join(diff)))
     return lines, core_ok, sup_ok, len(sup)
@@ -292,12 +352,27 @@ def main(argv: Optional[List[str]] = None) -> int:
     head_notes = []
     if args.date and D != args.date:
         head_notes.append(f"--date {args.date} is not a trading day; using {D}")
-    out_dir = os.path.join(os.path.expanduser(args.out), D)
+    cutoff = None
+    if args.asof:
+        m = re.match(r"^(\d{1,2}):(\d{2})$", args.asof.strip())
+        if not m:
+            print("--asof must be HH:MM (New York time)", file=sys.stderr)
+            return 2
+        cutoff = datetime.combine(date.fromisoformat(D), dtime(int(m.group(1)), int(m.group(2))), NY)
+        if cutoff > now_ny:
+            print(f"--asof {cutoff:%Y-%m-%d %H:%M} ET is in the future", file=sys.stderr)
+            return 2
+    run_id = D + (f"_{cutoff:%H%M}" if cutoff else "")
+    out_dir = os.path.join(os.path.expanduser(args.out), run_id)
     cache_dir = os.path.expanduser(args.cache)
     write_json(os.path.join(out_dir, "_market", "raw", "calendar_spy_ohlc_1d.json"), cal_resp.envelope())
-    say(f"target {D} (latest trading day {cal.latest()}) · tickers {', '.join(tickers)}")
+    say(f"target {D}" + (f" as of {cutoff:%H:%M} ET" if cutoff else "") + f" (latest trading day {cal.latest()}) · tickers {', '.join(tickers)}")
 
-    mctx = Ctx(client, "_market", D, cal, cfg, out_dir, cache_dir, today_ny)
+    mctx = Ctx(client, "_market", D, cal, cfg, out_dir, cache_dir, today_ny, cutoff)
+    if cutoff:
+        head_notes.append(f"point-in-time as of {cutoff:%Y-%m-%d %H:%M} ET: rows after the cutoff are dropped; "
+                          f"end-of-day-only sources use the prior session {mctx.K}; OI and daily greek exposure for {D} "
+                          f"are computed at the open and kept")
     screener = run_layer("screener-batch", False, fetch_screener_batch, mctx, tickers)
     sectors = sorted({v.get("sector") for v in (screener.data or {}).values() if v.get("sector")}) if screener.ok else []
     universes = fetch_universes(mctx, args.universe_file, sectors)
@@ -310,13 +385,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     all_core_ok = True
     for i, T in enumerate(tickers, 1):
         before = client.network_requests
-        ctx = Ctx(client, T, D, cal, cfg, out_dir, cache_dir, today_ny)
+        ctx = Ctx(client, T, D, cal, cfg, out_dir, cache_dir, today_ny, cutoff)
         res, derived = run_ticker(ctx, screener, skip)
-        lines, core_ok, sup_ok, sup_n = ticker_log(T, res, derived)
+        lines, core_ok, sup_ok, sup_n = ticker_log(T, res, derived, pit=cutoff is not None)
         all_core_ok &= core_ok == len(CORE_LAYERS)
         order = CORE_LAYERS + [n for n in res if n not in CORE_LAYERS]
         write_json(os.path.join(out_dir, T, "snapshot.json"), {
-            "ticker": T, "target_date": D, "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
+            "ticker": T, "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
+            "prior_session": ctx.K if cutoff else None,
+            "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
             "tool_version": __version__,
             "coverage": {"core": f"{core_ok}/{len(CORE_LAYERS)}", "supplemental": f"{sup_ok}/{sup_n}"},
             "as_of": {n: res[n].as_of for n in order},
@@ -331,7 +408,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     usage = client.last_usage
     head = [
-        f"UW short-engine fetch · target {D} · latest trading day {cal.latest()} · run {now_ny:%Y-%m-%d %H:%M %Z}",
+        f"UW short-engine fetch · target {D}" + (f" as of {cutoff:%H:%M} ET" if cutoff else "")
+        + f" · latest trading day {cal.latest()} · run {now_ny:%Y-%m-%d %H:%M %Z}",
         f"UW usage: daily used={usage.get('x-uw-daily-req-count', '?')}/{usage.get('x-uw-token-req-limit', '?')} · "
         f"this run: {client.network_requests} requests, {client.cache_hits} cache hits, {time.time() - t0:.0f}s",
     ] + [f"note: {n}" for n in head_notes] + [
@@ -359,7 +437,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         "target_date": D, "calendar_flags": flags, "screener_batch": screener.to_json(),
         "correlations": corr.to_json(), "sector_etf_flows": etf.to_json()}, indent=1)
     write_json(os.path.join(out_dir, "run_summary.json"), {
-        "target_date": D, "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
+        "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
+        "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
         "usage": usage, "requests": client.network_requests, "cache_hits": client.cache_hits,
         "universes": [{k: v for k, v in u.to_json().items() if k != "data"} for u in universes],
         "tickers": summary}, indent=1)

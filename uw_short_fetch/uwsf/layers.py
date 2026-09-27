@@ -18,9 +18,11 @@ Payload quirks handled here (SHORT_ENGINE.md §7 plus what live testing showed):
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
+import urllib.parse
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime, time as dtime, timedelta, timezone
@@ -181,6 +183,11 @@ def _safe_name(s: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "_", s)
 
 
+def request_key(path: str, params: Optional[Dict[str, Any]]) -> str:
+    clean = sorted((k, str(v)) for k, v in (params or {}).items() if v is not None)
+    return hashlib.sha1(f"{path}?{urllib.parse.urlencode(clean)}".encode()).hexdigest()[:12]
+
+
 # --------------------------------------------------------------------------- calendar
 class Calendar:
     """Trading days taken from SPY regular-session daily candles."""
@@ -281,21 +288,37 @@ class Config:
 
 
 class Ctx:
-    """Per-ticker (or market-level) fetch context: raw envelopes + day cache."""
+    """Per-ticker (or market-level) fetch context: raw envelopes + day cache.
+
+    Point-in-time mode (cutoff set): timestamped rows after the cutoff are dropped,
+    and end-of-day-only sources use K = the last completed session before D.
+    """
 
     def __init__(self, client, ticker: str, D: str, cal: Calendar, cfg: Config,
-                 out_dir: str, cache_dir: str, today_ny: str):
+                 out_dir: str, cache_dir: str, today_ny: str, cutoff: Optional[datetime] = None):
         self.client, self.T, self.D, self.cal, self.cfg = client, ticker, D, cal, cfg
         self.raw_dir = os.path.join(out_dir, ticker, "raw")
         self.cache_dir = os.path.join(cache_dir, ticker)
         self.today_ny = today_ny
+        self.cutoff = cutoff
+        self.pit = cutoff is not None
+        self.cutoff_iso = cutoff.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if cutoff else None
+        self.K = (cal.prev(D) or D) if self.pit else D
+
+    def known(self, ts: Any, lag_seconds: float = 0.0) -> bool:
+        """True when a timestamped row (plus lag) is at or before the cutoff."""
+        if not self.pit:
+            return True
+        dt = parse_ts(ts)
+        return dt is not None and dt + timedelta(seconds=lag_seconds) <= self.cutoff
 
     def get(self, raw_name: str, path: str, params: Optional[Dict[str, Any]] = None,
             cache_date: Optional[str] = None) -> Any:
         name = _safe_name(raw_name)
         cache_file = None
         if self.cfg.use_cache and cache_date and cache_date < self.today_ny:
-            cache_file = os.path.join(self.cache_dir, name + ".json")
+            # key on the exact request (path + params) so different dates / params never share a file
+            cache_file = os.path.join(self.cache_dir, f"{name}__{request_key(path, params)}.json")
         resp = self.client.get(path, params, cache_file=cache_file)
         os.makedirs(self.raw_dir, exist_ok=True)
         with open(os.path.join(self.raw_dir, name + ".json"), "w") as fh:
@@ -315,20 +338,22 @@ def run_layer(name: str, core: bool, fn: Callable[..., LayerResult], *args: Any)
 
 
 def paginate_day(ctx: Ctx, raw_prefix: str, path: str, params: Dict[str, Any],
-                 key_fn: Callable[[Dict[str, Any]], Any]) -> Tuple[List[Dict[str, Any]], int, bool]:
-    """Walk an `older_than` cursor, keeping only rows whose New York date is D."""
+                 key_fn: Callable[[Dict[str, Any]], Any], ts_key: str = "executed_at",
+                 page_size: int = PAGE, start: Optional[str] = None) -> Tuple[List[Dict[str, Any]], int, bool]:
+    """Walk an `older_than` cursor (starting at the cutoff in point-in-time mode, else at `start`),
+    keeping only rows whose New York date is D and that are known at the cutoff."""
     seen: Dict[Any, Dict[str, Any]] = {}
-    older, pages = None, 0
+    older, pages = ctx.cutoff_iso or start, 0
     for i in range(ctx.cfg.max_pages):
-        p = dict(params, limit=PAGE)
+        p = dict(params, limit=page_size)
         if older:
             p["older_than"] = older
         rows = rows_of(ctx.get(f"{raw_prefix}_p{i + 1}", path, p))
         pages += 1
         new, crossed = 0, False
         for r in rows:
-            d = ny_date(r.get("executed_at"))
-            if d is None or d > ctx.D:
+            d = ny_date(r.get(ts_key))
+            if d is None or d > ctx.D or not ctx.known(r.get(ts_key)):
                 continue
             if d < ctx.D:
                 crossed = True
@@ -337,12 +362,16 @@ def paginate_day(ctx: Ctx, raw_prefix: str, path: str, params: Dict[str, Any],
             if k not in seen:
                 seen[k] = r
                 new += 1
-        if len(rows) < PAGE or crossed or new == 0:
+        if len(rows) < page_size or crossed or new == 0:
             return list(seen.values()), pages, False
-        older = rows[-1].get("executed_at")
+        older = rows[-1].get(ts_key)
         if not older:
             return list(seen.values()), pages, False
     return list(seen.values()), pages, True
+
+
+def pit_note(ctx: Ctx, what: str) -> List[str]:
+    return [f"point-in-time: {what}"] if ctx.pit else []
 
 
 # --------------------------------------------------------------------------- L1 darkpool-levels
@@ -378,7 +407,8 @@ def level_stats(levels: Dict[float, List[float]], top_n: int = 8) -> Dict[str, A
 
 
 def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
-    days = ctx.cal.window(ctx.D, ctx.cfg.dp_days)
+    end = ctx.K  # price-levels is a full-day aggregate: in point-in-time mode stop at the last completed session
+    days = ctx.cal.window(end, ctx.cfg.dp_days)
     by_day: Dict[str, Dict[float, List[float]]] = {}
     per_day: Dict[str, Any] = {}
     missing: List[str] = []
@@ -397,8 +427,8 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
             "centroid_top8": st["centroid_top8"], "top8_prices": [r["price"] for r in st["top8"]],
             "levels": [[p, v[0], v[1]] for p, v in sorted(lv.items(), reverse=True)],
         }
-    if ctx.D not in by_day:
-        return FAIL(f"empty payload for {ctx.D}")
+    if end not in by_day:
+        return FAIL(f"empty payload for {end}")
     windows = {}
     for label, n in (("1D", 1), ("1W", 5), ("1M", 21)):
         wd = days[-n:]
@@ -411,23 +441,25 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
         windows[label] = {"from": wd[0], "to": wd[-1], "days": len(wd),
                           "days_present": sum(1 for d in wd if d in by_day), **level_stats(agg)}
     snapshots = {}
-    for label, k in (("D", 0), ("D-5", 5), ("D-21", 21)):
+    for label, k in (("end", 0), ("end-5", 5), ("end-21", 21)):
         if len(days) > k and days[-1 - k] in per_day:
             pd_ = per_day[days[-1 - k]]
             snapshots[label] = {"date": days[-1 - k], "dp_pct": pd_["dp_pct"], "dark_total": pd_["dark_total"],
                                 "centroid_top8": pd_["centroid_top8"], "top8_prices": pd_["top8_prices"]}
-    notes = []
+    notes = pit_note(ctx, f"{ctx.D} is still in session at the cutoff; price-levels is a full-day aggregate, "
+                          f"so windows end at the last completed session {end}")
     if missing:
         notes.append(f"missing days: {', '.join(missing)}")
     extra = f"days={len(by_day)}/{len(days)}"
-    return LayerResult(ok=True, as_of=per_day[ctx.D]["as_of"] or ctx.D, rows=per_day[ctx.D]["n_levels"],
+    return LayerResult(ok=True, as_of=per_day[end]["as_of"] or end, rows=per_day[end]["n_levels"],
                        extra=extra, notes=notes, data={
+                           "window_end": end,
                            "definition": {
                                "dp_pct": "dark_pool_volume / (dark_pool_volume + regular_volume) per UW price bucket",
                                "top8": "8 buckets with the most dark_pool_volume in the window",
                                "centroid_top8": "sum(price * dark) / sum(dark) over top8",
-                               "windows": "1D = D, 1W = last 5 trading days, 1M = last 21 trading days (bucket volumes summed)",
-                               "snapshots": "single days: D, 5 and 21 trading days earlier",
+                               "windows": "1D = window_end, 1W = last 5 sessions, 1M = last 21 sessions (bucket volumes summed)",
+                               "snapshots": "single sessions: window_end, 5 and 21 sessions earlier",
                            },
                            "windows": windows, "snapshots": snapshots, "per_day": per_day})
 
@@ -482,10 +514,13 @@ def _blocks(ctx: Ctx, prefix: str, path: str, extra: Dict[str, Any]) -> Tuple[Li
 
 def layer_darkpool(ctx: Ctx) -> LayerResult:
     path = f"/api/darkpool/{ctx.T}"
-    latest = [r for r in rows_of(ctx.get("darkpool_latest", path, {"date": ctx.D, "limit": 50, "cancellation_status": "hide_cancelled"}))
-              if ny_date(r.get("executed_at")) == ctx.D]
+    params = {"date": ctx.D, "limit": 50, "cancellation_status": "hide_cancelled"}
+    if ctx.pit:
+        params["older_than"] = ctx.cutoff_iso
+    latest = [r for r in rows_of(ctx.get("darkpool_latest", path, params))
+              if ny_date(r.get("executed_at")) == ctx.D and ctx.known(r.get("executed_at"))]
     if not latest:
-        return FAIL(f"empty payload: no dark pool prints on {ctx.D}")
+        return FAIL(f"empty payload: no dark pool prints on {ctx.D}" + (" before the cutoff" if ctx.pit else ""))
     spot = None
     for r in latest:
         b, a = num(r.get("nbbo_bid")), num(r.get("nbbo_ask"))
@@ -495,7 +530,7 @@ def layer_darkpool(ctx: Ctx) -> LayerResult:
             break
     day_volume = max((inum(r.get("volume")) or 0) for r in latest) or None
     spot_close = None
-    if spot and is_rth(spot["as_of"]) is False:  # latest print is extended hours: also record the last RTH midpoint
+    if not ctx.pit and spot and is_rth(spot["as_of"]) is False:  # latest print is extended hours: also record the last RTH midpoint
         close_utc = datetime.combine(date.fromisoformat(ctx.D), dtime(16, 0), NY).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         for r in rows_of(ctx.get("darkpool_rth_close", path, {"date": ctx.D, "limit": 20, "older_than": close_utc,
                                                                "cancellation_status": "hide_cancelled"})):
@@ -504,7 +539,8 @@ def layer_darkpool(ctx: Ctx) -> LayerResult:
                 spot_close = {"mid": round((a + b) / 2, 4), "bid": b, "ask": a, "as_of": r.get("executed_at")}
                 break
     trades, pages, truncated = _blocks(ctx, "darkpool_blocks", path, {"cancellation_status": "hide_cancelled"})
-    notes = []
+    notes = pit_note(ctx, "prints and cumulative day volume up to the cutoff")
+    notes.append("UW dark pool feed only carries prints with premium >= $100k")
     if truncated:
         notes.append(f"block pagination hit max_pages={ctx.cfg.max_pages}; totals are a lower bound")
     if not trades:
@@ -520,11 +556,17 @@ def layer_darkpool(ctx: Ctx) -> LayerResult:
 def layer_lit_blocks(ctx: Ctx) -> LayerResult:
     path = f"/api/lit-flow/{ctx.T}"
     trades, pages, truncated = _blocks(ctx, "lit_blocks", path, {})
-    probe = [r for r in rows_of(ctx.get("lit_latest", path, {"date": ctx.D, "limit": 5})) if ny_date(r.get("executed_at")) == ctx.D]
+    params = {"date": ctx.D, "limit": 20}
+    if ctx.pit:
+        params["older_than"] = ctx.cutoff_iso
+    probe = [r for r in rows_of(ctx.get("lit_latest", path, params))
+             if ny_date(r.get("executed_at")) == ctx.D and ctx.known(r.get("executed_at"))]
     if not probe and not trades:
-        return FAIL(f"empty payload: no lit prints on {ctx.D}")
+        return FAIL(f"empty payload: no lit prints on {ctx.D}" + (" before the cutoff" if ctx.pit else ""))
     day_volume = max([inum(r.get("volume")) or 0 for r in probe] or [0]) or None
-    notes = [f"block pagination hit max_pages={ctx.cfg.max_pages}"] if truncated else []
+    notes = pit_note(ctx, "prints up to the cutoff") + ["UW lit feed only carries large prints (not the full lit tape)"]
+    if truncated:
+        notes.append(f"block pagination hit max_pages={ctx.cfg.max_pages}")
     return LayerResult(ok=True, as_of=(probe[0].get("executed_at") if probe else ctx.D), rows=len(trades),
                        extra=f"blocks={len(trades)}", notes=notes, data={
                            "day_volume": day_volume, "pages": pages, "truncated": truncated,
@@ -611,11 +653,12 @@ def flow_aggregates(trades: List[Dict[str, Any]]) -> Dict[str, Any]:
 def layer_option_trades(ctx: Ctx) -> LayerResult:
     latest = ctx.cal.latest()
     if ctx.D != latest:
-        return FAIL(f"option-trades only serves the latest trading day ({latest}); use flow-per-strike / net-prem-ticks for {ctx.D}")
+        return FAIL(f"option-trades only serves the latest trading day ({latest}); "
+                    f"see flow-alerts / flow-per-strike / net-prem-ticks for {ctx.D}")
     key = lambda r: r.get("id") or (r.get("executed_at"), r.get("option_chain_id"), r.get("size"), r.get("price"))
     rows, pages, truncated = paginate_day(ctx, "option_trades", "/api/option-trades",
                                           {"ticker_symbol": ctx.T, "min_premium": int(ctx.cfg.flow_min_premium)}, key)
-    notes = []
+    notes = pit_note(ctx, "trades up to the cutoff")
     if not rows:
         probe = rows_of(ctx.get("option_trades_probe", "/api/option-trades", {"ticker_symbol": ctx.T, "limit": 1}))
         if not probe:
@@ -636,9 +679,12 @@ def layer_option_trades(ctx: Ctx) -> LayerResult:
 
 # --------------------------------------------------------------------------- L4 gex-levels
 def layer_gex_levels(ctx: Ctx) -> LayerResult:
-    days = ctx.cal.window(ctx.D, ctx.cfg.gex_days)
+    end = ctx.K  # levels for D are recomputed through the session: point-in-time uses the prior session's levels
+    days = ctx.cal.window(end, ctx.cfg.gex_days)
     series: Dict[str, List[Dict[str, Any]]] = {"vol": [], "oi": []}
-    notes, missing = [], []
+    notes = pit_note(ctx, f"{ctx.D} levels are rebuilt through the session (look-ahead); using {end} levels; "
+                          "see spot-gex for exposure at the cutoff")
+    missing: List[str] = []
     for src in ("vol", "oi"):
         for d in days:
             body = ctx.get(f"gex_levels_{src}_{d}", f"/api/stock/{ctx.T}/gex-levels", {"date": d, "source": src}, cache_date=d)
@@ -654,21 +700,22 @@ def layer_gex_levels(ctx: Ctx) -> LayerResult:
                 "gamma_flip": num(data.get("gamma_flip")), "gamma_magnet": num(data.get("gamma_magnet")),
                 "nearby_flips": [num(x) for x in (data.get("nearby_flips") or [])],
             })
-    today = next((x for x in series["vol"] if x["requested"] == ctx.D), None)
-    if today is None:
-        return FAIL(f"empty payload for {ctx.D} (source=vol)")
+    latest = next((x for x in series["vol"] if x["requested"] == end), None)
+    if latest is None:
+        return FAIL(f"empty payload for {end} (source=vol)")
     changes = {}
     for src, rows in series.items():
-        if len(rows) >= 2 and rows[-1]["requested"] == ctx.D:
+        if len(rows) >= 2 and rows[-1]["requested"] == end:
             a, b = rows[-2], rows[-1]
             changes[src] = {"from": a["requested"], "to": b["requested"], **{
                 k: (b[k] - a[k]) if (a[k] is not None and b[k] is not None) else None
                 for k in ("call_wall", "put_wall", "gamma_flip", "gamma_magnet")}}
     if missing:
         notes.append(f"missing: {', '.join(missing)}")
-    return LayerResult(ok=True, as_of=f"{today['date']} {today['time']}", rows=len(series["vol"]) + len(series["oi"]),
+    return LayerResult(ok=True, as_of=f"{latest['date']} {latest['time']}", rows=len(series["vol"]) + len(series["oi"]),
                        extra=f"days={len(days)} sources=vol,oi", notes=notes,
-                       data={"today": today, "today_oi": next((x for x in series["oi"] if x["requested"] == ctx.D), None),
+                       data={"levels_date": end, "latest": latest,
+                             "latest_oi": next((x for x in series["oi"] if x["requested"] == end), None),
                              "series": series, "day_over_day_change": changes})
 
 
@@ -695,6 +742,7 @@ def layer_greek_exposure(ctx: Ctx) -> LayerResult:
     order = "ascending" if rows[0].get("date", "") <= rows[-1].get("date", "") else "descending"
     ng = today["net_gamma"]
     return LayerResult(ok=True, as_of=ctx.D, rows=len(rows), extra=(f"net_gamma={ng:.4f}" if ng is not None else ""),
+                       notes=pit_note(ctx, "UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"),
                        data={"today": today, "series_21d": series, "payload_order": order,
                              "note": "row picked by date == D (max date), never by position"})
 
@@ -717,27 +765,30 @@ def layer_short_interest(ctx: Ctx) -> LayerResult:
     series = [pick(r) for r in sorted((r for r in rows if r.get("market_date") and r["market_date"] <= ctx.D),
                                       key=lambda r: r["market_date"], reverse=True)[:6]]
     return LayerResult(ok=True, as_of=latest["market_date"], rows=len(rows), extra=f"lag={lag}d",
-                       notes=[f"FINRA short interest lags; {lag} calendar days behind {ctx.D}"],
+                       notes=[f"FINRA short interest lags; {lag} calendar days behind {ctx.D}"]
+                       + pit_note(ctx, "latest settlement date on or before D (publication lag not modeled)"),
                        data={"latest": pick(latest), "lag_days": lag, "series": series})
 
 
 def layer_short_volume(ctx: Ctx) -> LayerResult:
     body = ctx.get("short_volume", f"/api/shorts/{ctx.T}/volume-and-ratio")
     rows = rows_of(body, "si")  # rows live under `si`, not `data`
-    latest = _latest_on_or_before(rows, "market_date", ctx.D)
+    bound = ctx.K  # T+1 data: D's file is published after the close, so point-in-time stops at K
+    latest = _latest_on_or_before(rows, "market_date", bound)
     if not latest:
-        return FAIL("empty payload (`si`)" if not rows else f"no row on or before {ctx.D}")
+        return FAIL("empty payload (`si`)" if not rows else f"no row on or before {bound}")
     pick = lambda r: {"market_date": r.get("market_date"), "short_volume": num(r.get("short_volume")),
                       "total_volume": num(r.get("total_volume")), "short_volume_ratio": num(r.get("short_volume_ratio"))}
-    series = [pick(r) for r in sorted((r for r in rows if r.get("market_date") and r["market_date"] <= ctx.D),
+    series = [pick(r) for r in sorted((r for r in rows if r.get("market_date") and r["market_date"] <= bound),
                                       key=lambda r: r["market_date"], reverse=True)[:20]]
     return LayerResult(ok=True, as_of=latest["market_date"], rows=len(rows),
                        extra=f"ratio={num(latest.get('short_volume_ratio')):.3f}" if num(latest.get("short_volume_ratio")) is not None else "",
+                       notes=pit_note(ctx, f"{ctx.D} short volume is published after the close; latest known session {bound}"),
                        data={"latest": pick(latest), "series_20d": series})
 
 
 def layer_short_data(ctx: Ctx) -> LayerResult:
-    rows = rows_of(ctx.get("short_data", f"/api/shorts/{ctx.T}/data"))
+    rows = [r for r in rows_of(ctx.get("short_data", f"/api/shorts/{ctx.T}/data")) if ctx.known(r.get("timestamp"))]
     latest = _latest_on_or_before(rows, "timestamp", ctx.D)
     if not latest:
         return FAIL("empty payload" if not rows else f"no row on or before {ctx.D}")
@@ -750,16 +801,18 @@ def layer_short_data(ctx: Ctx) -> LayerResult:
             per_day[d] = r
     series = [dict(pick(per_day[d]), date=d) for d in sorted(per_day, reverse=True)[:20]]
     return LayerResult(ok=True, as_of=latest["timestamp"], rows=len(rows),
+                       notes=pit_note(ctx, "latest borrow update at or before the cutoff"),
                        data={"latest": pick(latest), "daily_last_20d": series})
 
 
 # --------------------------------------------------------------------------- supplemental: price
 def layer_ohlc_daily(ctx: Ctx) -> LayerResult:
+    end = ctx.K  # D's daily candle is not final at a point-in-time cutoff (see derived.session_so_far)
     rows = [r for r in rows_of(ctx.get("ohlc_1d", f"/api/stock/{ctx.T}/ohlc/1d", {"timeframe": "1Y"}))
-            if r.get("market_time") == "r" and r.get("date") and r["date"] <= ctx.D]
+            if r.get("market_time") == "r" and r.get("date") and r["date"] <= end]
     rows.sort(key=lambda r: r["date"])  # payload is newest-first, 3 rows/day
-    if not rows or rows[-1]["date"] != ctx.D:
-        return FAIL(f"no regular-session daily candle for {ctx.D}")
+    if not rows or rows[-1]["date"] != end:
+        return FAIL(f"no regular-session daily candle for {end}")
     bars = [[r["date"], num(r.get("open")), num(r.get("high")), num(r.get("low")), num(r.get("close")), inum(r.get("volume"))] for r in rows]
     closes = [b[4] for b in bars]
     trs = [max(h - l, abs(h - pc), abs(l - pc)) for (_, _, h, l, _, _), pc in zip(bars[1:], closes[:-1])
@@ -768,8 +821,8 @@ def layer_ohlc_daily(ctx: Ctx) -> LayerResult:
     derived = {"close": closes[-1], "ret_1d": ret(1), "ret_5d": ret(5), "ret_21d": ret(21),
                "atr14_simple": (sum(trs[-14:]) / 14) if len(trs) >= 14 else None,
                "high_20d": max(b[2] for b in bars[-20:]), "low_20d": min(b[3] for b in bars[-20:])}
-    return LayerResult(ok=True, as_of=ctx.D, rows=len(bars), data={"bars": bars, "derived": derived,
-                                                                  "columns": ["date", "open", "high", "low", "close", "volume"]})
+    return LayerResult(ok=True, as_of=end, rows=len(bars), notes=pit_note(ctx, f"daily bars through {end}"),
+                       data={"bars": bars, "derived": derived, "columns": ["date", "open", "high", "low", "close", "volume"]})
 
 
 def layer_ohlc_5m(ctx: Ctx) -> LayerResult:
@@ -778,13 +831,17 @@ def layer_ohlc_5m(ctx: Ctx) -> LayerResult:
     for d in days:
         rows = [r for r in rows_of(ctx.get(f"ohlc_5m_{d}", f"/api/stock/{ctx.T}/ohlc/5m", {"date": d}, cache_date=d))
                 if ny_date(r.get("start_time")) == d]
+        if d == ctx.D:  # keep bars that had closed by the cutoff
+            rows = [r for r in rows if ctx.known(r.get("end_time")) if r.get("end_time")] if ctx.pit else rows
         rows.sort(key=lambda r: r["start_time"])
         if rows:
             out[d] = [[r["start_time"], num(r.get("open")), num(r.get("high")), num(r.get("low")),
                        num(r.get("close")), inum(r.get("volume")), r.get("market_time")] for r in rows]
     if ctx.D not in out:
-        return FAIL(f"empty payload for {ctx.D}")
-    return LayerResult(ok=True, as_of=ctx.D, rows=sum(len(v) for v in out.values()), extra=f"days={len(out)}/{len(days)}",
+        return FAIL(f"empty payload for {ctx.D}" + (" before the cutoff" if ctx.pit else ""))
+    last = out[ctx.D][-1][0]
+    return LayerResult(ok=True, as_of=last, rows=sum(len(v) for v in out.values()), extra=f"days={len(out)}/{len(days)}",
+                       notes=pit_note(ctx, f"{ctx.D} bars closed by the cutoff (last bar starts {last})"),
                        data={"columns": ["start_time", "open", "high", "low", "close", "volume", "market_time"], "days": out})
 
 
@@ -823,6 +880,7 @@ def layer_oi_change(ctx: Ctx) -> LayerResult:
         })
     curr_dates = sorted({c["curr_date"] for c in contracts if c["curr_date"]})
     notes = [] if curr_dates == [ctx.D] else [f"curr_date values {curr_dates} (expected {ctx.D})"]
+    notes += pit_note(ctx, "OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff")
     tot: Dict[str, int] = defaultdict(int)
     for c in contracts:
         if c["type"] and c["oi_diff"] is not None:
@@ -854,6 +912,8 @@ def _norm_contract(r: Dict[str, Any], D: str) -> Dict[str, Any]:
 
 def layer_option_contracts(ctx: Ctx) -> LayerResult:
     latest = ctx.cal.latest()
+    if ctx.pit:
+        return FAIL("live snapshot with no time filter; not point-in-time (OI side is in oi-change)")
     if ctx.D != latest:
         return FAIL(f"live snapshot only (latest trading day {latest})")
     path = f"/api/stock/{ctx.T}/option-contracts"
@@ -894,32 +954,38 @@ def layer_oi_per_strike(ctx: Ctx) -> LayerResult:
 
 
 def layer_options_volume(ctx: Ctx) -> LayerResult:
+    end = ctx.K  # daily totals: D's row is end-of-day
     rows = sorted((r for r in rows_of(ctx.get("options_volume", f"/api/stock/{ctx.T}/options-volume", {"limit": 30}))
-                   if r.get("date") and r["date"] <= ctx.D), key=lambda r: r["date"])
-    if not rows or rows[-1]["date"] != ctx.D:
-        return FAIL(f"no row for {ctx.D}")
+                   if r.get("date") and r["date"] <= end), key=lambda r: r["date"])
+    if not rows or rows[-1]["date"] != end:
+        return FAIL(f"no row for {end}")
     keep = lambda r: {k: (v if k == "date" else num(v)) for k, v in r.items()}
-    return LayerResult(ok=True, as_of=ctx.D, rows=len(rows), data={"series": [keep(r) for r in rows]})
+    return LayerResult(ok=True, as_of=end, rows=len(rows), notes=pit_note(ctx, f"daily rows through {end}"),
+                       data={"series": [keep(r) for r in rows]})
 
 
 # --------------------------------------------------------------------------- supplemental: IV / tails / activity
 def layer_interpolated_iv(ctx: Ctx) -> LayerResult:
-    rows = rows_of(ctx.get("interpolated_iv", f"/api/stock/{ctx.T}/interpolated-iv", {"date": ctx.D}))
+    end = ctx.K  # end-of-day values
+    rows = rows_of(ctx.get(f"interpolated_iv_{end}", f"/api/stock/{ctx.T}/interpolated-iv", {"date": end}, cache_date=end if ctx.pit else None))
     if not rows:
         return FAIL("empty payload")
     term = [{"days": inum(r.get("days")), "volatility": num(r.get("volatility")),
              "implied_move_perc": num(r.get("implied_move_perc")), "percentile": num(r.get("percentile"))} for r in rows]
-    return LayerResult(ok=True, as_of=rows[0].get("date") or ctx.D, rows=len(term), data={"term": term})
+    return LayerResult(ok=True, as_of=rows[0].get("date") or end, rows=len(term), notes=pit_note(ctx, f"prior close {end}"),
+                       data={"term": term})
 
 
 def layer_option_sentiment(ctx: Ctx) -> LayerResult:
-    body = ctx.get("option_sentiment", f"/api/stock/{ctx.T}/volatility/option-sentiment", {"date": ctx.D})
+    end = ctx.K
+    body = ctx.get(f"option_sentiment_{end}", f"/api/stock/{ctx.T}/volatility/option-sentiment", {"date": end},
+                   cache_date=end if ctx.pit else None)
     data = body.get("data") if isinstance(body, dict) else None
     if not isinstance(data, dict) or not data.get("latest"):
         return FAIL("empty payload")
-    hist = [h for h in (data.get("history") or []) if h.get("date") and h["date"] <= ctx.D][-30:]
+    hist = [h for h in (data.get("history") or []) if h.get("date") and h["date"] <= end][-30:]
     latest = data["latest"]
-    notes = [] if latest.get("date") == ctx.D else [f"latest.date={latest.get('date')}"]
+    notes = ([] if latest.get("date") == end else [f"latest.date={latest.get('date')}"]) + pit_note(ctx, f"prior close {end}")
     return LayerResult(ok=True, as_of=latest.get("date"), rows=len(hist), notes=notes,
                        data={"latest": latest, "history_30": hist,
                              "note": "AVAR = call vs put IV asymmetry (upside-tail proxy); VWKS = volume-weighted strike vs spot"})
@@ -927,6 +993,8 @@ def layer_option_sentiment(ctx: Ctx) -> LayerResult:
 
 def layer_unusualness(ctx: Ctx) -> LayerResult:
     latest = ctx.cal.latest()
+    if ctx.pit:
+        return FAIL("endpoint has no date or time parameter; not point-in-time")
     if ctx.D != latest:
         return FAIL(f"endpoint has no date parameter; only the latest day ({latest})")
     body = ctx.get("unusualness", f"/api/stock/{ctx.T}/unusualness")
@@ -937,13 +1005,31 @@ def layer_unusualness(ctx: Ctx) -> LayerResult:
     return LayerResult(ok=True, as_of=data.get("date"), rows=1, notes=notes, data=data)
 
 
+def _bucket_end(D: str, hr_min: Any) -> Optional[datetime]:
+    s = str(hr_min or "")
+    if not re.match(r"^\d{3,4}$", s):
+        return None
+    s = s.zfill(4)
+    return datetime.combine(date.fromisoformat(D), dtime(int(s[:2]), int(s[2:])), NY)
+
+
 def layer_options_pulse(ctx: Ctx) -> LayerResult:
-    body = ctx.get("options_pulse", f"/api/stock/{ctx.T}/options-pulse", {"date": ctx.D})
+    body = ctx.get("options_pulse", f"/api/stock/{ctx.T}/options-pulse", {"date": ctx.D}, cache_date=ctx.D)
     data = body.get("data") if isinstance(body, dict) else None
     if not isinstance(data, dict) or not data.get("latest"):
         return FAIL("empty payload")
-    return LayerResult(ok=True, as_of=data["latest"].get("trd_dt") or ctx.D, rows=len(data.get("intraday") or []),
-                       data={"latest": data["latest"], "intraday": data.get("intraday") or [],
+    if data["latest"].get("trd_dt") and data["latest"]["trd_dt"] != ctx.D:
+        return FAIL(f"payload is for {data['latest']['trd_dt']}, not {ctx.D}")
+    intraday = data.get("intraday") or []
+    latest = data["latest"]
+    if ctx.pit:  # hr_min labels the end of each 10-minute bucket (first bucket 0940)
+        intraday = [b for b in intraday if (_bucket_end(ctx.D, b.get("hr_min")) or ctx.cutoff + timedelta(days=1)) <= ctx.cutoff]
+        if not intraday:
+            return FAIL("no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)")
+        latest = intraday[-1]
+    return LayerResult(ok=True, as_of=f"{latest.get('trd_dt') or ctx.D} {latest.get('hr_min')}", rows=len(intraday),
+                       notes=pit_note(ctx, "buckets closed by the cutoff"),
+                       data={"latest": latest, "intraday": intraday,
                              "note": "call_txn / put_txn = opening-buy transaction counts (Nasdaq Options Pulse)"})
 
 
@@ -968,13 +1054,15 @@ def layer_rr_skew(ctx: Ctx, oi_change: Optional[LayerResult]) -> LayerResult:
     expiry = pick_rr_expiry(exps, ctx.D)
     if not expiry:
         return FAIL("no expiry 14-60 DTE available")
+    end = ctx.K  # end-of-day skew
     rows = rows_of(ctx.get("rr_skew", f"/api/stock/{ctx.T}/historical-risk-reversal-skew",
-                           {"expiry": expiry, "delta": 25, "date": ctx.D}))
-    rows = sorted((r for r in rows if r.get("date") and r["date"] <= ctx.D), key=lambda r: r["date"])
+                           {"expiry": expiry, "delta": 25, "date": end}))
+    rows = sorted((r for r in rows if r.get("date") and r["date"] <= end), key=lambda r: r["date"])
     if not rows:
         return FAIL(f"empty payload (expiry {expiry})")
     series = [{"date": r["date"], "risk_reversal": num(r.get("risk_reversal"))} for r in rows][-60:]
     return LayerResult(ok=True, as_of=rows[-1]["date"], rows=len(rows), extra=f"expiry={expiry} delta=25",
+                       notes=pit_note(ctx, f"series through {end}"),
                        data={"expiry": expiry, "delta": 25, "series": series,
                              "note": "risk_reversal = put IV - call IV at matching |delta|"})
 
@@ -996,6 +1084,8 @@ def layer_multi_leg(ctx: Ctx) -> LayerResult:
                 break
         strategies = []
         for r in rows.values():
+            if d == ctx.D and not ctx.known(r.get("executed_at")):
+                continue
             strategies.append({
                 "id": r.get("id"), "t": r.get("executed_at"), "strategy": r.get("strategy"), "direction": r.get("direction"),
                 "net_side": r.get("net_side"), "all_opening_legs": r.get("all_opening_legs"),
@@ -1017,41 +1107,122 @@ def layer_multi_leg(ctx: Ctx) -> LayerResult:
                       "risk_reversals": [s for s in strategies if s["strategy"] == "risk_reversal"],
                       "roll_shapes": [s for s in strategies if s["strategy"] in ROLL_SHAPES],
                       "strategies": strategies}
-    return LayerResult(ok=True, as_of=ctx.D, rows=sum(v["count"] for v in per_day.values()),
+    return LayerResult(ok=True, as_of=(ctx.cutoff_iso if ctx.pit else ctx.D), rows=sum(v["count"] for v in per_day.values()),
                        extra=f"days={len(days)} min_size={ctx.cfg.multileg_min_size}",
+                       notes=pit_note(ctx, f"{ctx.D} strategies executed by the cutoff"),
                        data={"note": "risk_reversal = collar shape; vertical / diagonal / calendar = roll shapes",
                              "per_day": per_day})
 
 
+FLOW_STRIKE_COLS = ["strike", "call_volume_ask_side", "call_volume_bid_side", "call_premium_ask_side", "call_premium_bid_side",
+                    "put_volume_ask_side", "put_volume_bid_side", "put_premium_ask_side", "put_premium_bid_side",
+                    "call_volume", "put_volume", "call_premium", "put_premium"]
+
+
 def layer_flow_per_strike(ctx: Ctx) -> LayerResult:
     days = ctx.cal.window(ctx.D, ctx.cfg.flow_days)
-    cols = ["strike", "call_volume_ask_side", "call_volume_bid_side", "call_premium_ask_side", "call_premium_bid_side",
-            "put_volume_ask_side", "put_volume_bid_side", "put_premium_ask_side", "put_premium_bid_side",
-            "call_volume", "put_volume", "call_premium", "put_premium"]
+    cols = FLOW_STRIKE_COLS
     out: Dict[str, List[List[Any]]] = {}
+    partial = None
     for d in days:
+        if ctx.pit and d == ctx.D:
+            # flow-per-strike-intraday only carries the day's top strikes (~8), so D up to the cutoff is kept apart
+            rows = [r for r in rows_of(ctx.get(f"flow_per_strike_intraday_{d}", f"/api/stock/{ctx.T}/flow-per-strike-intraday",
+                                               {"date": d}, cache_date=d)) if ctx.known(r.get("timestamp"))]
+            agg: Dict[float, List[float]] = {}
+            for r in rows:
+                k = num(r.get("strike"))
+                if k is None:
+                    continue
+                a = agg.setdefault(k, [0.0] * (len(cols) - 1))
+                for i, c in enumerate(cols[1:]):
+                    a[i] += num(r.get(c)) or 0.0
+            partial = {"date": d, "until": ctx.cutoff_iso, "strikes": [[k] + v for k, v in sorted(agg.items())],
+                       "coverage": "subset: UW's intraday per-strike feed only covers the day's top strikes; "
+                                   "complete per-minute totals are in net-prem-ticks"}
+            continue
         body = ctx.get(f"flow_per_strike_{d}", f"/api/stock/{ctx.T}/flow-per-strike", {"date": d}, cache_date=d)
         rows = rows_of(body)  # bare list
         rows = [r for r in rows if (r.get("date") or d) == d]
         if rows:
             out[d] = sorted(([num(r.get(c)) for c in cols] for r in rows), key=lambda x: x[0] or 0)
-    if ctx.D not in out:
-        return FAIL(f"empty payload for {ctx.D}")
-    return LayerResult(ok=True, as_of=ctx.D, rows=len(out[ctx.D]), extra=f"days={len(out)}/{len(days)}",
-                       data={"columns": cols, "days": out})
+    last = ctx.K
+    if last not in out:
+        return FAIL(f"empty payload for {last}")
+    extra = f"days={len(out)}/{len(days) - (1 if ctx.pit else 0)}"
+    if partial is not None:
+        extra += f" D-partial strikes={len(partial['strikes'])}"
+    notes = pit_note(ctx, f"complete days through {last}; {ctx.D} up to the cutoff is a top-strikes subset in d_partial") if ctx.pit else []
+    return LayerResult(ok=True, as_of=last, rows=len(out[last]), extra=extra, notes=notes,
+                       data={"columns": cols, "days": out, "d_partial": partial})
 
 
 def layer_net_prem_ticks(ctx: Ctx) -> LayerResult:
-    rows = rows_of(ctx.get("net_prem_ticks", f"/api/stock/{ctx.T}/net-prem-ticks", {"date": ctx.D}))
+    raw = rows_of(ctx.get("net_prem_ticks", f"/api/stock/{ctx.T}/net-prem-ticks", {"date": ctx.D}, cache_date=ctx.D))
+    rows = [r for r in raw if (r.get("date") or ny_date(r.get("tape_time"))) == ctx.D
+            and ctx.known(r.get("tape_time"), lag_seconds=60)]  # tape_time = minute start
     if not rows:
-        return FAIL("empty payload")
+        if raw and not any((r.get("date") or ny_date(r.get("tape_time"))) == ctx.D for r in raw):
+            return FAIL(f"payload is not for {ctx.D}")
+        return FAIL("empty payload" + (" before the cutoff" if ctx.pit else ""))
     cols = ["tape_time", "net_call_premium", "net_put_premium", "net_call_volume", "net_put_volume", "net_delta",
             "call_volume", "put_volume"]
     ticks = [[r.get("tape_time")] + [num(r.get(c)) for c in cols[1:]] for r in rows]
     ticks.sort(key=lambda x: x[0] or "")
     totals = {c: sum((t[i] or 0.0) for t in ticks) for i, c in enumerate(cols) if i > 0}
-    return LayerResult(ok=True, as_of=rows[0].get("date") or ctx.D, rows=len(ticks),
+    return LayerResult(ok=True, as_of=ticks[-1][0] if ctx.pit else (rows[0].get("date") or ctx.D), rows=len(ticks),
+                       notes=pit_note(ctx, "minutes completed by the cutoff"),
                        data={"columns": cols, "ticks": ticks, "day_totals": totals})
+
+
+def layer_flow_alerts(ctx: Ctx) -> LayerResult:
+    """UW rule-based flow alerts (repeated hits, floor, sweeps) on D, up to the cutoff in point-in-time mode."""
+    key = lambda r: r.get("id") or (r.get("created_at"), r.get("option_chain"), r.get("total_size"))
+    rows, pages, truncated = paginate_day(ctx, "flow_alerts", "/api/option-trades/flow-alerts",
+                                          {"ticker_symbol": ctx.T}, key, ts_key="created_at", page_size=200,
+                                          start=ny_day_bounds_utc(ctx.D)[1])  # no date param: start at the end of D
+    alerts = []
+    for r in rows:
+        occ = parse_occ(r.get("option_chain")) or {}
+        alerts.append({
+            "t": r.get("created_at"), "sym": r.get("option_chain"), "type": (r.get("type") or occ.get("type") or "").lower(),
+            "strike": occ.get("strike"), "expiry": r.get("expiry") or occ.get("expiry"), "rule": r.get("alert_rule"),
+            "total_premium": num(r.get("total_premium")), "ask_premium": num(r.get("total_ask_side_prem")),
+            "bid_premium": num(r.get("total_bid_side_prem")), "size": inum(r.get("total_size")),
+            "trades": inum(r.get("trade_count")), "volume": inum(r.get("volume")), "open_interest": inum(r.get("open_interest")),
+            "volume_oi_ratio": num(r.get("volume_oi_ratio")), "sweep": r.get("has_sweep"), "floor": r.get("has_floor"),
+            "multileg": r.get("has_multileg"), "all_opening": r.get("all_opening_trades"), "iv": num(r.get("iv")),
+            "underlying_price_unreliable": num(r.get("underlying_price")),
+        })
+    alerts.sort(key=lambda a: a["t"] or "", reverse=True)
+    tot: Dict[str, float] = defaultdict(float)
+    for a in alerts:
+        tot[f"{a['type']}_ask_premium"] += a["ask_premium"] or 0.0
+        tot[f"{a['type']}_bid_premium"] += a["bid_premium"] or 0.0
+    return LayerResult(ok=True, as_of=(alerts[0]["t"] if alerts else (ctx.cutoff_iso or ctx.D)), rows=len(alerts),
+                       extra=f"pages={pages}", notes=pit_note(ctx, "alerts created by the cutoff") +
+                       ([f"pagination hit max_pages={ctx.cfg.max_pages}"] if truncated else []) +
+                       ([] if alerts else ["no flow alerts on D" + (" before the cutoff" if ctx.pit else "")]),
+                       data={"totals": dict(tot), "sweeps": sum(1 for a in alerts if a["sweep"]),
+                             "all_opening": sum(1 for a in alerts if a["all_opening"]), "alerts": alerts,
+                             "note": "strike parsed from the OCC symbol"})
+
+
+def layer_spot_gex(ctx: Ctx) -> LayerResult:
+    """Per-minute spot gamma/charm/vanna exposure on D (the intraday counterpart of greek-exposure)."""
+    rows = [r for r in rows_of(ctx.get("spot_exposures", f"/api/stock/{ctx.T}/spot-exposures", {"date": ctx.D}, cache_date=ctx.D))
+            if ny_date(r.get("time")) == ctx.D and ctx.known(r.get("time"))]
+    if not rows:
+        return FAIL("empty payload" + (" before the cutoff" if ctx.pit else ""))
+    rows.sort(key=lambda r: r.get("time") or "")
+    cols = ["time", "price", "gamma_per_one_percent_move_oi", "gamma_per_one_percent_move_vol", "gamma_per_one_percent_move_dir",
+            "charm_per_one_percent_move_oi", "vanna_per_one_percent_move_oi"]
+    series = [[r.get("time")] + [num(r.get(c)) for c in cols[1:]] for r in rows]
+    last = dict(zip(cols, series[-1]))
+    return LayerResult(ok=True, as_of=last["time"], rows=len(series),
+                       extra=f"gamma_oi={last['gamma_per_one_percent_move_oi']}",
+                       notes=pit_note(ctx, "latest exposure snapshot at or before the cutoff"),
+                       data={"latest": last, "columns": cols, "series": series})
 
 
 # --------------------------------------------------------------------------- supplemental: cross-checks
@@ -1092,7 +1263,9 @@ def oi_basis_walls(strikes: List[List[float]], spot: Optional[float],
 
 
 def layer_offlit_levels(ctx: Ctx, bin_size: float = 0.25) -> LayerResult:
-    rows = rows_of(ctx.get("offlit_price_levels", f"/api/stock/{ctx.T}/stock-volume-price-levels", {"date": ctx.D}))
+    end = ctx.K  # full-day aggregate, like darkpool-levels
+    rows = rows_of(ctx.get(f"offlit_price_levels_{end}", f"/api/stock/{ctx.T}/stock-volume-price-levels", {"date": end},
+                           cache_date=end if ctx.pit else None))
     if not rows:
         return FAIL("empty payload")
     bins: Dict[float, List[float]] = {}
@@ -1106,7 +1279,8 @@ def layer_offlit_levels(ctx: Ctx, bin_size: float = 0.25) -> LayerResult:
         a[1] += num(r.get("lit_vol")) or 0.0
     off, lit = sum(v[0] for v in bins.values()), sum(v[1] for v in bins.values())
     table = [[k, v[0], v[1], (v[0] / (v[0] + v[1])) if (v[0] + v[1]) else None] for k, v in sorted(bins.items(), reverse=True)]
-    return LayerResult(ok=True, as_of=ctx.D, rows=len(rows), extra=f"bins={len(table)}", data={
+    return LayerResult(ok=True, as_of=end, rows=len(rows), extra=f"bins={len(table)}",
+                       notes=pit_note(ctx, f"full-day aggregate: last completed session {end}"), data={
         "columns": ["price_bin", "off_vol", "lit_vol", "off_pct"], "bin_size": bin_size, "bins": table,
         "off_total": off, "lit_total": lit, "off_pct": off / (off + lit) if (off + lit) else None,
         "note": "FINRA off-exchange vs Nasdaq lit only (UW); second view on darkpool-levels"})
@@ -1128,26 +1302,28 @@ def layer_contract_history(ctx: Ctx, oi_change: Optional[LayerResult], gex: Opti
         add(c["sym"])
     for c in ranked[:2]:
         add(c["sym"])
-    today = (gex.data or {}).get("today") if (gex and gex.ok) else None
-    if today:
+    walls = (gex.data or {}).get("latest") if (gex and gex.ok) else None
+    if walls:
         for kind, typ in (("call_wall", "call"), ("put_wall", "put")):
-            k = today.get(kind)
+            k = walls.get(kind)
             cands = [c for c in live if c["type"] == typ and k is not None and c["strike"] == k]
             if cands:
                 add(max(cands, key=lambda c: c["curr_oi"] or 0)["sym"])
     if not picks:
         return FAIL("no contracts selected")
     out: Dict[str, Any] = {}
+    end = ctx.K  # D's daily row carries end-of-day volume
     for sym in picks:
         rows = rows_of(ctx.get(f"contract_history_{sym}", f"/api/option-contract/{sym}/historic", {"limit": 30}), "chains")
-        rows = sorted((r for r in rows if r.get("date") and r["date"] <= ctx.D), key=lambda r: r["date"])
+        rows = sorted((r for r in rows if r.get("date") and r["date"] <= end), key=lambda r: r["date"])
         out[sym] = [{"date": r["date"], **{k: num(r.get(k)) for k in (
             "open_interest", "volume", "ask_volume", "bid_volume", "mid_volume", "sweep_volume", "multi_leg_volume",
             "stock_multi_leg_volume", "implied_volatility", "total_premium", "last_price")}} for r in rows]
     got = sum(1 for v in out.values() if v)
     if not got:
         return FAIL("empty payloads (`chains`)")
-    return LayerResult(ok=True, as_of=ctx.D, rows=sum(len(v) for v in out.values()), extra=f"contracts={got}/{len(picks)}",
+    return LayerResult(ok=True, as_of=end, rows=sum(len(v) for v in out.values()), extra=f"contracts={got}/{len(picks)}",
+                       notes=pit_note(ctx, f"daily rows through {end}; D's opening OI is in oi-change"),
                        data={"selection": "unexpired only: top 3 OI increases, top 2 decreases, largest-OI contract at call_wall / put_wall",
                              "contracts": out})
 

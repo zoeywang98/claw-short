@@ -23,11 +23,14 @@ class FakeClient:
         return Response(path, 200, self.router(path, dict(params or {})), "t", False, {})
 
 
-def make_ctx(router, D=D, days=DAYS, today="2026-09-27", **cfg):
+def make_ctx(router, D=D, days=DAYS, today="2026-09-27", cutoff=None, **cfg):
     tmp = tempfile.mkdtemp()
     client = FakeClient(router)
-    ctx = L.Ctx(client, "TEST", D, L.Calendar(days), L.Config(**cfg), tmp, os.path.join(tmp, "cache"), today)
+    ctx = L.Ctx(client, "TEST", D, L.Calendar(days), L.Config(**cfg), tmp, os.path.join(tmp, "cache"), today, cutoff)
     return ctx, client
+
+
+CUT = L.datetime(2026, 9, 25, 9, 35, tzinfo=L.NY)   # 13:35Z
 
 
 class Helpers(unittest.TestCase):
@@ -112,6 +115,20 @@ class Layers(unittest.TestCase):
         ctx, _ = make_ctx(lambda path, p: {"data": [], "date": p["date"]})
         self.assertFalse(L.layer_darkpool_levels(ctx).ok)
 
+    def test_cache_file_is_unique_per_request(self):
+        ctx, client = make_ctx(lambda path, p: {"data": [{"date": p["date"], "tape_time": f"{p['date']}T14:00:00Z"}]})
+        ctx.get("same_name", "/api/x", {"date": "2026-09-24"}, cache_date="2026-09-24")
+        ctx.get("same_name", "/api/x", {"date": "2026-09-25"}, cache_date="2026-09-25")
+        files = [c[2] for c in client.calls]
+        self.assertEqual(len(set(files)), 2)
+        self.assertNotEqual(L.request_key("/api/x", {"date": "a", "source": "vol"}), L.request_key("/api/x", {"date": "a", "source": "oi"}))
+
+    def test_wrong_date_payload_fails(self):
+        ctx, _ = make_ctx(lambda path, p: {"data": [{"date": "2026-09-24", "tape_time": "2026-09-24T14:00:00Z"}]})
+        self.assertIn("not for", L.layer_net_prem_ticks(ctx).reason)
+        ctx, _ = make_ctx(lambda path, p: {"data": {"latest": {"trd_dt": "2026-09-24", "hr_min": "1620"}, "intraday": []}})
+        self.assertFalse(L.layer_options_pulse(ctx).ok)
+
     def test_cache_only_for_past_days(self):
         ctx, client = make_ctx(lambda path, p: {"data": [{"price": "1", "dark_pool_volume": "1", "regular_volume": "1"}]}, today=D)
         L.layer_darkpool_levels(ctx)
@@ -187,7 +204,8 @@ class Layers(unittest.TestCase):
         ctx, _ = make_ctx(router)
         r = L.layer_gex_levels(ctx)
         self.assertTrue(r.ok, r.reason)
-        self.assertEqual(r.data["today"]["call_wall"], 250.0)
+        self.assertEqual(r.data["latest"]["call_wall"], 250.0)
+        self.assertEqual(r.data["levels_date"], D)
         self.assertEqual(r.data["day_over_day_change"]["vol"]["call_wall"], 0.0)
         ctx, _ = make_ctx(lambda path, p: {"data": {"date": p["date"], "call_wall": None, "put_wall": None,
                                                     "gamma_flip": None, "gamma_magnet": None}})
@@ -263,10 +281,87 @@ class Layers(unittest.TestCase):
         oi = L.LayerResult(ok=True, data={"contracts": [
             {"sym": "TEST260925C00250000", "type": "call", "strike": 250.0, "expiry": "2026-09-25", "oi_diff": 900, "curr_oi": 9000},
             {"sym": "TEST261016C00250000", "type": "call", "strike": 250.0, "expiry": "2026-10-16", "oi_diff": 10, "curr_oi": 100}]})
-        gex = L.LayerResult(ok=True, data={"today": {"call_wall": 250.0, "put_wall": None}})
+        gex = L.LayerResult(ok=True, data={"latest": {"call_wall": 250.0, "put_wall": None}})
         ctx, client = make_ctx(lambda path, p: {"chains": [{"date": D, "open_interest": 1}]})
         r = L.layer_contract_history(ctx, oi, gex)
         self.assertEqual(list(r.data["contracts"]), ["TEST261016C00250000"])
+
+
+class PointInTime(unittest.TestCase):
+    """--asof: rows after the cutoff are dropped; end-of-day sources use K = prior session."""
+
+    def test_ctx(self):
+        ctx, _ = make_ctx(lambda p, q: {}, cutoff=CUT)
+        self.assertEqual((ctx.pit, ctx.K, ctx.cutoff_iso), (True, "2026-09-24", "2026-09-25T13:35:00Z"))
+        self.assertTrue(ctx.known("2026-09-25T13:35:00Z"))
+        self.assertFalse(ctx.known("2026-09-25T13:35:01Z"))
+        self.assertFalse(ctx.known("2026-09-25T13:34:30Z", lag_seconds=60))
+        full, _ = make_ctx(lambda p, q: {})
+        self.assertEqual(full.K, D)
+        self.assertTrue(full.known("2099-01-01T00:00:00Z"))
+
+    def test_darkpool_levels_end_at_prior_session(self):
+        ctx, client = make_ctx(lambda path, p: {"date": p["date"], "data": [{"price": "10", "dark_pool_volume": "3", "regular_volume": "1"}]}, cutoff=CUT)
+        r = L.layer_darkpool_levels(ctx)
+        self.assertEqual((r.ok, r.as_of, r.data["window_end"]), (True, "2026-09-24", "2026-09-24"))
+        self.assertNotIn(D, [c[1]["date"] for c in client.calls])
+
+    def test_short_layers(self):
+        sv = [{"market_date": D, "short_volume_ratio": "0.9"}, {"market_date": "2026-09-24", "short_volume_ratio": "0.4"}]
+        ctx, _ = make_ctx(lambda path, p: {"si": sv}, cutoff=CUT)
+        self.assertEqual(L.layer_short_volume(ctx).as_of, "2026-09-24")
+        sd = [{"timestamp": "2026-09-25T15:24:50Z", "fee_rate": "9"}, {"timestamp": "2026-09-25T12:00:00Z", "fee_rate": "0.5"}]
+        ctx, _ = make_ctx(lambda path, p: {"data": sd}, cutoff=CUT)
+        self.assertEqual(L.layer_short_data(ctx).data["latest"]["fee_rate"], 0.5)
+
+    def test_intraday_filters(self):
+        ticks = [{"tape_time": "2026-09-25T13:33:00Z", "net_call_premium": "1"},
+                 {"tape_time": "2026-09-25T13:34:00Z", "net_call_premium": "2"},   # minute ends 13:35 -> kept
+                 {"tape_time": "2026-09-25T13:35:00Z", "net_call_premium": "4"}]   # ends 13:36 -> dropped
+        ctx, _ = make_ctx(lambda path, p: {"data": ticks}, cutoff=CUT)
+        self.assertEqual(L.layer_net_prem_ticks(ctx).data["day_totals"]["net_call_premium"], 3.0)
+        pulse = {"data": {"latest": {"hr_min": "1620"}, "intraday": [{"hr_min": "0940", "call_txn": 1}]}}
+        ctx, _ = make_ctx(lambda path, p: pulse, cutoff=CUT)
+        self.assertFalse(L.layer_options_pulse(ctx).ok)                       # first bucket ends 09:40
+        ctx, _ = make_ctx(lambda path, p: pulse, cutoff=L.datetime(2026, 9, 25, 9, 40, tzinfo=L.NY))
+        self.assertEqual(L.layer_options_pulse(ctx).data["latest"]["call_txn"], 1)
+        spot = {"data": [{"time": "2026-09-25T13:30:00Z", "price": "1"}, {"time": "2026-09-25T13:40:00Z", "price": "2"}]}
+        ctx, _ = make_ctx(lambda path, p: spot, cutoff=CUT)
+        self.assertEqual(L.layer_spot_gex(ctx).data["latest"]["price"], 1.0)
+
+    def test_ohlc_5m_bars_closed_by_cutoff(self):
+        bars = [{"start_time": "2026-09-25T13:25:00Z", "end_time": "2026-09-25T13:30:00Z", "market_time": "pr", "close": "1"},
+                {"start_time": "2026-09-25T13:30:00Z", "end_time": "2026-09-25T13:35:00Z", "market_time": "r", "close": "2"},
+                {"start_time": "2026-09-25T13:35:00Z", "end_time": "2026-09-25T13:40:00Z", "market_time": "r", "close": "3"}]
+        ctx, _ = make_ctx(lambda path, p: {"data": bars if p["date"] == D else []}, cutoff=CUT)
+        r = L.layer_ohlc_5m(ctx)
+        self.assertEqual([b[4] for b in r.data["days"][D]], [1.0, 2.0])
+
+    def test_flow_per_strike_rebuilds_D_from_minutes(self):
+        def router(path, p):
+            if path.endswith("intraday"):
+                return {"data": [{"timestamp": "2026-09-25T13:31:00Z", "strike": "240", "call_volume_ask_side": 5},
+                                 {"timestamp": "2026-09-25T13:32:00Z", "strike": "240", "call_volume_ask_side": 2},
+                                 {"timestamp": "2026-09-25T14:00:00Z", "strike": "240", "call_volume_ask_side": 99}]}
+            return [{"date": p["date"], "strike": "240", "call_volume_ask_side": 1}]
+        ctx, _ = make_ctx(router, cutoff=CUT)
+        r = L.layer_flow_per_strike(ctx)
+        self.assertNotIn(D, r.data["days"])                                  # partial subset kept apart
+        self.assertEqual(r.data["d_partial"]["strikes"][0][:2], [240.0, 7.0])
+        self.assertEqual(r.data["days"]["2026-09-24"][0][:2], [240.0, 1.0])
+        self.assertEqual(r.as_of, "2026-09-24")
+
+    def test_multi_leg_drops_D_rows_after_cutoff(self):
+        rows = [{"id": "a", "executed_at": "2026-09-25T13:34:00Z", "strategy": "risk_reversal"},
+                {"id": "b", "executed_at": "2026-09-25T15:00:00Z", "strategy": "risk_reversal"}]
+        ctx, _ = make_ctx(lambda path, p: {"data": rows if p["newer_than"].startswith("2026-09-25") else []}, cutoff=CUT)
+        r = L.layer_multi_leg(ctx)
+        self.assertEqual([s["id"] for s in r.data["per_day"][D]["strategies"]], ["a"])
+
+    def test_live_only_layers_fail(self):
+        ctx, _ = make_ctx(lambda path, p: {"data": [{"x": 1}]}, cutoff=CUT)
+        self.assertFalse(L.layer_option_contracts(ctx).ok)
+        self.assertFalse(L.layer_unusualness(ctx).ok)
 
 
 if __name__ == "__main__":
