@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 98600,
+ "stop_reason": "end_turn",
+ "session_id": "62c8124a-6cfc-4de7-a2d5-f83d28a07051",
+ "total_cost_usd": 0.8583246,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 83479,
+  "cache_read_input_tokens": 19523,
+  "output_tokens": 9329,
+  "output_tokens_details": {
+   "thinking_tokens": 6281
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 83479,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 9329,
+    "cache_read_input_tokens": 19523,
+    "cache_creation_input_tokens": 83479,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 83479
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 9329,
+   "cacheReadInputTokens": 19523,
+   "cacheCreationInputTokens": 83479,
+   "webSearchRequests": 0,
+   "costUSD": 0.8583246,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 6281,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA** · 医药 · Healthcare · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① **挤仓否决：通过**\n- SI% float 3.23%（as-of 2026-08-31，滞后 25 天，仅作背景）；days_to_cover 7.71。\n- 实时借券费率 0.4135，可借量 7,400,000 股（as-of 2026-09-25T15:24:50Z）。9 月中费率曾升到 0.8421（09-22），可借量曾低到 2,800,000（09-15），现在已回落。\n- T+1 空头成交比 0.390，20 日区间 0.231–0.692，不在高位。\n- 近 5 日涨 +0.54%，21 日涨 +3.35%，不算急涨。背景：3 个月涨 +16.6%，52 周高点 40.79 出现在 09-21。\n- SI 低、费率低、可借量尚可，挤仓否决不触发。\n\n② **熔断：未熔断**\n- Healthcare 池负 gamma 8/35，高于 4/35 的门槛。医药分组 1/6 只作参考。\n- 本票 net gamma +541,149（正值，as-of 2026-09-25，取 max(date) 行）。\n\n③ **量级：足够，但边缘、打折**\n- 1D 暗池量 1,837,610，DP% 79.7%。这是近 5 日最低：1W 日均约 2.76M，1M 日均约 2.41M。相对成交量 0.76。\n- 大单参与度表面 16.4%（按规模算 14.8%）。但其中 12.0 个百分点来自盘外单：\n  - 盘前 08:24 平均价成交 320,659 股 @40.22（等于前收）；\n  - 盘后 17:29 参考价成交 134,924 股 @39.19。\n- 剔除这两笔后，盘中大单只有约 170,076 股，约 4.4%，接近散户噪音区间。\n\n④ **方向：不明（1M 偏吸筹，1W 走平滞涨，未见派发）**\n\n| 窗口 | DP% | top8 重心 |\n|---|---|---|\n| 1M | 85.4% | 37.64 |\n| 1W | 85.3% | 39.28 |\n| 1D | 79.7% | 39.20 |\n\n- 快照重心：08-26 为 37.17 → 09-18 为 38.73 → 09-25 为 39.20。\n- 主力档位逐窗口上移：36.0（1M 最大档 16.79M）→ 38.0 → 39.0（1W 最大档 9.01M，占 1W 暗池量 65%）。价格从约 36 一路抬到 39–40，这是吸筹形态。\n- 1W 内重心走平（逐日 39.77 / 39.25 / 38.99 / 39.18 / 39.20）。40.0 档两次收上后都没站稳（09-21 收 40.06，09-24 收 40.22）。\n- 价格位置：收盘 39.19 站在 39.0 与 38.75 档上方，在 39.75 与 40.0 档下方。\n- 结论：没有出现\"档位下移、在更低处重建\"。这只是高位滞涨，没有派发确认。\n\n⑤ **动机：Gamma 对冲（无方向），1M 背景偏吸筹。不是派发指纹。**\n- **位置**：1W 暗池量集中在 39.0 和 40.0，正好对应 OI put wall 39 和 call wall 40（magnet 40）。本票处于正 gamma，价格被钉在 39–40 之间双向成交。1W 内 DP% 没有持续迁移。\n- **期权 OI（09-25 次日确认，对应 09-24 的交易）**：\n  - Call OI +2,851，Put OI +515。\n  - Call OI 主要增在 11/20 43C：+2,152，前一日 ask 1,633 对 bid 37，属于买入开仓。派发要求 Call OI 走平或下降，这里相反。\n- **IV**：iv30 0.32（一周前 0.31、一月前 0.323），iv rank 12.4，处于压缩低位，没有扩张。25d 风险逆转 −0.016，中性。期权成交量百分位 12.1，活跃度收缩，所以也不构成库存转移。\n- **今日 flow 的偏空读数被机械单放大**：bearish premium 615,104 对 bullish 467,338，net call premium −106,159。但主要来自两类机械性多腿单：\n  - 0DTE 深度价内 47P（ask 184）和 46P（bid 176），合计约 249k premium，两边对冲；\n  - 0DTE 深度价内 call 的多腿成交。\n  - ≥$50k 的大额 flow 为 0 行。\n- **借券**：见 ①，不紧张。\n- **季末因素**：季末 09-30，还剩 3 个交易日。盘外平均价 / 参考价大单带有再平衡特征，已按基金再平衡排除项降权，但期权端并不平，所以不是纯再平衡。\n\n⑥ **Dealer：决策表命中\"Wall↑ + Ask + OI↑ → 偏多，不利于做空\"（09-24 那组，已有次日 OI 确认）**\n- **结构位（gex-levels，OI 口径，09-24 → 09-25）**：call wall 45 → 40（−5），put wall 40 → 39（−1），gamma flip 39.51 → 38.52（−0.99），magnet 40 → 40（不变）。\n- **结构位（成交量口径）**：call wall 50 → 39.5，put wall 40 → 39，flip 40.5 → 39.72，magnet 40 → 39。\n- **现价与 flip 的关系**：DP NBBO 中点 39.755 取自盘后报价，价差 1.93 很宽；RTH 收盘中点 39.15。两者都在 OI flip 38.52 上方，即正 gamma 区。相对成交量口径 flip 39.72 的位置不明确。\n- **命中项（09-24）**：OI call wall 40 → 45 上移；43C、45C、47C 以 ask 侧为主（43C ask 1,633 / bid 37）；09-25 OI 确认 43C +2,152、47C +36。对应\"偏多，不利于做空\"。\n- **09-25 这组**：call wall 下移到 40；40 行权价 call 成交 ask 121 / bid 52，premium 大致相当。次日 OI 未明确（需要 09-28 数据），不构成命中。\n- **补充**：10/02 40C 在 09-24 有 bid 577 的卖出开仓，OI +206，在 40 形成一个小盖子。但相对 40 行权价 call 总 OI 31,377 很小，也不符合决策表的组合。\n\n**仓位 / 意图 / 不对称性**：\n- 暗池持有人在 39.0 档重仓，同时有买 call 开仓扩展上方敞口（11 月 43C）。持有人偏多，不是在离场。\n- Dealer 正 gamma，把价格钉在 39–40 区间。\n- 做空的不对称性不利：下方离 OI flip 38.52 只有约 1.7%，而且正 gamma 下逢跌会被买入；上方 52 周高点 40.79 只差约 1 个 ATR（1.33）。\n\n**失效位**：不适用（未构成 setup，不建仓）。\n- 转为做空候选需同时满足：\n  - 收盘跌破 38.52（OI gamma flip）且失守 39.0 暗池主档；\n  - 后续窗口档位在更低位置重建；\n  - Call OI 转为走平或下降。\n- 季末 09-30 之后再评估，以避开再平衡噪音。\n- 反向：站稳 40.0 call wall 上方，吸筹判断加强，继续排除。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=4 days=22/22\n✅ RAN darkpool as-of 2026-09-25T21:29:16Z rows=17 blocks=17 spot=39.755\n✅ RAN option-trades as-of 2026-09-25 rows=0 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:11.459000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=541149.1855\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.390\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+ "ttft_ms": 68316,
+ "type": "result",
+ "duration_ms": 98661,
+ "uuid": "2f21ef42-4ed5-4a04-bdf2-fa258e1fedd1",
+ "ttft_stream_ms": 1431,
+ "time_to_request_ms": 34,
+ "first_content_frame_ms": 1432,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

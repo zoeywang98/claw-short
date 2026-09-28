@@ -1,8 +1,9 @@
 #!/bin/bash
 # Daily post-close short scan, one ticker at a time:
-#   1. market layer once (all tickers, greek-exposure only + sector breaker pools, calendar, correlations)
-#   2. per ticker: fetch full data -> brief -> bare `claude -p` analysis (analyze.py) -> post to Discord as claw-short
-#   3. one summary post over all tickers (summarize.py)
+#   1. market layer once (all tickers, greek-exposure only -> watchlist breaker board, calendar, correlations)
+#   2. fetch full data for every ticker, then add the whole-watchlist cross-section to the market brief
+#   3. per ticker: brief -> bare `claude -p` analysis (analyze.py) -> post to Discord as claw-short
+#   4. one summary post over all tickers (summarize.py)
 #
 # usage: run.sh [--dry-run] [--tickers LITE,COHR] [--date YYYY-MM-DD]
 #   --dry-run   analyse but do not post to Discord (replies saved under logs/<D>/)
@@ -16,7 +17,7 @@ HERE=$WS/daily_short
 RUNS=$FETCH/runs
 export PATH=/Users/yuwang/.nvm/versions/node/v24.16.0/bin:/Users/yuwang/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:$PATH
 # every per-ticker layer except greek-exposure: the market pass only needs each name's net gamma
-MARKET_SKIP=darkpool-levels,darkpool,option-trades,gex-levels,short-interest,short-volume,short-data,lit-blocks,ohlc-daily,ohlc-5m,oi-change,option-contracts,oi-per-strike,options-volume,interpolated-iv,option-sentiment,unusualness,options-pulse,multi-leg,flow-per-strike,net-prem-ticks,greek-exposure-strike,offlit-levels,flow-alerts,spot-gex,contract-history,rr-skew
+MARKET_SKIP=darkpool-levels,darkpool,option-trades,gex-levels,short-interest,short-volume,short-data,lit-blocks,ohlc-daily,ohlc-5m,oi-change,option-contracts,oi-per-strike,options-volume,interpolated-iv,option-sentiment,unusualness,options-pulse,multi-leg,flow-per-strike,net-prem-ticks,greek-exposure-strike,offlit-levels,flow-alerts,spot-gex,contract-history,rr-skew,iv-rv
 
 DRY=0; TICKERS=""; DATE=""
 while [ $# -gt 0 ]; do
@@ -57,11 +58,17 @@ fi
 
 LOG=$HERE/logs/$DATE; mkdir -p "$LOG"
 ok=0; fail=0; FAILED=""; STARTED=$(date +%s)
-for T in ${TICKERS//,/ }; do
-  if [ $FRESH -eq 1 ]; then
+# fetch every ticker before any analysis, so each read sees the whole watchlist (SHORT_ENGINE §2 / §5.2)
+if [ $FRESH -eq 1 ]; then
+  for T in ${TICKERS//,/ }; do
     python3 fetch.py --quiet --tickers "$T" --date "$DATE" --out "$RUNS/tickers/$T" > "$LOG/$T.fetch.out" 2>&1
     echo "$T fetch · $(usage_line "$RUNS/tickers/$T/$DATE/run_log.txt")"
-  fi
+  done
+fi
+python3 brief.py --date "$DATE" --tickers "$TICKERS" --cross-section "$MARKET" > "$LOG/_cross_section.out" 2>&1 \
+  && echo "cross-section · $(tail -1 "$LOG/_cross_section.out")" \
+  || echo "⚠ cross-section failed (see logs/$DATE/_cross_section.out)"
+for T in ${TICKERS//,/ }; do
   if [ -f "$RUNS/tickers/$T/$DATE/$T/snapshot.json" ]; then
     SRC=$RUNS/tickers/$T
   else

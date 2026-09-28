@@ -36,6 +36,7 @@ PHASE_A = [
     ("oi-per-strike", False, L.layer_oi_per_strike),
     ("options-volume", False, L.layer_options_volume),
     ("interpolated-iv", False, L.layer_interpolated_iv),
+    ("iv-rv", False, L.layer_iv_rv),
     ("option-sentiment", False, L.layer_option_sentiment),
     ("unusualness", False, L.layer_unusualness),
     ("options-pulse", False, L.layer_options_pulse),
@@ -62,8 +63,6 @@ def parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
     ap.add_argument("--date", help="target trading date YYYY-MM-DD (default: latest trading day)")
     ap.add_argument("--asof", help="point-in-time cutoff HH:MM (New York time) on --date; drops data after it "
                                    "and uses the prior session for end-of-day-only sources")
-    ap.add_argument("--universe-file", help="circuit-breaker names (default: top --universe-size by market cap in each candidate's sector)")
-    ap.add_argument("--universe-size", type=int, default=35)
     ap.add_argument("--out", default=os.path.join(PROJECT_DIR, "data"))
     ap.add_argument("--cache", default=os.path.join(PROJECT_DIR, "cache"))
     ap.add_argument("--env-file", default="~/.openclaw/.env")
@@ -104,52 +103,6 @@ def fetch_screener_batch(ctx: Ctx, tickers: List[str]) -> LayerResult:
     return LayerResult(ok=True, as_of=dates[-1] if dates else None, rows=len(by_t), data=by_t,
                        notes=([f"missing from screener: {', '.join(missing)}"] if missing else [])
                        + L.pit_note(ctx, f"screener rows are end-of-day snapshots; using {ctx.K}"))
-
-
-def fetch_universes(ctx: Ctx, universe_file: Optional[str], sectors: List[str]) -> List[LayerResult]:
-    """Circuit-breaker pool. Gamma is read for D (UW computes daily gamma from OI at the open);
-    in point-in-time mode the top-N membership comes from the prior session's market caps."""
-    specs: List[Tuple[str, str, Dict[str, Any], List[str]]] = []
-    if universe_file:
-        with open(os.path.expanduser(universe_file)) as fh:
-            names = read_names(fh.read())
-        specs.append((f"file {os.path.basename(universe_file)} ({len(names)} names)", "universe_file",
-                      {"ticker": ",".join(names), "date": ctx.D, "limit": 500}, names))
-    else:
-        for s in sectors:
-            params = {"sectors[]": s, "order": "marketcap", "order_direction": "desc",
-                      "limit": ctx.cfg.universe_size, "date": ctx.K}
-            if ctx.pit:
-                members = [r.get("ticker") for r in rows_of(ctx.get(f"universe_members_{s}_{ctx.K}", SCREENER, params)) if r.get("ticker")]
-                specs.append((f"{s} · top {ctx.cfg.universe_size} by market cap on {ctx.K}", f"universe_{s}",
-                              {"ticker": ",".join(members), "date": ctx.D, "limit": 500}, members))
-            else:
-                specs.append((f"{s} · top {ctx.cfg.universe_size} by market cap", f"universe_{s}", params, []))
-    if not specs:
-        return [L.FAIL("no universe: pass --universe-file, or candidates need a screener sector", name="universe")]
-    out = []
-    for label, raw, params, names in specs:
-        def one() -> LayerResult:
-            if "ticker" in params and not params["ticker"]:
-                return L.FAIL("no universe members")
-            rows = rows_of(ctx.get(raw, SCREENER, params))
-            if not rows:
-                return L.FAIL("empty payload")
-            summ = L.universe_summary(label, rows, ctx.D)
-            if summ["null"] == summ["n"]:
-                return L.FAIL("no gamma values in payload")
-            notes = []
-            if names:
-                got = {i["ticker"] for i in summ["items"]}
-                miss = [n for n in names if n not in got]
-                if miss:
-                    notes.append(f"not returned: {', '.join(miss)}")
-            if summ["dates"] != [ctx.D]:
-                notes.append(f"row dates {summ['dates']} (expected {ctx.D})")
-            return LayerResult(ok=True, as_of=summ["as_of"], rows=summ["n"], data=summ, notes=notes,
-                               extra=f"net_gamma<0={summ['negative']}/{summ['n']}")
-        out.append(run_layer(f"universe[{label}]", False, one))
-    return out
 
 
 def fetch_correlations(ctx: Ctx, tickers: List[str], sectors: List[str]) -> LayerResult:
@@ -237,6 +190,25 @@ def run_ticker(ctx: Ctx, screener: LayerResult, skip: set) -> Tuple[Dict[str, La
         "walls_crosscheck": L.oi_basis_walls(ges.data["strikes"], spot["mid"], gex_oi) if (ges and ges.ok and spot) else None,
     }
     return res, derived
+
+
+FLOW_IV_DIR = os.path.join(PROJECT_DIR, "history", "flow_iv")
+
+
+def flow_iv_history(T: str, D: str, today: Optional[Dict[str, Any]], complete: bool) -> Dict[str, Any]:
+    """Day-over-day flow-IV (SHORT_ENGINE §5.1). option-trades only serves the latest day, so each completed
+    session's premium-weighted IV is kept in history/flow_iv/<T>.json; an intraday run reads it but never writes."""
+    path = os.path.join(FLOW_IV_DIR, f"{T}.json")
+    hist: Dict[str, Any] = {}
+    if os.path.exists(path):
+        with open(path) as fh:
+            hist = json.load(fh)
+    if today is not None and complete:
+        hist[D] = dict(today, recorded_at=datetime.now(NY).isoformat(timespec="seconds"))
+        write_json(path, hist, indent=1)
+    prior = [dict(v, date=d) for d, v in sorted(hist.items()) if d < D][-10:]
+    return {"today": today, "today_complete": complete, "history": prior,
+            "note": "history = earlier completed sessions from history/flow_iv (kept since 2026-09-28); missing days were not recorded"}
 
 
 def group_gamma(net_gamma: Dict[str, Optional[float]]) -> List[Dict[str, Any]]:
@@ -354,7 +326,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     skip = {s.strip() for s in args.skip.split(",") if s.strip()}
     cfg = Config(dp_days=max(22, args.dp_days), gex_days=max(2, args.gex_days), flow_days=max(1, args.flow_days),
                  block_shares=args.block_shares, block_premium=args.block_premium, flow_min_premium=args.flow_min_premium,
-                 multileg_min_size=args.multileg_min_size, universe_size=args.universe_size, use_cache=not args.no_cache)
+                 multileg_min_size=args.multileg_min_size, use_cache=not args.no_cache)
     say = (lambda *a: None) if args.quiet else (lambda *a: print(*a, flush=True))
 
     client = UWClient(load_token(args.token_env, args.env_file), concurrency=args.concurrency)
@@ -391,7 +363,6 @@ def main(argv: Optional[List[str]] = None) -> int:
                           f"are computed at the open and kept")
     screener = run_layer("screener-batch", False, fetch_screener_batch, mctx, tickers)
     sectors = sorted({v.get("sector") for v in (screener.data or {}).values() if v.get("sector")}) if screener.ok else []
-    universes = fetch_universes(mctx, args.universe_file, sectors)
     corr = run_layer("correlations", False, fetch_correlations, mctx, tickers, sectors)
     etf = run_layer("sector-etf-flows", False, fetch_etf_flows, mctx, sectors)
     flags = L.calendar_flags(D)
@@ -408,6 +379,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         all_core_ok &= core_ok == len(CORE_LAYERS)
         ge = res.get("greek-exposure")
         net_gamma[T] = ge.data["today"]["net_gamma"] if (ge and ge.ok) else None
+        ot = res.get("option-trades")
+        session_done = D < today_ny or (now_ny.hour, now_ny.minute) >= (16, 15)
+        derived["flow_iv"] = flow_iv_history(T, D, ot.data["aggregates"]["flow_iv"] if (ot and ot.ok) else None,
+                                              complete=bool(ot and ot.ok) and cutoff is None and session_done)
         order = CORE_LAYERS + [n for n in res if n not in CORE_LAYERS]
         write_json(os.path.join(out_dir, T, "snapshot.json"), {
             "ticker": T, "group": W.group_of(T) or None, "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
@@ -436,15 +411,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         f"{flags['weekdays_to_quarter_end']} to quarter end · last quad witching {flags['last_quad_witching']} "
         f"({flags['days_since_quad_witching']}d ago)",
     ]
-    for u in universes:
-        if u.ok:
-            d = u.data
-            names = ", ".join(d["negative_names"]) or "none"
-            head.append(f"universe [{d['label']}] as-of {d['as_of']}: net gamma < 0 → {d['negative']}/{d['n']} ({names}); null={d['null']}")
-        else:
-            head.append(u.log_line())
-        head += [f"     note: {n}" for n in u.notes]
     groups = group_gamma(net_gamma)
+    neg_all, n_all = sum(g["negative"] for g in groups), sum(g["n"] for g in groups)
+    head.append(f"watchlist (breaker board, SHORT_ENGINE §3) net gamma < 0 → {neg_all}/{n_all}")
     for g in groups:
         head.append(f"watchlist group [{g['label']}] net gamma < 0 → {g['negative']}/{g['n']}"
                     + (f" ({', '.join(g['negative_names'])})" if g["negative_names"] else "")
@@ -456,7 +425,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     log_text = "\n".join(head + all_lines) + "\n"
     with open(os.path.join(out_dir, "run_log.txt"), "w") as fh:
         fh.write(log_text)
-    write_json(os.path.join(out_dir, "universe_gamma.json"), [u.to_json() for u in universes], indent=1)
     write_json(os.path.join(out_dir, "group_gamma.json"), groups, indent=1)
     write_json(os.path.join(out_dir, "market.json"), {
         "target_date": D, "calendar_flags": flags, "screener_batch": screener.to_json(),
@@ -465,7 +433,6 @@ def main(argv: Optional[List[str]] = None) -> int:
         "target_date": D, "asof_cutoff": cutoff.isoformat() if cutoff else None,
         "latest_trading_day": cal.latest(), "generated_at": now_ny.isoformat(timespec="seconds"),
         "usage": usage, "requests": client.network_requests, "cache_hits": client.cache_hits,
-        "universes": [{k: v for k, v in u.to_json().items() if k != "data"} for u in universes],
         "tickers": summary}, indent=1)
     say("")
     say(log_text)

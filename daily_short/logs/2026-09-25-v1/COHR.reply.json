@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 103437,
+ "stop_reason": "end_turn",
+ "session_id": "26adb5e6-6df2-4f50-8fc8-cc1f1330b6d0",
+ "total_cost_usd": 2.1384886,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 242167,
+  "cache_read_input_tokens": 19523,
+  "output_tokens": 9862,
+  "output_tokens_details": {
+   "thinking_tokens": 7098
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 242167,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 9862,
+    "cache_read_input_tokens": 19523,
+    "cache_creation_input_tokens": 242167,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 242167
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 9862,
+   "cacheReadInputTokens": 19523,
+   "cacheCreationInputTokens": 242167,
+   "webSearchRequests": 0,
+   "costUSD": 2.1384886,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7098,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**COHR** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：\n- SI% float 5.50%（as-of 2026-08-31，滞后 25 天，仅作背景）。序列 4.44%→5.50% 缓升，days_to_cover 1.72。\n- 实时借券费率 0.4081（单位未明确）。9/11 起由 0.3269 上调，之后持平，属低位。\n- 可借量 3,400,000 股。20 日区间 2.8M–3.6M，无收紧。\n- T+1 空头成交比 0.533，从 9/21 的 0.649 回落。\n- 近 5 日 −6.78%，近 21 日 +0.50%。9/03 低点 255.25 到 9/21 高点 332.86 的急涨已过去一周，现价较高点回撤约 11%，不算\"刚刚急涨\"。\n- 判定：**通过**\n\n② 熔断：\n- Technology 池负 gamma 6/35，高于 §3 阈值 4/35。\n- 本票 net gamma −20,396.8（负 gamma）。gex-levels 当日数据存在。\n- watchlist 光模块组 2/5 仅作参考。\n- 判定：**未熔断**（贴近阈值）\n\n③ 量级：\n- 1D DP 绝对量 2,315,560 股，DP% 86.76%。约为 1M 日均 3,097,395 股的 75%，1W 内逐日递减：3.78M → 3.92M → 2.70M → 2.48M → 2.32M。relative_volume 0.76。\n- 大单参与度：either 口径 8.53%（dark）/ 8.62%（total），by_size 仅 2.23%（6 笔）。低于 16–21% 的机构带。\n- 盘后 30 笔大单（占日量 2.62%）集中在收盘价 295.83，条件为 prior_reference_price / average_price_trade，属收盘参考价撮合。\n- 判定：**薄**。按 §4.1 不强行给方向。\n\n④ 方向：\n- DP% 三个窗口都走平：1D 86.76% / 1W 87.11% / 1M 87.38%，无迁移。\n- top8 重心：1D 295.75 / 1W 302.98 / 1M 295.26。\n- 周内重心逐日下移：9/21 324.61 → 9/22 309.02 → 9/23 301.44 → 9/24 292.46，9/25 回升至 295.75。档位在更低处重建，但 1M 视角走平（8/26 为 290.57）。\n- 价格 295.83 只站上 1D 与 1M 重心。站不上 1W 重心 302.98，也站不上 1W 的 300/301/309/310/321 各档。盘中冲高 301.77 后回落。\n- 判定：**不明**（1W 偏下移，1M 走平，DP% 无迁移；量级闸门未过，不定方向）\n\n⑤ 动机：**对冲/领口（降权）**，派发指纹只部分成立。\n- 领口证据：9/25 15:44–15:47 一组 futures_floor 同时成交。\n  - ask 侧买入：330P 2027-06（150 张，$1.37M，vol>OI 13）、320P 2027-03（100 张，$724k）、210P 2027-03（330 张，$611k）。\n  - bid 侧卖出：360C 2027-03（60 张，$241k）、230P 2026-12（650 张，$819k）。\n  - 这是典型的深度保护性 put 加卖上方 call 的领口结构。需次日 OI 确认，下一交易日数据未明确。\n- OI（9/24→9/25）：call OI +3,497，put OI +5,272。put 增量主要来自 260P 10/02（+909，前日 ask 1,038）和 340P 10/02（+289，ask）。call 增量主要来自 310C 10/02（+1,275，前日 bid 1,005 vs ask 520，其中多腿 1,096），属多腿卖 call。\n- IV：iv30 0.698，1D 前 0.69、1W 前 0.707、1M 前 0.756，月内压缩。iv_percentile_1y 16.8。25Δ RR −0.040，put 偏贵。\n- 下方 put 持续被卖：9/23 short put diagonal 900 张，9/25 230P bid 650 张、280/290 put diagonal bid。持有人在卖下方保险，这与派发矛盾。\n- 借券平稳。\n- gamma 位置：现价低于 flip 302.13/302.45，处于负 gamma 区。\n- 季末干扰：距 9/30 季末 3 个交易日，盘后收盘价撮合（§5 第 5 条）。但 DP% 无单窗口尖峰、期权并不平，只作部分降权。\n\n⑥ Dealer（只用 gex_levels）：\n- vol 口径：call wall 300（Δ0）、put wall 295（+25）、flip 302.13（+13.38）、magnet 295（+35）。\n- oi 口径：call wall 310（−10，周内 350→320→310 下移）、put wall 287.5（+142.5）、flip 302.45（−1.06）、magnet 295。\n- strike 表给出 320/145/290，与 gex_levels 不一致，以 gex_levels 为准并记录分歧。\n- flow 意图净额（≥$50k）：\n  - call：ask $983,788 − bid $1,628,600 = −$644,813，净卖 call。\n  - put：ask $3,380,870 − bid $1,294,530 = +$2,086,340，净买 put。\n  - 全日口径：net call −$1,667,270，net put +$320,755。\n  - ≥$50k 成交 sweep 为 0。400C 11/20 bid 1,175 对 ask 325，需次日 OI 确认，未明确。\n- 决策表：**无命中**。\n  - 310 处呈 Bid+OI↑ 的卖 call 盖子特征，但墙在下移而非\"Wall↑\"，且以多腿为主，不计入。\n  - 今日 flow 的次日 OI 未明确。\n\n**仓位 / 意图 / 不对称性**：可见的主要仓位是长期持有人在 330/320 深度 put 上加领口，同时持续卖下方 put、卖上方 call。这更像给多头上保险、锁定区间，而不是离场派发。负 gamma 且处于 flip 下方，下破确有加速空间。但量级不足，动机属排除项，还叠加季末撮合，当前没有可交易的不对称性。决策线：跌破 OI put wall 287.5，且在更低位出现 DP 档位重建、大单参与度回到 16% 以上、次日 OI 确认 call 盖子之前，不构成 setup。\n\n**失效位**：收复 gamma flip 302.13–302.45 并站上 1W 重心 302.98，则周内下移迹象作废，偏空观察整体撤销。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=24 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:56:29Z rows=247 blocks=247 spot=296.51\n✅ RAN option-trades as-of 2026-09-25T19:58:05.500000Z rows=39 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:33.785000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=-20396.8147\n✅ RAN short-interest as-of 2026-08-31 rows=122 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.533\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+ "ttft_ms": 78152,
+ "type": "result",
+ "duration_ms": 103495,
+ "uuid": "7aa92724-62e6-40c4-88e9-f53ec9b678ce",
+ "ttft_stream_ms": 3810,
+ "time_to_request_ms": 40,
+ "first_content_frame_ms": 3810,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

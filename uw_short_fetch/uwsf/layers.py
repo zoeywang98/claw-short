@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import urllib.parse
@@ -283,7 +284,7 @@ class Config:
     multileg_min_size: int = 50
     max_pages: int = 20
     contract_history: int = 8
-    universe_size: int = 35
+    thin_strikes: int = 45       # SHORT_ENGINE §8.2: THIN chain = nstrk < 45
     use_cache: bool = True
 
 
@@ -396,6 +397,7 @@ def level_stats(levels: Dict[float, List[float]], top_n: int = 8) -> Dict[str, A
     top = sorted(table, key=lambda r: r["dark"], reverse=True)[:top_n]
     w = sum(r["dark"] for r in top)
     return {
+        "poc": top[0]["price"] if top else None,
         "dark_total": dark,
         "regular_total": reg,
         "dp_pct": dark / (dark + reg) if (dark + reg) else None,
@@ -430,7 +432,7 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
     if end not in by_day:
         return FAIL(f"empty payload for {end}")
     windows = {}
-    for label, n in (("1D", 1), ("1W", 5), ("1M", 21)):
+    for label, n in (("1D", 1), ("2D", 2), ("3D", 3), ("1W", 5), ("1M", 21)):
         wd = days[-n:]
         agg: Dict[float, List[float]] = {}
         for d in wd:
@@ -458,7 +460,8 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
                                "dp_pct": "dark_pool_volume / (dark_pool_volume + regular_volume) per UW price bucket",
                                "top8": "8 buckets with the most dark_pool_volume in the window",
                                "centroid_top8": "sum(price * dark) / sum(dark) over top8",
-                               "windows": "1D = window_end, 1W = last 5 sessions, 1M = last 21 sessions (bucket volumes summed)",
+                               "windows": "1D = window_end, 2D / 3D = last 2 / 3 sessions, 1W = last 5 sessions, 1M = last 21 sessions (bucket volumes summed)",
+                               "poc": "bucket with the most dark_pool_volume in the window (dominant grey node)",
                                "snapshots": "single sessions: window_end, 5 and 21 sessions earlier",
                            },
                            "windows": windows, "snapshots": snapshots, "per_day": per_day})
@@ -615,6 +618,24 @@ def norm_option_trade(r: Dict[str, Any], D: str) -> Dict[str, Any]:
     }
 
 
+FLOW_IV_EXCLUDED_FLAGS = {"cross_trade", "futures_floor"}  # negotiated / floor prints: side and IV are not a lifted-at-ask read
+
+
+def flow_iv(trades: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Premium-weighted IV of the day's prints, per option type (SHORT_ENGINE §5.1 flow-IV).
+    `ask` = ask-side (lifted) prints only, the leg the rulebook reads first; `all` = every side.
+    Day-over-day comparison needs earlier days, which the pipeline keeps in history/flow_iv/<T>.json."""
+    out: Dict[str, Any] = {}
+    for typ in ("call", "put"):
+        for label, keep in (("ask", lambda t: t["side"] == "ask"), ("all", lambda t: True)):
+            sel = [t for t in trades if t["type"] == typ and t["iv"] is not None and t["premium"] and (t.get("dte") or 0) >= 1
+                   and keep(t) and not (set(t["report_flags"]) & FLOW_IV_EXCLUDED_FLAGS)]
+            w = sum(t["premium"] for t in sel)
+            out[f"{typ}_{label}"] = {"iv": (sum(t["iv"] * t["premium"] for t in sel) / w) if w else None,
+                                     "premium": w, "prints": len(sel)}
+    return out
+
+
 def flow_aggregates(trades: List[Dict[str, Any]]) -> Dict[str, Any]:
     prem: Dict[str, float] = defaultdict(float)
     cnt: Dict[str, int] = defaultdict(int)
@@ -647,6 +668,9 @@ def flow_aggregates(trades: List[Dict[str, Any]]) -> Dict[str, Any]:
         "strike_mismatch_count": len(mism),
         "strike_mismatch_examples": [{"sym": t["sym"], "strike_field": t["strike_field"], "strike_occ": t["strike"]} for t in mism[:5]],
         "top_contracts": sorted(by_contract.values(), key=lambda c: -(c["ask_premium"] + c["bid_premium"]))[:40],
+        "flow_iv": flow_iv(trades),
+        "flow_iv_definition": "premium-weighted print IV per type; ask = ask-side prints; prints in this tape only "
+                              "(premium >= min_premium); 0DTE, cross_trade and futures_floor prints excluded",
     }
 
 
@@ -806,6 +830,18 @@ def layer_short_data(ctx: Ctx) -> LayerResult:
 
 
 # --------------------------------------------------------------------------- supplemental: price
+def hv_series(bars: List[List[Any]], n: int = 20) -> List[List[Any]]:
+    """[date, HV_n] for every bar with n prior daily log returns (SHORT_ENGINE §5.3: IV30 vs HV20)."""
+    closes = [(b[0], b[4]) for b in bars if b[4]]
+    rets = [(d1, math.log(c1 / c0)) for (_, c0), (d1, c1) in zip(closes[:-1], closes[1:]) if c0 and c1]
+    out = []
+    for i in range(n - 1, len(rets)):
+        win = [r for _, r in rets[i - n + 1:i + 1]]
+        m = sum(win) / n
+        out.append([rets[i][0], math.sqrt(sum((r - m) ** 2 for r in win) / (n - 1)) * math.sqrt(252)])
+    return out
+
+
 def layer_ohlc_daily(ctx: Ctx) -> LayerResult:
     end = ctx.K  # D's daily candle is not final at a point-in-time cutoff (see derived.session_so_far)
     rows = [r for r in rows_of(ctx.get("ohlc_1d", f"/api/stock/{ctx.T}/ohlc/1d", {"timeframe": "1Y"}))
@@ -818,9 +854,13 @@ def layer_ohlc_daily(ctx: Ctx) -> LayerResult:
     trs = [max(h - l, abs(h - pc), abs(l - pc)) for (_, _, h, l, _, _), pc in zip(bars[1:], closes[:-1])
            if None not in (h, l, pc)]
     ret = lambda k: (closes[-1] / closes[-1 - k] - 1) if len(closes) > k and closes[-1 - k] else None
+    hv = hv_series(bars, 20)
     derived = {"close": closes[-1], "ret_1d": ret(1), "ret_5d": ret(5), "ret_21d": ret(21),
                "atr14_simple": (sum(trs[-14:]) / 14) if len(trs) >= 14 else None,
-               "high_20d": max(b[2] for b in bars[-20:]), "low_20d": min(b[3] for b in bars[-20:])}
+               "high_20d": max(b[2] for b in bars[-20:]), "low_20d": min(b[3] for b in bars[-20:]),
+               "hv20": hv[-1][1] if hv else None,
+               "hv20_series_60": hv[-60:],
+               "hv20_definition": "annualized stdev of the last 20 daily log returns (close to close) x sqrt(252)"}
     return LayerResult(ok=True, as_of=end, rows=len(bars), notes=pit_note(ctx, f"daily bars through {end}"),
                        data={"bars": bars, "derived": derived, "columns": ["date", "open", "high", "low", "close", "volume"]})
 
@@ -910,6 +950,26 @@ def _norm_contract(r: Dict[str, Any], D: str) -> Dict[str, Any]:
     }
 
 
+def chain_depth(contracts: List[Dict[str, Any]], D: str, thin_below: int) -> Dict[str, Any]:
+    """nstrk for the THIN rule (SHORT_ENGINE §8.2): distinct strikes with a valid contract, i.e. traded today
+    (volume > 0, last tape on D, New York time) with a two-sided NBBO, across all expiries (the THIN flag);
+    per-expiry and nearest-monthly counts are kept for reference."""
+    per: Dict[str, set] = defaultdict(set)
+    for c in contracts:
+        if (c["volume"] or 0) > 0 and (c["nbbo_bid"] or 0) > 0 and (c["nbbo_ask"] or 0) > 0 \
+                and ny_date(c["last_tape_time"]) == D and c["expiry"] and c["strike"] is not None:
+            per[c["expiry"]].add(c["strike"])
+    monthly = sorted(e for e in per if e >= D and date.fromisoformat(e) == third_friday(int(e[:4]), int(e[5:7])))
+    front = monthly[0] if monthly else None
+    n_front = len(per[front]) if front else None
+    n_all = len({k for v in per.values() for k in v})
+    return {"nstrk": n_all, "thin": n_all < thin_below, "thin_below": thin_below,
+            "nstrk_front_monthly": n_front, "front_monthly_expiry": front,
+            "nstrk_by_expiry": {e: len(v) for e, v in sorted(per.items())},
+            "definition": "valid contract = volume > 0, last tape on D (NY), nbbo_bid > 0 and nbbo_ask > 0; "
+                          "nstrk = distinct strikes with a valid call or put, all expiries (THIN = nstrk < thin_below)"}
+
+
 def layer_option_contracts(ctx: Ctx) -> LayerResult:
     latest = ctx.cal.latest()
     if ctx.pit:
@@ -931,9 +991,10 @@ def layer_option_contracts(ctx: Ctx) -> LayerResult:
     if not rows:
         return FAIL("empty payload")
     contracts = sorted((_norm_contract(r, ctx.D) for r in rows), key=lambda c: -(c["volume"] or 0))
+    depth = chain_depth(contracts, ctx.D, ctx.cfg.thin_strikes)
     return LayerResult(ok=True, as_of=max((c["last_tape_time"] or "") for c in contracts) or ctx.D, rows=len(contracts),
-                       extra=("split_by_expiry" if split else ""), data={"contracts": contracts,
-                                                                         "filter": "contracts with volume today"})
+                       extra=("split_by_expiry " if split else "") + f"nstrk={depth['nstrk']}",
+                       data={"contracts": contracts, "filter": "contracts with volume today", "chain_depth": depth})
 
 
 def layer_oi_per_strike(ctx: Ctx) -> LayerResult:
@@ -974,6 +1035,29 @@ def layer_interpolated_iv(ctx: Ctx) -> LayerResult:
              "implied_move_perc": num(r.get("implied_move_perc")), "percentile": num(r.get("percentile"))} for r in rows]
     return LayerResult(ok=True, as_of=rows[0].get("date") or end, rows=len(term), notes=pit_note(ctx, f"prior close {end}"),
                        data={"term": term})
+
+
+def layer_iv_rv(ctx: Ctx) -> LayerResult:
+    """IV30 by date plus UW's 21-day realized vol (SHORT_ENGINE §5.3). UW pairs IV on `date` with the RV of the
+    21 sessions that follow it (window end = `unshifted_rv_date`), so RV is re-keyed to its window end to get a
+    trailing series; recent rows have no RV yet. HV20 from daily closes is in ohlc-daily."""
+    end = ctx.K  # end-of-day values
+    rows = rows_of(ctx.get(f"volatility_realized_{end}", f"/api/stock/{ctx.T}/volatility/realized",
+                           {"date": end, "timeframe": "3M", "days": 21}, cache_date=end))
+    rows = sorted((r for r in rows if r.get("date") and r["date"] <= end), key=lambda r: r["date"])
+    if not rows:
+        return FAIL("empty payload")
+    iv30 = [[r["date"], num(r.get("implied_volatility")), num(r.get("price"))] for r in rows]
+    rv21 = sorted([[r["unshifted_rv_date"], num(r.get("realized_volatility"))] for r in rows
+                   if r.get("unshifted_rv_date") and r["unshifted_rv_date"] <= end and num(r.get("realized_volatility")) is not None])
+    if iv30[-1][0] != end:
+        return FAIL(f"no IV row for {end} (last {iv30[-1][0]})")
+    return LayerResult(ok=True, as_of=end, rows=len(rows), extra=f"iv30={iv30[-1][1]} rv21_last={rv21[-1] if rv21 else None}",
+                       notes=pit_note(ctx, f"end-of-day values through {end}"),
+                       data={"iv30": iv30, "iv30_columns": ["date", "iv30", "close"],
+                             "rv21_trailing": rv21, "rv21_columns": ["window_end", "rv21"],
+                             "definition": "iv30 = UW implied_volatility (30 calendar days) on date; rv21_trailing = UW "
+                                           "realized_volatility (21 sessions) keyed to the window's last day"})
 
 
 def layer_option_sentiment(ctx: Ctx) -> LayerResult:
@@ -1337,15 +1421,3 @@ def screener_subset(row: Dict[str, Any]) -> Dict[str, Any]:
             v = row[k]
             out[k] = v if k in ("ticker", "date", "sector", "industry_type", "next_earnings_date", "er_time") else num(v)
     return out
-
-
-def universe_summary(label: str, rows: List[Dict[str, Any]], D: str) -> Dict[str, Any]:
-    items = [{"ticker": r.get("ticker"), "net_gex": num(r.get("gex_daily_net_gex")),
-              "gex_net_change": num(r.get("gex_net_change")), "marketcap": num(r.get("marketcap")),
-              "date": r.get("date")} for r in rows]
-    neg = [i["ticker"] for i in items if i["net_gex"] is not None and i["net_gex"] < 0]
-    nul = [i["ticker"] for i in items if i["net_gex"] is None]
-    dates = sorted({i["date"] for i in items if i["date"]})
-    return {"label": label, "as_of": dates[-1] if dates else None, "dates": dates, "n": len(items),
-            "negative": len(neg), "negative_names": neg, "null": len(nul), "null_names": nul,
-            "items": items, "note": "net_gex = screener gex_daily_net_gex (= greek-exposure call_gamma + put_gamma)"}

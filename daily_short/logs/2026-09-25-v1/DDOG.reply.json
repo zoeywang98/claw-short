@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 88144,
+ "stop_reason": "end_turn",
+ "session_id": "3f98f1ff-a6b6-4bb6-b8b7-d181f699cd0f",
+ "total_cost_usd": 1.7885686,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 202582,
+  "cache_read_input_tokens": 19523,
+  "output_tokens": 8200,
+  "output_tokens_details": {
+   "thinking_tokens": 5628
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 202582,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 8200,
+    "cache_read_input_tokens": 19523,
+    "cache_creation_input_tokens": 202582,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 202582
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 8200,
+   "cacheReadInputTokens": 19523,
+   "cacheCreationInputTokens": 202582,
+   "webSearchRequests": 0,
+   "costUSD": 1.7885686,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 5628,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**DDOG** · 软件/企服 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：🚫 禁止做空\n\n① 挤仓否决：\n- **SI% float**：3.05%（as-of 2026-08-31，滞后 25 天，仅作背景）。\n- **实时借券费率**：0.25%。\n- **可借量**：4,000,000 股。\n- **T+1 空头成交比**：0.583。\n- **近 5 日 / 21 日涨跌**：+16.6% / +17.8%。当日 +4.36%，盘中高点 280.7 为 20 日新高。\n- 借券与 SI 都干净，但\"该名字刚刚急涨\"已触发。高空头成交比在这里是燃料，不是卖压。\n- → **否决**\n\n② 熔断：Technology 池负 gamma 6/35，高于 ≤4 的门槛。本票 net gamma +24,648.9，为正，且是 21 日序列最高。→ **未熔断**（只列事实，结论按 §2）\n\n③ 量级（关键事实）：\n- 1D DP 绝对量 2,687,930 股，日成交 5,366,066 股。\n- 大单参与度 18.4%（dark 17.6%），属机构区间。\n- 盘后 average_price_trade 大宗 542,142 股 @268.13，占日量 10.1%。\n- → 足够\n\n④ 方向（关键事实）：\n- **三个窗口**：\n  - 1D：DP% 59.9%，重心 270.198\n  - 1W：DP% 50.8%，重心 256.306\n  - 1M：DP% 46.3%，重心 222.619\n- **快照迁移**：end-21 为 229.109，end-5 为 229.941，end 为 270.198。\n- **逐日重心**：241.56 → 246.46 → 252.17 → 255.52 → 270.20，逐级上移。\n- **价格位置**：收盘 268.13 站上 1W 和 1M 重心，但略低于 1D 重心。1D top8 在 269–277 档，DP% 70–76%，价格从 280.7 回落。这只是单窗口回落，不构成方向。\n- → **吸筹 / 上移**，不是派发形态。\n\n⑤ 动机：**对冲/领口（方向降权）**。竞争指纹为库存转移与基金再平衡，均不是派发。\n- **Put 侧**：ask 侧买入（≥5 万美元单）put_ask 1.57M 对 put_bid 0.66M。主要成交：\n  - 261016P270 ask 350 张，量 > OI 145，属 250/270 put ratio floor 单。\n  - 261218P250 ask 269 张。\n  - 270115P240 ask 100 张。\n- **Call 侧**：以 bid 卖出为主，call_bid 4.17M 对 call_ask 1.35M，net call premium −2.82M。长期限 call 被写：270617C350 bid 198 张，280121C290 bid 50 张。\n- **OI（9/24 交易 → 9/25 确认）**：Put +1,250，Call +1,764。\n- **IV 与偏斜**：IV30 从 0.524（1W）到 0.567 再到 0.59，扩张。25d RR 从 −0.0057 跌到 −0.0392，put 变贵，上行尾部相对收缩。\n- **借券**：平稳在 0.25%。\n- **Gamma 位置**：价格在 vol flip 267.61 上方。\n- **为何排除派发**：Call OI、IV 与活跃度同步上升（期权量分位 86.8），与派发指纹互斥。\n- **基金再平衡**：季末还有 3 个交易日，盘后均价大宗和 1D DP% 单窗口尖峰符合降权条件。但 OI 与 IV 不平，跨名字篮子形态未明确，因此只作次要降权。\n\n⑥ Dealer（只用 gex_levels）：\n- **vol 口径**：\n  - call wall 280（+20）\n  - put wall 255（+5）\n  - gamma flip 267.61（+5.28）\n  - magnet 270（+10）\n- **oi 口径**：\n  - call wall 270（+10）\n  - put wall 260（+5）\n  - gamma flip 246.84（+2.29）\n  - magnet 270（+10）\n- greek-exposure/strike 的 call wall 为 280，与 gex_levels OI 口径的 270 不一致，以 gex_levels 为准并记录分歧。\n- **Flow 意图净额**：全日 net call premium −2,116,680，net put premium +577,648。\n- **OI wall 270 的四点**：\n  - 结构：OI call wall 从 260 上移到 270（Wall↑）。\n  - Flow：9/24 在 270 以 bid 为主，premium 902,305 对 125,723。\n  - 次日 OI：9/25 确认 270 call OI +139，含 280616C270 +102，bid 101，stock multi-leg 100。\n  - 价格：9/25 冲高 280.7 后收 268.13，回到 270 下方。\n  - → **命中 Wall↑ + Bid + OI↑（上方盖子）**。\n- **vol wall 280**：9/25 flow 以 bid 为主，premium 1,409,820 对 635,590，但 9/25 flow 的次日 OI（9/28）未明确，不计入。\n\n**仓位 / 意图 / 不对称性**：5 日急涨 16.6% 后，DP 重心逐级上移到 270。持有人在高位买 put、卖长期 call 上保险，这不是离场。本票为强正 gamma（21 日最高），dealer 会逢跌买入，做空对抗趋势与正 gamma 毯子，不对称性不利于空头。唯一偏空的结构是 OI 口径 270 的盖子，只能用来界定彩票单的上沿；按 §2，最多只允许 flip 收复失败后的限定风险彩票单，风险 ≤ 0.25% 账户。追空下限不能超过 flip − 1 ATR：vol 口径约 255.90（267.61 − ATR14 11.71），OI 口径约 235.13。\n\n**失效位**：\n- 彩票单失效：收盘站回 270.198（1D DP 重心，同时是 OI call wall / magnet 270）。\n- 结构性否决不解除的条件：价格守在 vol flip 267.61 之上，或突破 280.7 / vol call wall 280。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=50 days=22/22\n✅ RAN darkpool as-of 2026-09-25T21:43:09Z rows=254 blocks=254 spot=268.385\n✅ RAN option-trades as-of 2026-09-25T19:35:35.900000Z rows=70 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:36.553000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=24648.8951\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.583\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+ "ttft_ms": 65724,
+ "type": "result",
+ "duration_ms": 88255,
+ "uuid": "6a78a7b1-31cc-4efb-8f6e-c2c0aa26ab3a",
+ "ttft_stream_ms": 7610,
+ "time_to_request_ms": 44,
+ "first_content_frame_ms": 7610,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

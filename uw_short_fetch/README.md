@@ -14,7 +14,7 @@ python3 fetch.py --group optics,ai_infra              # 只跑指定分组
 python3 fetch.py --tickers NBIS,AXTI                  # 指定票（不用默认名单）
 python3 fetch.py --tickers NBIS --date 2026-09-24     # 历史日期（只提供实时数据的端点会记 FAIL）
 python3 fetch.py --tickers NBIS,AXTI --date 2026-09-24 --asof 09:35   # 时间点快照：只用截至 9:35 ET 已经能拿到的数据
-python3 fetch.py --tickers-file list.txt --universe-file breaker35.txt
+python3 fetch.py --tickers-file list.txt
 python3 -m unittest discover -s tests                # 离线测试，不调用 API
 ```
 
@@ -31,7 +31,7 @@ API token 先读环境变量 `UW_API_TOKEN`，没有的话再读 `~/.openclaw/.e
 - commodity_etf 商品ETF：SLV
 
 每次运行都会按分组统计负 gamma 的名字数（取各票 greek-exposure 当天的 net gamma），写进 run_log 和 `group_gamma.json`。这只是数据，不做熔断判定。
-熔断池仍按 UW 的板块分类（取候选所在板块市值前 35），传了 `--universe-file` 就用文件里的名单。
+熔断的"板"就是这份名单（SHORT_ENGINE §3，ZZ 2026-09-28），run_log 里有一行全名单合计。不再按板块拉市值前 35。
 
 ## 时间点模式（`--asof HH:MM`）
 
@@ -51,18 +51,18 @@ API token 先读环境变量 `UW_API_TOKEN`，没有的话再读 `~/.openclaw/.e
 ```
 data/<D>/run_log.txt          逐层 ✅ RAN / ❌ FAIL + as-of + 行数，核心覆盖率 N/8，补充数据覆盖率，UW 当日用量
 data/<D>/run_summary.json     同上，机器可读
-data/<D>/universe_gamma.json  熔断输入：池子里每个名字的 net gamma，以及负 gamma 的个数
 data/<D>/market.json          日历标记、候选之间的相关性、板块 SPDR ETF 的申赎流
 data/<D>/<T>/snapshot.json    整理后的各层数据（每层带 as_of）+ derived（现价、大单参与度、墙的交叉核对）
 data/<D>/<T>/raw/*.json       每次请求的原始响应，附 URL、状态码、抓取时间、UW 用量响应头
 cache/<T>/*.json              历史日期的响应，再跑时直接复用。文件名按完整请求（路径 + 参数）哈希生成，不同日期不会混用
+history/flow_iv/<T>.json      每个收完盘的交易日的 flow-IV（按 premium 加权的成交 IV），用来做日对日；盘中跑和时间点模式只读不写
 ```
 
 ## 核心 8 层
 
 | 层 | 端点 | 说明 |
 |---|---|---|
-| darkpool-levels | `/api/darkpool/{t}/price-levels?date=` | 22 个交易日逐日拉取；每档 DP% = dark/(dark+regular)；给出 1D/1W/1M 三个窗口的累计值，以及 D、D-5、D-21 三个单日快照；top8 按 dark 量排序，重心按 dark 量加权 |
+| darkpool-levels | `/api/darkpool/{t}/price-levels?date=` | 22 个交易日逐日拉取；每档 DP% = dark/(dark+regular)；给出 1D/3D/1W/1M 四个窗口的累计值，以及 D、D-5、D-21 三个单日快照；top8 按 dark 量排序，重心按 dark 量加权 |
 | darkpool | `/api/darkpool/{t}` | 大单定义为 ≥1 万股或 ≥$20 万，剔除竞价成交；现价取 DP NBBO 中点（盘后的话另外记录最后一笔 RTH 中点） |
 | option-trades | `/api/option-trades?ticker_symbol=` | 只提供最近一个交易日；只拉 premium ≥ $5 万的成交；按 ask/bid 净额汇总；strike 用 OCC 代码解析的值 |
 | gex-levels | `/api/stock/{t}/gex-levels` | 6 个交易日 × vol/oi 两种口径；记录墙的日间变化 |
@@ -73,16 +73,18 @@ cache/<T>/*.json              历史日期的响应，再跑时直接复用。�
 
 ## 补充数据
 
-lit-blocks、ohlc-daily、ohlc-5m、oi-change、option-contracts（仅实时）、oi-per-strike、options-volume、interpolated-iv、option-sentiment（AVAR，作为上行尾部的替代指标）、unusualness（活跃度，仅实时）、options-pulse（开仓买入笔数）、multi-leg（领口 / roll 的形状）、flow-per-strike 和 net-prem-ticks（历史 flow）、flow-alerts（UW 按规则触发的期权告警，可以查历史，也可以截到分钟）、spot-gex（逐分钟的 spot gamma/charm/vanna）、greek-exposure-strike、offlit-levels（DP 的第二视角）、contract-history（关键合约的 OI 历史）、rr-skew（25Δ）、screener。
+lit-blocks、ohlc-daily（含 HV20 序列）、ohlc-5m、oi-change、option-contracts（仅实时；含 chain_depth：全链有效合约的不同 strike 数 nstrk，THIN = nstrk < 45）、iv-rv（`/api/stock/{t}/volatility/realized`：IV30 日序列 + 按窗口末日重排的 21 日 RV）、oi-per-strike、options-volume、interpolated-iv、option-sentiment（AVAR，作为上行尾部的替代指标）、unusualness（活跃度，仅实时）、options-pulse（开仓买入笔数）、multi-leg（领口 / roll 的形状）、flow-per-strike 和 net-prem-ticks（历史 flow）、flow-alerts（UW 按规则触发的期权告警，可以查历史，也可以截到分钟）、spot-gex（逐分钟的 spot gamma/charm/vanna）、greek-exposure-strike、offlit-levels（DP 的第二视角）、contract-history（关键合约的 OI 历史）、rr-skew（25Δ）、screener。
 
 数据源本身的限制：UW 的暗池和场内逐笔接口只收 premium ≥ $10 万的成交，是大单子集，不是完整的逐笔成交。所以逐价位的 DP% 只能用 price-levels（全天汇总）来算。
 市场层面的数据：交易日历（SPY）、熔断池（screener 一次拉完）、相关性、板块 ETF 申赎。
 
 ## 默认参数（都可以调）
 
-`--block-shares 10000 --block-premium 200000 --flow-min-premium 50000 --multileg-min-size 50 --dp-days 22 --gex-days 6 --flow-days 5 --universe-size 35 --concurrency 4`
+`--block-shares 10000 --block-premium 200000 --flow-min-premium 50000 --multileg-min-size 50 --dp-days 22 --gex-days 6 --flow-days 5 --concurrency 4`
 
-熔断池：传了 `--universe-file` 就用文件里的名单；不传的话，取每个候选所在板块市值前 35 的名字。
+option-trades 的聚合里另有 flow_iv：call/put 各自按 premium 加权的成交 IV（ask 侧 / 全部），剔除 0DTE、cross_trade、futures_floor。
+
+`brief.py --date D --tickers A,B,... --cross-section <market_brief.json>`：把全名单截面（涨跌、SVR、DP 量对均值、大单参与度、net gamma）写进市场数据，daily_short/run.sh 在逐只分析前调用。
 
 ## 已经处理的数据坑
 

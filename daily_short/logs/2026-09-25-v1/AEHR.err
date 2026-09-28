@@ -1,0 +1,19 @@
+Unknown account "claw-short" for channel discord.
+Traceback (most recent call last):
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 104, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 99, in main
+    post(r["result"])
+    ~~~~^^^^^^^^^^^^^
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 57, in post
+    subprocess.run(["openclaw", "message", "send", "--channel", "discord", "--account", ACCOUNT,
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "--target", CHANNEL, "--message", part], check=True,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   stdout=subprocess.DEVNULL, timeout=120)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'claw-short', '--target', 'channel:1553568018200657973', '--message', '**AEHR** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：🚫 禁止做空\n\n① 挤仓否决：\n- **SI% float**：13.34%，as-of 2026-08-31，滞后 25 天。按规则只作背景参考，但水平偏高；days_to_cover 2.02。\n- **实时借券**：费率 0.2629%，可借 1.3M 股，借券不紧张。\n- **T+1 空头成交比**：0.569。\n- **涨跌**：1D +7.15%，5D +11.66%，21D +14.56%。收盘 104.39 贴近 20 日高点 105.58，距 20 日低点 74.23 约 +41%。\n- 另有财报日 2026-10-05 临近。\n- **判定：否决**。依据 §2 "刚刚急涨"，SI 偏高作加重项。借券干净不能抵消急涨条件，空头在这里是燃料，不是卖压。\n\n② 熔断：\n- Technology 池负 gamma 6/35，大于 4，全场未被正 gamma 压制。\n- 本票 net gamma +24,280.5（正，取 max(date)=2026-09-25）。\n- 光模块组 2/5 仅作参考。\n- **判定：未熔断**。\n\n③ 量级（① 已否决，只列事实）：\n- 1D DP 1,401,670 股，DP% 60.0%。1M 日均 DP 约 1.31M，今日略高。\n- 大单参与度 6.70%（either 口径），按规模口径 1.59%。低于机构区间 16–21%，接近散户区间，需打折。\n- **判定：偏薄**。\n\n④ 方向（只列事实）：\n\n| 窗口 | DP% | top8 重心 |\n|---|---|---|\n| 1D | 60.0% | 101.00 |\n| 1W | 60.0% | 97.17 |\n| 1M | 56.0% | 91.98 |\n\n- 快照：9/18 为 90.35，8/26 为 91.65。\n- 迁移方向：重心逐窗口上移。\n- 价格 104.39 站上三个窗口的全部 top8 档位。104 档 DP% 仅 30.5%（lit 主导），96–103 档 DP% 为 68–79%。\n- **判定：吸筹**，不是做空形态。\n\n⑤ 动机：\n- **选定指纹：吸筹**（排除项 1）。IV 为走平而非从低位扩张，属部分吻合。\n- **OI**：call OI +679，put OI +387。\n  - 10/16 P100 OI +132，前日 bid 133，属 Sell to Open put。\n  - 10/16 C105 OI +20、10/02 C105 OI +12，前日均以 ask 为主。\n- **ask 侧 flow**：净 call 权利金 +397,688，净 put 权利金 −1,005,670（净卖 put，偏多）。\n  - option-trades 中 put bid 1.80M 对 put ask 1.02M，call ask 427k 对 call bid 299k。\n- **IV**：iv30d 1.035（1D 前 1.129，1W 前 1.011，1M 前 1.026），走平。\n- **借券**：宽松，无空头压力信号。\n- **gamma 位置**：价格高于 vol flip 102.94，低于 OI flip 112.05。DP 集中在 100–104，处于 put wall 100、magnet 100–104 附近，带有部分 gamma 对冲成分。\n- **季末再平衡（§5 第 5 条）**：距季末 3 个交易日，尾盘有 24,200 股及 prior_reference_price 大单。但 DP% 并非单窗口尖峰（1D/1W 均为 60%），期权量约为 30 日均量的 1.85 倍（并非 OI/IV 平），不构成主因，仅降权记录。\n\n⑥ Dealer：\n- **gex_levels OI 口径**（9/24→9/25）：\n  - call wall 100→105（+5）\n  - put wall 95→100（+5）\n  - gamma flip 97.63→112.05（+14.42）\n  - magnet 100\n- **vol 口径**：\n  - call wall 100→130（+30）\n  - put wall 91→104（+13）\n  - flip 96.33→102.94（+6.61）\n']' returned non-zero exit status 1.

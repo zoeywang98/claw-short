@@ -106,7 +106,7 @@ def dp_levels(layers):
     d = data(layers, "darkpool-levels")
     win = {}
     for k, w in (d.get("windows") or {}).items():
-        win[k] = pick(w, ["from", "to", "days_present", "dark_total", "regular_total",
+        win[k] = pick(w, ["from", "to", "days_present", "poc", "dark_total", "regular_total",
                           "dp_pct", "centroid_top8", "dark_vwap_all"])
         win[k]["top8"] = [pick(x, ["price", "dark", "regular", "dp_pct"]) for x in w.get("top8", [])]
     per_day = {}
@@ -193,6 +193,7 @@ def build(snap, tier=None):
                                          last_date=(oc.get("contracts") or [{}])[0].get("last_date"))},
         "oi_per_strike": {**data(L, "oi-per-strike"), "strikes": f.strike_rows(data(L, "oi-per-strike").get("strikes"))},
         "option_contracts": {"filter": data(L, "option-contracts").get("filter"),
+                             "chain_depth": data(L, "option-contracts").get("chain_depth"),
                              "contracts": table(f.recs(data(L, "option-contracts").get("contracts")))},
         "contract_history": {"selection": data(L, "contract-history").get("selection"),
                              "contracts": {sym: table(rows) for sym, rows in
@@ -204,6 +205,7 @@ def build(snap, tier=None):
         "ohlc_5m": data(L, "ohlc-5m"),
         "options_volume_5d": (data(L, "options-volume").get("series") or [])[-5:],
         "interpolated_iv": data(L, "interpolated-iv").get("term"),
+        "iv_rv": {k: (v[-45:] if isinstance(v, list) else v) for k, v in data(L, "iv-rv").items()},
         "option_sentiment": {"latest": data(L, "option-sentiment").get("latest"),
                              "history_10": (data(L, "option-sentiment").get("history_30") or [])[-10:]},
         "rr_skew_25d": {"expiry": data(L, "rr-skew").get("expiry"),
@@ -237,7 +239,12 @@ def main(argv=None):
     ap.add_argument("--data", default=os.path.join(PROJECT_DIR, "data"))
     ap.add_argument("--market-only", action="store_true", help="write market_brief.json only (no per-ticker briefs)")
     ap.add_argument("--no-market", action="store_true", help="write per-ticker briefs only")
+    ap.add_argument("--cross-section", metavar="MARKET_BRIEF",
+                    help="add the whole-watchlist cross-section (--tickers) to this market_brief.json and exit")
     a = ap.parse_args(argv)
+    if a.cross_section:
+        write_cross_section(a.cross_section, a.date, [t for t in a.tickers.split(",") if t])
+        return 0
     day = os.path.join(a.data, a.date)
     tickers = [] if a.market_only else [t for t in a.tickers.split(",") if t] or sorted(
         t for t in os.listdir(day) if os.path.isfile(os.path.join(day, t, "snapshot.json")))
@@ -249,11 +256,6 @@ def main(argv=None):
 
 def write_market_brief(day):
     market = {}
-    p = os.path.join(day, "universe_gamma.json")
-    if os.path.exists(p):
-        market["universe_gamma"] = [
-            {"status": u.get("status"), **pick(u.get("data") or {}, ["label", "as_of", "n", "negative", "negative_names", "null"])}
-            for u in json.load(open(p))]
     p = os.path.join(day, "market.json")
     if os.path.exists(p):
         mk = json.load(open(p))
@@ -261,9 +263,78 @@ def write_market_brief(day):
             market[k] = mk.get(k)
     p = os.path.join(day, "group_gamma.json")
     if os.path.exists(p):
-        market["watchlist_group_gamma"] = [pick(g, ["label", "n", "negative", "negative_names", "missing"]) for g in json.load(open(p))]
+        groups = json.load(open(p))
+        market["watchlist_group_gamma"] = [pick(g, ["label", "n", "negative", "negative_names", "missing"]) for g in groups]
+        market["watchlist_breaker_board"] = {
+            "negative": sum(g.get("negative") or 0 for g in groups), "n": sum(g.get("n") or 0 for g in groups),
+            "negative_names": [t for g in groups for t in (g.get("negative_names") or [])],
+            "rule": "SHORT_ENGINE §3: board = the watchlist; breaker trips at <= 4 negative-gamma names"}
     with open(os.path.join(day, "market_brief.json"), "w") as f:
         json.dump(rnd(market), f, ensure_ascii=False, separators=(",", ":"))
+
+
+def snapshot_path(date, t):
+    """Per-ticker run layout first (runs/tickers/<T>/<D>/<T>), then the all-at-once data/<D>/<T>."""
+    for p in (os.path.join(PROJECT_DIR, "runs", "tickers", t, date, t, "snapshot.json"),
+              os.path.join(PROJECT_DIR, "data", date, t, "snapshot.json")):
+        if os.path.isfile(p):
+            return p
+    return None
+
+
+def cross_row(snap):
+    L = snap.get("layers") or {}
+    der = snap.get("derived") or {}
+    oh = data(L, "ohlc-daily").get("derived") or {}
+    sv = data(L, "short-volume")
+    svs = sorted(sv.get("series_20d") or [], key=lambda x: x.get("market_date") or "")
+    dl = (data(L, "darkpool-levels").get("windows") or {})
+    d1, m1 = dl.get("1D") or {}, dl.get("1M") or {}
+    avg = (m1.get("dark_total") / m1.get("days_present")) if m1.get("dark_total") and m1.get("days_present") else None
+    bp = ((der.get("block_participation") or {}).get("either") or {}).get("pct_total")
+    sc = data(L, "screener")
+    ge = (data(L, "greek-exposure").get("today") or {}).get("net_gamma")
+    return [snap.get("ticker"), snap.get("group"), sc.get("sector"), oh.get("close"), oh.get("ret_1d"), oh.get("ret_5d"),
+            oh.get("ret_21d"), svs[-1].get("short_volume_ratio") if svs else None,
+            svs[-2].get("short_volume_ratio") if len(svs) > 1 else None, d1.get("dark_total"), avg,
+            (d1["dark_total"] / avg) if (avg and d1.get("dark_total")) else None, d1.get("dp_pct"), bp, ge,
+            sc.get("relative_volume"), sc.get("iv30d")]
+
+
+CROSS_COLUMNS = ["ticker", "group", "sector", "close", "ret_1d", "ret_5d", "ret_21d", "svr", "svr_prev",
+                 "dp_dark_1d", "dp_dark_1m_avg", "dp_1d_vs_1m_avg", "dp_pct_1d", "block_participation", "net_gamma",
+                 "relative_volume", "iv30"]
+
+
+def write_cross_section(market_brief, date, tickers):
+    """Whole-watchlist cross-section in the market brief, so each ticker's read can see the board
+    (SHORT_ENGINE §2 sector squeeze phase, §5.2 basket-shaped rebalance). Data only, no verdicts."""
+    rows, missing = [], []
+    for t in tickers:
+        p = snapshot_path(date, t)
+        if not p:
+            missing.append(t)
+            continue
+        rows.append(cross_row(json.load(open(p))))
+    groups = {}
+    for r in rows:
+        g = groups.setdefault(r[1] or "?", {"group": r[1], "n": 0, "up_1d": 0, "down_1d": 0, "ret_1d": [], "svr_ge_50": 0})
+        g["n"] += 1
+        if r[4] is not None:
+            g["ret_1d"].append(r[4])
+            g["up_1d" if r[4] > 0 else "down_1d"] += 1
+        g["svr_ge_50"] += int((r[7] or 0) >= 0.5)
+    for g in groups.values():
+        v = g.pop("ret_1d")
+        g["avg_ret_1d"] = (sum(v) / len(v)) if v else None
+    m = json.load(open(market_brief))
+    m["watchlist_cross_section"] = rnd({"date": date, "columns": CROSS_COLUMNS, "rows": rows, "missing": missing,
+                                        "group_summary": list(groups.values()),
+                                        "note": "ret_* from daily closes; svr = off-exchange short volume ratio (T+1); "
+                                                "dp_* from darkpool-levels; block_participation = either-rule share of day volume"})
+    with open(market_brief, "w") as f:
+        json.dump(m, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"cross-section {len(rows)} rows" + (f", missing {','.join(missing)}" if missing else "") + f" -> {market_brief}")
 
 
 def write_briefs(day, tickers):

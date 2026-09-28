@@ -1,6 +1,6 @@
 # SHORT_ENGINE.md — 做空候选分析规则（v2 · 2026-09-28 重写）
 
-> **依据**（ZZ 2026-09-28 定）：① RULEBOOK.pdf 附录「canonical RULEBOOK.md」原文（冲突时以它为准）；② Dealer Hedging Rules（§6）；③ PDF 第 1–9 节里与附录不冲突的操作细节（8 层端点、数据新鲜度、数据坑、逐层日志）。每条规则后面的〔 〕是出处。
+> **依据**（ZZ 2026-09-28 定）：① RULEBOOK.pdf 附录「canonical RULEBOOK.md」原文（冲突时以它为准）；② Dealer Hedging Rules（§6）；③ PDF 第 1–9 节里与附录不冲突的操作细节（8 层端点、数据新鲜度、数据坑、逐层日志）；④ DP 灰色重心迁移法（ZZ 2026-09-28，§4.2 方向）。每条规则后面的〔 〕是出处。
 >
 > **不看 cliff**（ZZ 2026-09-28）：原文中依赖 cliff 的分量（vit/zvit、tail/tailTop/ttX、cross/clfX、floorX/putvitX、nstrk 等）一律去掉，去掉了哪些见 §10.2。
 >
@@ -94,13 +94,37 @@ SI 只能等 FINRA 披露，没有更新的源（ZZ 2026-09-28）：照用，但
 - 大单参与度 16–21% = 机构意图（可信）；3–4% = 散户噪音（降权）。
 - 量薄 → 不强行给方向。
 
-### 4.2 方向（硬规则：逐价位 × 四窗）〔附录·多时间窗价格行为〕
+### 4.2 方向：DP 灰色重心迁移法 + 价格 acceptance〔DP 灰色重心迁移法，ZZ 2026-09-28；附录·多时间窗价格行为〕
 
-- **任何高 DP 量价位**，都要比 **当日 / 3 日 / 1 周 / 1 月** 四个窗口：价在该 DP 带上是上移（吸货/转移）还是下移（派发）？
-- **读 DP 的 K 线 price action，不读名义额**：价在该 DP 带上方接得住，还是顶不动、被顶回。
-- 站上 + 守住 = 吸收/吸货；block 后价继续下淌 = 派发；只在单一窗口冒尖、其它窗口无延续 = rebalance / noise。**跨窗方向一致性是仲裁者。**
-- 上迁 + 价站上每级 = 吸货 → 不是做空候选。走平/下迁、下跌后梯子在更低位重建、价顶不动 = 派发向。**停滞本身就是早于下迁的派发信号。**
-- top-8 DP 加权重心的迁移可以作汇总〔PDF §5〕，但不替代逐价位读法。两个快照 ≠ 价格行为，必须真拉价格路径。
+**核心原则**：不看某一根 grey bar 是买还是卖，而是比较长 / 中 / 短周期的 DP 成交重心是**上移、下移还是停滞**。DP volume-at-price 本身不提供买卖方向；"吸筹 / 派发"来自**重心迁移 + 后续价格行为**的联合判断。**重心迁移给方向偏置；价格 acceptance / failed acceptance 给最终确认。**
+
+**周期**：长 = 1M（原文配 1H K 线）· 中 = 1W（15m）· 短 = 2D（5m）。
+数据对应：`darkpool_levels.windows` 的 1M / 1W / 2D；"重心" = `centroid_top8`（灰色集中区的加权中心），`dark_vwap_all` 作参考；dominant grey node = `poc`。K 线：1M 用日线，1W / 2D 用 5 分钟线（近 5 日）；1H 线目前没有。
+
+**阅读流程（按顺序）**：
+1. **Long**：先找长期 dominant grey node / value area——历史主要库存在哪里？
+2. **Medium**：最近一周的重心相对长期是上移、下移还是横移？
+3. **Short**：最近两天是否继续同方向迁移？
+4. **Price**：比较 spot 与最新 DP 重心——价格是否跑在 inventory 前面？
+5. **Retest**：第一次重要回踩是否 defend DP core？这是最有价值的确认。
+6. **Cross-check**：再和 GEX / DEX（`greek_exposure` 的 net_gamma / net_delta 序列、`gex_levels`）一起看——衍生品结构是否得到 DP inventory 迁移确认？
+
+**价格负责裁决 DP 的意义**（读 DP 带上的 K 线 price action，不读名义额）：
+- **健康 acceptance**：到达 DP node → 停留 → 回踩守住 → 再向上离开。旧 inventory 被 defend，新 value 被接受。
+- **失败 / trapped inventory**：冲到高位 DP 区 → 无法站稳 → 跌回旧 DP core → 再失守。高价 inventory 没有得到市场确认。
+
+**三种状态**：
+- **吸筹确认**：Long < Medium < Short 重心逐级上移 + 价格接受新高位（能站在新的高位 DP 区附近或上方）。含义：市场愿意在越来越高的价格完成大量换手。→ **不是做空候选**。
+- **派发确认**：Long > Medium > Short 重心逐级下移（尤其发生在一段上涨之后，说明最新 inventory 越来越在低价区重新成交）+ 高位失守。
+- **Trap warning（DP non-confirmation）**：Price ↑↑ 但中 / 短周期 DP 重心 →（没有同步向高位迁移）。价格跑在 inventory 前面，上涨缺少 equity-inventory confirmation。**这不是已经确认的派发**，等 retest 裁决：
+  - 跌回并失守共同 DP core、没有吸收和 reclaim → 升级为 **confirmed trap**（高价持仓被套 / regime failure），按派发确认处理；
+  - 回踩守住 DP core 并再向上离开 → 健康 acceptance，trap warning 解除。
+
+**案例（COHR）**：8/17 价格约 325→360，但中 / 短周期 DP 主重心仍停在 325–334，没有同步迁到 350–360；同时 GEX rebuild、DEX 快速扩张 → 标 bullish markup with DP non-confirmation（trap warning，不是已确认派发）。8/18 价格直接回到并跌穿 325–334 共同 DP core；健康的吸筹本应看到吸收、reclaim 330、再回 340，实际没有 → 升级为 confirmed regime failure / trapped high-price positioning。
+
+**一句话**：DP 不是看"哪里有大单"，而是看"成交重心如何随时间迁移，以及价格是否接受这个新重心"。
+
+补充（附录）：只在单一窗口冒尖、其它窗口无延续 = rebalance / noise；停滞本身就是早于下迁的派发信号；两个快照 ≠ 价格行为，必须真拉价格路径。`windows` 里的 1D / 3D 可作参考。
 
 ### 4.3 动机
 
@@ -125,9 +149,8 @@ SI 只能等 FINRA 披露，没有更新的源（ZZ 2026-09-28）：照用，但
 - **吸货 Accumulation → bull**：DP 重心在 spot 处/下方；DP% 价位多窗口上迁（梯子 1d/3d/1w 上移）；价站上每级；call OI↑；IV30 从低位 expand。→ 有人低位建仓等 markup。**不是做空候选。**
 - **库存转移 Inventory transfer → 中性偏多**：盘后大额 DP（常单笔 / block）+ call OI↑ + IV↑ + option volume > OI（新仓）。→ dealer/MM 为配合大额期权单做的对盘/转库存，不是供给砸盘。**判别：期权账本在同步扩张——派发不会和 call OI + IV 同步扩张共存。**
 - **Gamma hedge → 无方向**：DP/print 量跟随 dealer gamma——簇在 gamma wall/flip，spot 穿关键位时爆量，机械、双向、围绕墙均值回归，DP% 无持续迁移，OI 无信念，IV 不从意图扩。UW gex-levels 的位对齐 = tell。非方向意图，别当信念。
-- **对冲 Hedge → 方向降权**：
-  - hedge / basis：DP **配对反向期权**（call 买 + DP 卖 / 领口），**净 delta ≈ 平、两侧 OI 都增、IV 闷**。→ 在对冲敞口，不是方向押注。
-  - 护盘：DP block + put OI↑ / 保护结构 + IV↑ 但**价不破位**。→ 持有者在对冲多头，不是清仓；DP 量 ≠ 离场。（原文另有"call 侧 vit 不扩张"，属 cliff，已去掉。）
+- **对冲 Hedge → 方向降权**：DP **配对反向期权**（call 买 + DP 卖 / 领口），**净 delta ≈ 平、两侧 OI 都增、IV 闷**。→ 在对冲敞口，不是方向押注。
+  - 只有满足上面这几条才算对冲。原文另一条"护盘"（DP block + put OI↑ / 保护结构 + IV↑ 但价不破位）已按 ZZ 2026-09-28 删去：put OI↑ + IV↑ + 价格没破位，不再算对冲。
   - 判定对冲前，先按 §7.3 把 flow 结构拆开（单腿还是多腿、side、vol vs OI、sweep/重复、到期）。
 - **Fund rebalance → 机械，降权**：月末/季末/指数重构日的大 DP，价不敏感、沿 VWAP 摊全天，篮子型（同日多只相关名字），无期权确认（OI/IV 平），DP% 仅单窗口冒尖、无多窗口迁移，事件后价均值回归。→ 非 informed，别读成意图。
 
@@ -198,7 +221,7 @@ IV30 与 RV（HV20）必须连价格一起读，判定用整段轨迹，不用�
 ### 8.2 确认空头表的硬规则〔附录〕
 
 - **财报**：每只确认票标"财报 MM-DD"或"财报未查"。已知 7 个自然日内有财报，或"未查 + THIN" → 弃权。
-- **THIN 链**（nstrk < 45）永不进确认空头表，上限 = 观察行；挂 ⚠THIN 旗保留行位也不行，必须物理不入表。（2026-07-29 TEVA +9.6% 教训。nstrk = 当日链上有效合约——volume>0、双边 NBBO 有效——的 strike 数〔附录 2026-09-01 链口径〕；数据还没接，接上之前标"缺失"）
+- **THIN 链**（nstrk < 45）永不进确认空头表，上限 = 观察行；挂 ⚠THIN 旗保留行位也不行，必须物理不入表。（2026-07-29 TEVA +9.6% 教训。nstrk = 当日有效合约——volume>0、双边 NBBO 有效——在所有到期日里的不同 strike 数〔附录 2026-09-01 链口径；到期日范围原文未写，暂取全链，待 ZZ 确认〕）
 - **caveat 反向 = 机械降 tier**（07-17 档案条款升级为硬规）：凡文字里给某票挂"拥挤 / 燃料 / 相位可疑 / 降半档"类 caveat，该票必须整行降出确认表，禁止"降半档但保留行位"。
 - 报动机 + 证据链（因果），不要只丢"吸/派"二分标签。
 
@@ -233,8 +256,9 @@ Discord 不渲染 markdown 表格，表格一律放 ``` 代码块；诚实标 as
   ├─ ③ 量级闸（§4.1）：DP 绝对量 + 大单参与度
   │     └─ 量薄 → 不给方向
   │
-  ├─ ④ 方向（§4.2）：每个高 DP 量价位 × 当日/3日/1周/1月，读 DP K 线
-  │     └─ 上迁站稳 = 吸货 → 弃；走平/下迁 + 停滞 → 继续
+  ├─ ④ 方向（§4.2 灰色重心迁移法）：1M → 1W → 2D 重心迁移 + 价格 acceptance / retest + GEX/DEX 交叉
+  │     └─ 吸筹确认 → 弃；派发确认或 confirmed trap → 继续；
+  │        Trap warning 未裁决 → 只出判决线（retest 的 DP core），不下做空结论；横移 / 不一致 → 不明
   │
   ├─ ⑤ 动机（§5）：判别关节 + 六指纹 + IV×RV regime；flow 按 §7.3 拆结构
   │     └─ 必须命中"派发"；命中其余指纹 → 弃或降权
@@ -258,14 +282,16 @@ Discord 不渲染 markdown 表格，表格一律放 ``` 代码块；诚实标 as
 - 挤仓否决：旧版"SI 高 / 借券紧 / 刚急涨"三选一、无数字 → 🧨 三条同时成立（附录四条去掉 vit/zvit）；不再有单独的"刚急涨"否决。
 - 🧨 彩票：旧版"flip 收复失败后做空" → 附录原文"flip 上方一档 call"。
 - 熔断：旧版"板块内 ≤4/35" → ZZ 的票列表（全场）。
-- 新增：相位闸、挤压反噬闸、逐价位四窗读法、hedge/basis 定义、flow 拆结构、flow-IV、IV×RV regime、输入新鲜度闸、严谨闸、财报 7 天、THIN、caveat 降级。
+- 新增：相位闸、挤压反噬闸、逐价位 K 线读法（后并入 §4.2 灰色重心迁移法）、hedge/basis 定义、flow 拆结构、flow-IV、IV×RV regime、输入新鲜度闸、严谨闸、财报 7 天、THIN、caveat 降级。
+- 对冲只保留 hedge/basis 定义（要配对反向头寸、净 delta ≈ 平、两侧 OI 都增、IV 闷）；原文"护盘"一条按 ZZ 2026-09-28 删去。
+- §4.2 方向改用 DP 灰色重心迁移法（ZZ 2026-09-28）：长 1M / 中 1W / 短 2D 的重心迁移给方向偏置，价格 acceptance / retest 给最终确认，再和 GEX / DEX 交叉；新增 Trap warning 状态（价格跑在 inventory 前面，等 retest 裁决）。附录的"当日 / 3 日 / 1 周 / 1 月四窗"改为此三档。
 - 删除 QuantData；次日 OI 只用 UW `oi-change`。
 - §6 按 DHR 原文核对后改回：去掉旧版自加的"做空含义"一列（"看空确认：上方形成盖子""上方支撑撤除，偏空""不利于做空"）和"盖子/撤保护 → 置信度升级""缺任何一点都降级"；补回漏掉的 Dealer Pivot。
 
 ### 10.2 按"不看 cliff"去掉的附录条款
 
 - 🧨 的"vit/zvit 板内前列"；相位闸里的"ttX>1 外推同读偏晚"。
-- 指纹里的 tail / vit / tailTop 分量；护盘的"call 侧 vit 不扩张"；判别关节"tail + vit"。
+- 指纹里的 tail / vit / tailTop 分量；判别关节"tail + vit"。
 - 空头书（put_rank）：受阻（cross/clfX）、put 端 ≥2 项确认（floorX < 0.97 / putvitX > 1.1 / floor-spot 贴近 > 0.8）、floor 在升不空、put-vit 极值 + 刚暴跌 = 逼空燃料、薄链 pvitX 财报前读 hedging、低价票 fl/spot 打折。
 - Call Holder Trap（2026-08-18）：第一触发腿是 cliff 的 put/call 两侧同时加仓，整段暂不启用。
 
@@ -277,7 +303,7 @@ Discord 不渲染 markdown 表格，表格一律放 ``` 代码块；诚实标 as
 4. 🧨 照原文：只发 flip 收复触发位 + call 彩票纪律。
 5. Call Holder Trap 的触发腿是 cliff，不启用。
 6. "高 DP 量价位"照原文，不另设档数。
-7. THIN 的 nstrk 按附录链口径数；数据接上之前标"缺失"。
+7. THIN 的 nstrk 按附录链口径数；原文没写按哪个到期日，暂取全链（所有到期日的不同 strike；只数最近月度会把 IBM 这类流动性好的票也判成 THIN），待确认。
 8. 挤仓否决照附录 🧨 执行；PDF §4"以借券费 + SVR 为主、SI 降为背景"的提议附录里没有，不采用。
 9. 大单参与度照原文 16–21% / 3–4%。
 10. §6 只写 DHR 原文内容，不加"对做空的含义"；Dealer Pivot 照原文列出，UW 无此字段，标"缺失"。

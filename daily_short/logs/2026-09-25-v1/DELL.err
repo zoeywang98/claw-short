@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 104, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 99, in main
+    post(r["result"])
+    ~~~~^^^^^^^^^^^^^
+  File "/Users/yuwang/.openclaw/workspace-claw-short/daily_short/analyze.py", line 57, in post
+    subprocess.run(["openclaw", "message", "send", "--channel", "discord", "--account", ACCOUNT,
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "--target", CHANNEL, "--message", part], check=True,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   stdout=subprocess.DEVNULL, timeout=120)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 2179, in _communicate
+    self.wait(timeout=self._remaining_time(endtime))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 1279, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 2076, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**DELL** · AI基建/电力 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：🚫 禁止做空\n\n① 挤仓否决：\n- SI% float 4.58%（as-of 2026-08-31，滞后 25 天，仅作背景）。\n- 实时借券费率 0.25%（2026-09-25 15:24Z，GC 水平）。\n- 可借量 2,800,000 股。\n- T+1 空头成交比 0.518（2026-09-25）。\n- 近 5 日 −0.91%，近 21 日 +21.36%；另有当日 +5.07%、1M +24.75%，9/1 低点 421.89 → 9/18 高点 595.51。\n- SI 与借券条件干净，但"刚刚急涨"条件成立：21 日 +21.4%，且当日 +5.1%。\n→ **否决**\n\n② 熔断：Technology 池负 gamma 6/35 · 本票 net gamma +17,118.6（9/24 为 −2,218.3）→ 未熔断（6 > 4；watchlist 分组 AI基建/电力 1/5 仅作参考）\n（以下各步只列关键事实，不给做空结论）\n\n③ 量级：\n- 1D 暗池 4,869,860 股，常规成交 424,984 股，全日量 8,727,772。\n- 大单参与度：either 口径 12.74%；按股数口径（≥10k 股）仅 0.73%。\n→ 绝对量足够，但机构大单参与偏薄、需打折。\n\n④ 方向：\n- DP% 与 top8 重心：1D 91.97%、重心 565.13；1W 90.17%、重心 554.54；1M 89.17%、重心 554.36。\n- 迁移方向：1M→1W 走平（+0.18），1W→1D 上移（+10.6）。\n- 逐日重心：9/17 586.71 → 9/18 573.02 → 9/21 575.47 → 9/22 551.22 → 9/23 549.98 → 9/24 534.66，这一段是下移阶梯；9/25 跳回 565.13（档位 561–571 重建在高位）。\n- 价格：现价 564.0（NBBO 中点）站上 1W/1M 各档；当日冲高 573.8 后回落，收 562.89，未站稳 569–571 档。\n→ 不明（前段下移阶梯被 9/25 上移打断）。\n\n⑤ 动机：Gamma 对冲（无方向），证据链如下。\n- DP 与墙位重合：1D top8 集中在 561–571，正好落在 vol 口径 put wall 562.5 / flip 563.14 / magnet 565 / call wall 570 之间。\n- 0DTE 放量：570C 18,258 张、575C 14,976、560C 11,481、580C 11,438，属机械对冲带。\n- DP% 无尖峰：1D 92.0% 对比 1W 90.2%、1M 89.2%，仅温和抬升。\n- IV 走平且处压缩位：iv30 0.589（1d 0.597，1w 0.587，1m 0.772），25Δ RR −0.0255 走平。\n- 不符合派发指纹：\n  - call 为 ask 侧净买入 +11.25M；\n  - call OI +12,963（大部分为 9/25 到期合约），put OI +5,627（含 10/2 450P +551、462.5P +507 下尾保护）。\n- 借券为 GC。\n- 季末因素（距 9/30 还有 3 个交易日）：跨名字篮子证据未明确；DP% 无单窗尖峰，且期权并非平静，因此基金再平衡不作主因。\n\n⑥ Dealer：\n- 结构位 vol 口径：call wall 545→570（+25），put wall 530→562.5（+32.5），flip 537.37→563.14（+25.77），magnet 530→565。\n- 结构位 OI 口径：call wall 600（不变），put wall 240→560（+320），flip 548.24→585.86（+37.62），magnet 600→560；与 strike 表交叉核对一致（600/560/560）。\n- 冲突需标注：现价在 vol flip 之上、OI flip 之下，而 net gamma 为正。\n- Flow 意图净额：\n  - call ask 30.58M − bid 19.32M = +11.25M；\n  - put ask 12.01M − bid 11.29M = +0.71M；\n']' timed out after 120 seconds
+[session-sqlite] slow SQLite reclamation Worker operation pid=70961 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=6 elapsedMs=1162 outcome=rejected exitCode=1 error="SQLite session reclamation database owner is no longer current" errorFrame="at SqliteReclamationWorker.assertCurrent (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-worker-CLuHKRTt.mjs:157:44)"

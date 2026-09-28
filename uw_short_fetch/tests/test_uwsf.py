@@ -107,6 +107,8 @@ class Layers(unittest.TestCase):
         self.assertAlmostEqual(w["dp_pct"], 400 / 600)
         self.assertAlmostEqual(w["centroid_top8"], (104 * 300 + 104.75 * 100) / 400)
         self.assertEqual(r.data["windows"]["1W"]["days_present"], 4)
+        self.assertEqual((r.data["windows"]["3D"]["from"], r.data["windows"]["3D"]["days_present"]), ("2026-09-23", 3))
+        self.assertEqual((r.data["windows"]["2D"]["from"], r.data["windows"]["2D"]["poc"]), ("2026-09-24", 104.0))
         self.assertIn("missing days: 2026-09-22", r.notes)
         # past days pass a cache file, D (< today) too
         self.assertTrue(all(c[2] for c in client.calls))
@@ -253,12 +255,43 @@ class Layers(unittest.TestCase):
         ok = L.LayerResult(name="short-volume", ok=True, as_of=D, rows=3, extra="ratio=0.510")
         self.assertEqual(ok.log_line(), "✅ RAN short-volume as-of 2026-09-25 rows=3 ratio=0.510")
 
-    def test_universe_summary(self):
-        rows = [{"ticker": "A", "gex_daily_net_gex": "-1", "date": D}, {"ticker": "B", "gex_daily_net_gex": "2", "date": D},
-                {"ticker": "C", "gex_daily_net_gex": None, "date": D}]
-        s = L.universe_summary("x", rows, D)
-        self.assertEqual((s["negative"], s["null"], s["n"]), (1, 1, 3))
-        self.assertEqual(s["negative_names"], ["A"])
+    def test_flow_iv_premium_weighted_by_side(self):
+        mk = lambda side, iv, prem, flags=(), dte=30: {"type": "call", "side": side, "iv": iv, "premium": prem,
+                                                      "report_flags": list(flags), "dte": dte}
+        f = L.flow_iv([mk("ask", 0.40, 100.0), mk("ask", 0.50, 300.0), mk("bid", 0.30, 400.0),
+                       mk("ask", 0.90, 1000.0, ["futures_floor"]), mk("ask", None, 50.0), mk("ask", 12.0, 900.0, dte=0)])
+        self.assertAlmostEqual(f["call_ask"]["iv"], (0.40 * 100 + 0.50 * 300) / 400)
+        self.assertEqual(f["call_ask"]["prints"], 2)
+        self.assertAlmostEqual(f["call_all"]["iv"], (0.40 * 100 + 0.50 * 300 + 0.30 * 400) / 800)
+        self.assertIsNone(f["put_ask"]["iv"])
+
+    def test_chain_depth_front_monthly(self):
+        mk = lambda k, e, vol=1, bid=1.0, t="2026-09-25T19:00:00Z": {"strike": k, "expiry": e, "volume": vol,
+                                                                   "nbbo_bid": bid, "nbbo_ask": 1.1, "last_tape_time": t}
+        c = [mk(k, "2026-10-16") for k in range(100, 150)] + [mk(99, "2026-10-16", vol=0), mk(98, "2026-10-16", bid=0),
+             mk(97, "2026-10-16", t="2026-09-24T19:00:00Z")] + [mk(k, "2026-10-02") for k in range(100, 110)]
+        d = L.chain_depth(c, D, 45)
+        self.assertEqual((d["nstrk"], d["thin"], d["front_monthly_expiry"], d["nstrk_front_monthly"]), (50, False, "2026-10-16", 50))
+        self.assertEqual(d["nstrk_by_expiry"]["2026-10-02"], 10)
+        self.assertTrue(L.chain_depth(c[:40], D, 45)["thin"])
+
+    def test_hv_series(self):
+        bars = [[f"2026-09-{i:02d}", None, None, None, 100.0 * (1.01 if i % 2 else 0.99), 1] for i in range(1, 25)]
+        hv = L.hv_series(bars, 20)
+        self.assertEqual(len(hv), 4)   # 24 closes -> 23 returns -> 4 full 20-return windows
+        self.assertEqual(hv[-1][0], "2026-09-24")
+        self.assertGreater(hv[-1][1], 0.2)
+
+    def test_iv_rv_rekeys_realized_to_window_end(self):
+        rows = [{"date": "2026-08-20", "implied_volatility": "0.40", "price": "10", "realized_volatility": "0.30",
+                 "unshifted_rv_date": "2026-09-18"},
+                {"date": D, "implied_volatility": "0.35", "price": "11", "realized_volatility": None, "unshifted_rv_date": None},
+                {"date": "2026-09-28", "implied_volatility": "0.50", "price": "12"}]
+        ctx, _ = make_ctx(lambda path, p: {"data": rows})
+        r = L.layer_iv_rv(ctx)
+        self.assertTrue(r.ok, r.reason)
+        self.assertEqual(r.data["iv30"][-1][:2], [D, 0.35])
+        self.assertEqual(r.data["rv21_trailing"], [["2026-09-18", 0.30]])
 
     def test_oi_basis_walls(self):
         w = L.oi_basis_walls([[230, 0, 0, 5.0], [235, 0, 0, -9.0], [240, 0, 0, 7.0], [245, 0, 0, 3.0]], 238.0,
