@@ -1,200 +1,284 @@
-# SHORT_ENGINE.md — 做空候选分析唯一规则文档
+# SHORT_ENGINE.md — 做空候选分析规则（v2 · 2026-09-28 重写）
 
-> 本文档是今后做空候选分析的**唯一**规则来源，由 RULEBOOK（UW 暗池/期权流/GEX 规则书）与 Dealer Hedging Rules 提炼合并而成，只保留做空相关逻辑。与旧文档冲突时，以本文档为准。
+> **依据**（ZZ 2026-09-28 定）：① RULEBOOK.pdf 附录「canonical RULEBOOK.md」原文（冲突时以它为准）；② Dealer Hedging Rules（§6）；③ PDF 第 1–9 节里与附录不冲突的操作细节（8 层端点、数据新鲜度、数据坑、逐层日志）。每条规则后面的〔 〕是出处。
 >
-> **数据源只有两个：Unusual Whales API（简称 UW API）和 QuantData 网页版。** 不使用 MenthorQ、OptionData 或任何其他来源；所有"结构位"（Call Wall / Put Wall / Gamma Flip）一律来自 UW `gex-levels`，"OI 是否真实变化"一律用 UW 期权链 OI 数据或 QuantData 网页的 OI 变化页面做次日确认。
+> **不看 cliff**（ZZ 2026-09-28）：原文中依赖 cliff 的分量（vit/zvit、tail/tailTop/ttX、cross/clfX、floorX/putvitX、nstrk 等）一律去掉，去掉了哪些见 §10.2。
+>
+> **数据源**：只用 Unusual Whales REST API。原文里来自 MenthorQ / SpotGamma 的 gamma flip、call/put wall、negG，统一改用 UW `gex-levels` / `greek-exposure`〔PDF §3〕。不用 QuantData。
+>
+> **有歧义时以 rulebook 原文字面为准，不另加数字或解读**（ZZ 2026-09-28）。数字来自脚本，本文件只管解读〔附录〕。旧版（Fable 整理）备份在 `SHORT_ENGINE.v1-fable.md`。
 
 ---
 
-## 0 · 唯一不可动摇的框架
+## 0 · 框架（不可动摇）
 
-- **不预测价格。** 找的是"谁在什么位置、为什么这样持仓"的名字，输出的是仓位、意图、不对称性和失效位（invalidation），不是目标价。
-- **暗池（DP）成交量不是信号，只是量级闸门**——它只说明"发生了事情"。方向来自真实的逐档 DP% 与多窗口价格迁移；动机来自多信号联合签名。**永远不要**用自制的"重心 vs 现价偏移"代替真实 DP%，**永远不要**用单一快照定方向（这正是 AXTI/NBIS 误判的根源）。
-- 所有概率均为风险中性/隐含概率，不是 alpha。
+- **不预测价格。** 找"谁在什么位置、为什么这样持仓"，输出仓位、意图、不对称性、失效位。所有概率 = risk-neutral / implied，非 alpha。〔附录·目标〕
+- **DP volume 本身不是信号，只是"有事发生"的量级闸。** 方向看真实 DP% 和多时间窗价格迁移；动机靠联立证据反推（因果推断，不是分类）。永远不用自制的"重心 vs 现价偏移"代替真实 DP%，不用单一快照定方向——这正是 AXTI/NBIS 误判的根源。〔附录·DP 动机因果推断；PDF §1〕
+- **Darkpool = 安全闸**：长期意图，硬闸；short 侧主力；给真实 S/R。〔附录·四层架构〕
+- **解读口吻 = 顶级 quant trader**：谁在什么位置建/平仓、市场在 price 什么、这份信念是真还是机械、DP 对面是谁（吸/派/搬库存）、dealer gamma 怎么逼 flow、risk-reward 与失效位、什么 regime。禁 engineer 口吻（背字段定义、讲管道实现）。指标只是证据，话要落在 positioning / 意图 / 不对称性上。〔附录·纪律 2026-06-17 Olivia〕
 
 ---
 
-## 1 · 数据源与层级映射
+## 1 · 数据层与新鲜度
 
-### 1.1 UW API 端点（8 层）
+### 1.1 8 层 → UW REST〔PDF §3〕
 
-| 角色 | 层 | UW API 端点 | 关键字段 |
+| 角色 | 层 | UW 端点 | 关键字段 |
 |---|---|---|---|
-| Trigger | DP 方向 | `darkpool-levels` | 逐档 DP%（dark vs regular volume） |
+| Trigger | DP 方向 | `darkpool-levels` | 逐档 DP%（dark vs regular） |
 | Safety | DP 大单 | `darkpool` | 大宗成交的时间/规模 |
 | Flow | 期权意图 | `option-trades` | side（ask/bid）、premium、sweep |
 | Ready | GEX 墙 | `gex-levels` | gamma_flip / magnet / call_wall / put_wall |
 | Ready | 做市商 gamma | `greek-exposure` | 一年期序列；今天 = `max(date)` 行 |
 | Veto | 空头持仓 | `short-interest` | si_float、days_to_cover、fee_rate、shares_available |
-| Veto | 空头成交比 | `short-volume` | short_volume_ratio（payload 键是 `si` 不是 `data`） |
+| Veto | 空头成交比 | `short-volume` | short_volume_ratio（payload 键是 `si`） |
 | Veto | 借券 | `short-data` | 实时借券费率 + 可借股数 |
 
-8 层全部可经 REST 运行——失败就是真实故障（空 payload / API 错误），不存在"该层不可用"。
+8 层全部可经 REST 运行——失败就是真实故障（空 payload / API 错误），永远不是"该层不可用"。〔PDF §3〕
 
-**DP% 原语（唯一合法算法）：** 每个价位档 `pct = dark_pool_volume / (dark_pool_volume + regular_volume)`。这才是真实逐档 DP%。
+**DP% 原语：** 每个价位 `pct = dark_pool_volume / (dark_pool_volume + regular_volume)`。这才是真实逐档 DP%，不许用代理值替代。〔PDF §3〕
 
-### 1.2 QuantData 网页版的用途
-
-QuantData 只做**交叉验证与次日确认**，不做首发信号：
-
-- 次日确认 OI 变化（对应原 OptionData 的角色）：昨天的 flow 是否真的变成了新持仓。
-- 暗池大单打印、GEX 结构位的第二视角核对（与 UW API 数字不一致时，以 UW API 为准并记录分歧）。
-
-### 1.3 数据新鲜度表（每条腿必须标注 as-of）
+### 1.2 新鲜度（每条腿标 as-of）〔PDF §4〕
 
 | 层 | 节奏 | 典型滞后 |
 |---|---|---|
-| `darkpool-levels` / `darkpool` | 实时（约延迟 15 分钟） | 当日 |
-| `option-trades`（flow） | 盘中实时 | 当日 |
-| `gex-levels` / `greek-exposure` | 实时；序列为一年期 | 当日（取 `max(date)`，不是第一行） |
-| `short-interest`（SI% float） | FINRA 双月结算 | **滞后约 2–3 周** |
-| `short-volume`（场外空头比） | T+1 | 前一交易日 |
-| `short-data`（借券费/可借量） | 实时 | 当日 |
+| `darkpool-levels` / `darkpool` | 实时（约 15 分钟延迟） | 当日 |
+| `option-trades` | 盘中实时 | 当日 |
+| `gex-levels` / `greek-exposure` | 实时；序列一年期 | 当日（取 `max(date)`） |
+| `short-interest` | FINRA 双月结算 | 约 2–4 周，只能等披露 |
+| `short-volume` | T+1 | 前一交易日 |
+| `short-data` | 实时 | 当日 |
 
-**Veto 权重规则：** 因 SI% float 滞后约 2 周，挤仓否决以**实时借券费率 + T+1 空头成交比**为主导，SI% float 降级为背景参考。用陈旧触发换取实时借券证据。
+SI 只能等 FINRA 披露，没有更新的源（ZZ 2026-09-28）：照用，但必须标 as-of 和滞后天数。
 
----
+### 1.3 输入新鲜度闸〔附录·纪律 2026-07-10，只保留 UW 层部分〕
 
-## 2 · 强制前置：挤仓否决（Squeeze Veto）
-
-**在给任何做空候选排名之前必须先跑。** 检查 SI%、场外空头成交比、借券费率 + 可借量。
-
-- **SI 高，或借券紧张（费率高/可借量少），或该名字刚刚急涨 → 🚫 禁止做空。** 暗池看不到被迫回补的买家；这种名字上的高空头比例是**燃料，不是卖压**——不要读反。
-- 此类名字最多只允许"flip 收复失败后的限定风险彩票单"：风险 ≤ 0.25% 账户，且不追穿越 gamma flip 超过 1 ATR 的价格。
-- **全部干净（低 SI + 低费率 + 可借充足）→ 该做空候选才允许进入后续分析。**
+动笔前逐层核对 as-of == 目标 session。任何一层不符 → 报告头部大字标"⚠ <层> = T-1（asof YYYYMMDD）"，该层结论全部降为观察；禁止不标注就照常使用。UW 变慢时宁可标缺，不可装新。
 
 ---
 
-## 3 · 强制熔断：做空引擎断路器（Circuit Breaker）
+## 2 · 🧨 挤仓否决（squeeze-watch）〔附录 2026-07-14，AEHR +37% 教训〕
 
-若做市商 gamma 全场是正 gamma 压制（板块内负 gamma 名字 ≤ 4/35，或等效证据表明多数名字处于正 gamma）：
+**判定：以下三条同时成立 → 标 🧨**（原文第一条"vit/zvit 板内前列"属 cliff，已去掉）：
 
-- **做空引擎熔断：当日零确认做空**，只允许输出决策线（"跌破 X 之前不构成 setup"）。
-- 正 gamma 毯子之下，派发阶梯会被逢跌买入直接买穿——做空不成立。
-- **当日拿不到 GEX 数据 → 默认熔断**（保守处理）。
+1. SI ≥ 10% float，**或** 场外空头成交比（SVR）≥ 55% 连日；
+2. DTC ≤ 2；
+3. |spot − gamma flip| ≤ 3%。
 
----
+**🧨 名字：**
+- **做空绝对禁止。** squeeze 的买家是被迫回补 + dealer gamma，暗池里永远提前看不到；SI 高位读数在此类名字上是**燃料不是卖压**，别读反。
+- 只发 **flip 收复触发位** + defined-risk lottery 纪律：**flip 上方一档 call**，风险 ≤ 0.25%，穿 flip > 1 ATR 不追。（这是顺着挤仓做多的彩票，不是做空。）
 
-## 4 · 三步读取顺序（量级 → 方向 → 动机）
+**相位闸**〔附录 2026-07-15，AEHR 二次教训〕：squeeze 票的 SI/SVR **单日 −10pt 及以上** = 回补 climax 尾段签名，不是 ignition → 🧨 机械降级"已点火偏晚"，禁追高（07-15 AEHR 单日 SI −18pt，看多次日 −5%）。借券费 / 可借余量骤降同向确认燃料退潮。（原文"ttX>1 外推同读偏晚"属 cliff，已去掉。）
 
-硬性顺序，不许跳步，不许用记忆里的近似值代替实拉数据。
+**挤压反噬闸**〔附录 2026-08-12，DELL +8.2% 教训〕：SI/SVR ≥ 50% 的名字，任何派发/空头读数必须显式标"**挤压反噬风险**"；干净单票派发梯挡不住板块级轧空 beta——确认空头还需大盘/板块**不在轧空相位**（板块当日普涨/逼空迹象 = veto）。
 
-### 第 1 步 · 量级闸门（Magnitude）
-
-- 绝对 DP 成交量是否足够大？**绝对量 = 置信度，永远不定方向。**
-- 大单参与度约 16–21% = 机构（可信）；约 3–4% = 散户噪音（打折）。
-- 量太薄 → 不许强行给方向。
-
-### 第 2 步 · 方向（Direction）
-
-方向 = 真实逐档 DP%（§1.1 原语）+ 多窗口迁移。拉 `darkpool-levels --date <D>` 覆盖今日 / 1 周 / 1 月三个窗口，计算 top-8 档的 DP 加权重心，比较迁移：
-
-- **做空关注的形态：重心下移或走平、下跌后档位在更低位置重建、价格站不上各档 → 派发（distribution）/看空。**
-- 重心上移且价格逐级站稳 = 吸筹/看多 → **不是做空候选，直接排除。**
-- 单窗口偏移不是方向；两个快照不是价格行为——必须拉真实多窗口价格路径，读 DP 价格带的 K 线，而不是名义金额。
-
-### 第 3 步 · 动机（Motive）
-
-动机 = 跨 OI-vs-volume、ask 侧 flow-IV、SI/借券、gamma 位置的**联合签名因果推断**，从六指纹中选一个并给出证据链。禁止只贴"吸筹/派发"二元标签。
+**不满足 🧨 的名字：** 附录没有单独的"刚急涨"否决（PDF 第 7 节英文摘要写的"SI 高或借券紧或刚急涨即禁空"与附录冲突，以附录为准）。冲高后、SI 高、借券紧的名字照常走 §9 流水线，但要过相位闸、挤压反噬闸；凡需要挂"拥挤/燃料/相位可疑"类 caveat 的，按 §8.2 整行降出确认表。
 
 ---
 
-## 5 · 动机指纹：唯一的做空指纹与五个排除项
+## 3 · 空头引擎熔断〔附录 2026-08-13，轧空周 DELL/META/DDOG 0/3 教训〕
 
-同样的 DP 大单，动机不同 → 交易方向相反。读联合签名，不读规模。
-
-### ✅ 唯一可做空的指纹：派发（Distribution）
-
-- DP 量大且 DP% 高，**但档位不上移**（走平/下移）；
-- 价格滞涨或阴跌；
-- Call OI 走平/下降，或 Put OI 上升；
-- IV 走平/压缩；活跃度（vitality）走平/收缩；上行尾部收缩。
-- **滞涨本身就是派发的早期信号，先于重心下移出现。**
-
-### 🚫 五个排除指纹（出现任何一个 → 不是做空理由）
-
-1. **吸筹（Accumulation）→ 看多。** DP 集中在现价及下方、档位逐窗口上移、价格逐级站稳、Call OI↑、IV 从压缩低位扩张。
-2. **库存转移（Inventory transfer）→ 中性偏多。** 盘后大宗 DP 但 Call OI↑ + IV↑ + 期权量 > OI（新仓）+ 尾部与活跃度扩张。这是机构挪库存建期权仓，不是供给砸盘。**判别式：派发从不与 Call OI + IV + 活跃度同步上升共存。**
-3. **Gamma 对冲 → 无方向。** DP 聚集在 gamma 墙/flip 附近、现价穿越关键位时放量、机械且双向、DP% 无持续迁移、IV 不必扩张。是 dealer delta 对冲，不是观点。
-4. **对冲/领口（Hedge/Collar）→ 方向降权。** DP 伴随保护性结构（Put OI↑ / collar）、IV↑ 但价格不破位、call 侧活跃度不扩张。是持有人给多头上保险，不是离场——**DP 成交量 ≠ 出货。**
-5. **基金再平衡 → 机械性，降权。** 月末/季末或指数调仓时段的大宗 DP、跨相关名字呈篮子状、无期权确认（OI/IV 平）、DP% 只在单一窗口尖峰、价格均值回归。不是知情交易。
+- 当日 dealer gamma 面若为**全场 pin**（名单内负 gamma 票数 ≤ 4〔原文 ≤4/35〕，或等效证据显示名单内绝大多数正 gamma）→ **空头引擎熔断**：一切派发读数只挂 flip / 判决线（"破 X 前不是 setup"），不给确认空头入场位。
+- 正 gamma 毯下，派发梯会被 dealer 高抛低吸直接碾穿。
+- 当日无 GEX 数据 → 默认熔断（宁保守）。
+- "全场 / 板内" = **ZZ 给的票的列表**（`uw_short_fetch/uwsf/watchlist.py`，现为 23 只，含 SLV）。原文的 MQ 批次 35 只就是这份名单（ZZ 2026-09-28）。**不是板块**，也不单独给 ETF 另设池子。门槛照原文数字：负 gamma ≤ 4 只（名单现为 23 只）。
 
 ---
 
-## 6 · Dealer 对冲确认（结构 + flow + OI 三点合一）
+## 4 · 读取顺序：量级 → 方向 → 动机（硬顺序，不跳步）〔PDF §5；附录〕
 
-原则：**结构位（UW `gex-levels`）回答"结构性风险在哪"；UW flow 回答"今天谁在主动交易"；次日 OI（UW 期权链 / QuantData）回答"持仓是否真的变了"；价格回答"定位是否被确认"。永远不用单一工具下结论。**
+### 4.1 量级闸
+
+- 绝对 DP 量 = 信心，**永远不定方向**。
+- 大单参与度 16–21% = 机构意图（可信）；3–4% = 散户噪音（降权）。
+- 量薄 → 不强行给方向。
+
+### 4.2 方向（硬规则：逐价位 × 四窗）〔附录·多时间窗价格行为〕
+
+- **任何高 DP 量价位**，都要比 **当日 / 3 日 / 1 周 / 1 月** 四个窗口：价在该 DP 带上是上移（吸货/转移）还是下移（派发）？
+- **读 DP 的 K 线 price action，不读名义额**：价在该 DP 带上方接得住，还是顶不动、被顶回。
+- 站上 + 守住 = 吸收/吸货；block 后价继续下淌 = 派发；只在单一窗口冒尖、其它窗口无延续 = rebalance / noise。**跨窗方向一致性是仲裁者。**
+- 上迁 + 价站上每级 = 吸货 → 不是做空候选。走平/下迁、下跌后梯子在更低位重建、价顶不动 = 派发向。**停滞本身就是早于下迁的派发信号。**
+- top-8 DP 加权重心的迁移可以作汇总〔PDF §5〕，但不替代逐价位读法。两个快照 ≠ 价格行为，必须真拉价格路径。
+
+### 4.3 动机
+
+联合签名因果推断：从 §5.2 六指纹里选一个，报证据链。**不许只贴"吸/派"二分标签**——同一笔 DP 大单，动机不同，交易方向相反。〔附录 2026-06-17 Olivia〕
+
+---
+
+## 5 · 动机：判别关节、六指纹、IV×RV regime
+
+### 5.1 判别关节（缺一不能定性）〔附录 2026-06-17 Olivia〕
+
+- **OI vs 成交量**：option volume > OI = 新建仓（有信念）；volume < OI = 平仓/移仓（无信念）。
+- **flow-IV 方向**：看今日新成交 prints 的 IV 相对前几日是否抬升（尤其 ask-side / lifted 那部分，premium 加权做日对日）。抬 = 买方愿意出更高的钱 = 真需求、信念在加注；平/降 = 没人加注 = 机械流。IV30 从压缩低位 expand 是更慢的确认层，不是当日 tell。
+- **DP 时点**：盘后 / 大宗 block + 期权建仓 = 库存转移；月末/季末价不敏感、沿 VWAP 摊 = rebalance；贴 gamma wall = hedge。
+- **大单%**：16–21% = 机构意图；3–4% = 散户噪音，降权。
+
+（原文"tail + vit 同时扩张 = DP 背后有投机想象 / DP 大但 vit≈0 = 机械"属 cliff，已去掉。）
+
+### 5.2 六指纹〔附录 2026-06-17 Olivia，两处写法合并；已去掉 vit / tail / tailTop 分量〕
+
+- **派发 Distribution → bear（唯一可做空的指纹）**：DP 大量、DP% 高，但价位不上迁（平/下）；价顶不动或在其下停滞；block 后价继续淌、梯子重建在更低位、头顶供给；call 写在 bid；call OI 平/降 或 put OI↑；IV 平/压缩。→ 借强出货，变成上方阻力。
+- **吸货 Accumulation → bull**：DP 重心在 spot 处/下方；DP% 价位多窗口上迁（梯子 1d/3d/1w 上移）；价站上每级；call OI↑；IV30 从低位 expand。→ 有人低位建仓等 markup。**不是做空候选。**
+- **库存转移 Inventory transfer → 中性偏多**：盘后大额 DP（常单笔 / block）+ call OI↑ + IV↑ + option volume > OI（新仓）。→ dealer/MM 为配合大额期权单做的对盘/转库存，不是供给砸盘。**判别：期权账本在同步扩张——派发不会和 call OI + IV 同步扩张共存。**
+- **Gamma hedge → 无方向**：DP/print 量跟随 dealer gamma——簇在 gamma wall/flip，spot 穿关键位时爆量，机械、双向、围绕墙均值回归，DP% 无持续迁移，OI 无信念，IV 不从意图扩。UW gex-levels 的位对齐 = tell。非方向意图，别当信念。
+- **对冲 Hedge → 方向降权**：
+  - hedge / basis：DP **配对反向期权**（call 买 + DP 卖 / 领口），**净 delta ≈ 平、两侧 OI 都增、IV 闷**。→ 在对冲敞口，不是方向押注。
+  - 护盘：DP block + put OI↑ / 保护结构 + IV↑ 但**价不破位**。→ 持有者在对冲多头，不是清仓；DP 量 ≠ 离场。（原文另有"call 侧 vit 不扩张"，属 cliff，已去掉。）
+  - 判定对冲前，先按 §7.3 把 flow 结构拆开（单腿还是多腿、side、vol vs OI、sweep/重复、到期）。
+- **Fund rebalance → 机械，降权**：月末/季末/指数重构日的大 DP，价不敏感、沿 VWAP 摊全天，篮子型（同日多只相关名字），无期权确认（OI/IV 平），DP% 仅单窗口冒尖、无多窗口迁移，事件后价均值回归。→ 非 informed，别读成意图。
+
+### 5.3 IV × RV × 价格 regime〔附录 2026-07-21 Olivia，WDC 案例〕
+
+IV30 与 RV（HV20）必须连价格一起读，判定用整段轨迹，不用单日快照：
+
+- **RV > IV 且在高位 / RV、价齐涨 + IV 高位向上 = 空头行情**（除非巨大利好）。WDC 6/25 顶部（~745）即此形态 → 需要做空。
+- **顶部机制**：一轮上涨后 IV 超高 → IV 拐头向下 + RV 拐头向上 = buy OTM call 的力量用尽，临近到期持仓者集体转 sell call → vol 供给压顶 + dealer 反向 = RV > IV 高位空头行情。**IV 下拐 / RV 上穿的交叉点就是 call 买盘枯竭的标记。**
+- 空头行情之后 IV 翻上 RV = bounce 相位，不是新趋势（WDC 7/16–21 的反弹）。
+- IV > RV 期间两线再次相交 = 价格回归信号。
+- IV > RV 且 IV 在高位 = vol 终将回归，别按趋势读。
+- RV > IV 但 IV 在低位 = 多数是多头行情；IV 低位向上走 + RV > IV 但回落中 = 多头单腿 call 行情。→ 这两种不做空。
+
+---
+
+## 6 · Dealer 对冲确认（Dealer Hedging Rules）〔DHR 原文：Dealer_Hedging_Rules_Full_Guide.pdf〕
+
+原文用 MenthorQ（结构）+ Unusual Whales（flow）+ OptionData（次日 OI）+ 价格。按"只用 UW"，本版把结构换成 UW `gex-levels`，次日 OI 换成 UW `oi-change`，其余照原文。
+
+**核心原则**：结构位回答"结构性风险在哪"；UW 回答"今天谁在主动交易"；次日 OI 回答"持仓是否真的变了"；价格回答"定位是否被确认"。**永远不只用一个工具。**
 
 ### 6.1 四步法
 
-1. **结构（UW `gex-levels`）**：只观察 Call Wall / Put Wall / Gamma Flip 的位置与移动。墙从 360 移到 365 只能得出"风险中心从 360 移到 365"，**不许**直接推断 dealer 挪仓或客户看多。
-2. **Flow（UW `option-trades`）**：看 ask/bid、sweep、premium、volume vs OI。同一时段 360 bid + 365 ask 常提示 roll；连续 ask sweep 提示激进买入。
-3. **OI 次日确认**：360 OI 降了吗？365 OI 升了吗？只有确认后才知道昨天的交易变成了新持仓。
-4. **推断 dealer 对冲方向**（见决策表）。
+1. **结构**（原文 MenthorQ → UW `gex-levels`）：只观察 Call Wall / Put Wall / Gamma Flip / Dealer Pivot。Call Wall 从 360 移到 365，只能得出"风险中心从 360 移到 365"，**不许**推断 dealer 挪仓或客户看多。（UW 没有 Dealer Pivot 字段，这一项标"缺失"。）
+2. **Flow**（UW `option-trades`）：看 ask/bid、sweep、premium、volume vs OI。同一时段 360 bid + 365 ask 常提示 roll；**重复的 ask sweep** 提示激进买入。
+3. **次日 OI 确认**（原文 OptionData → UW `oi-change`）：360 OI 降了吗？365 OI 升了吗？只有确认后，才知道昨天的交易变成了新持仓。
+4. **推断 dealer 对冲方向**（见 6.2）。
 
-### 6.2 决策表（做空视角）
+### 6.2 四种情形（决策表）
 
-| 信号组合 | 客户行为 | Dealer 对冲 | 做空含义 |
+| 信号组合 | 客户（可能） | Dealer | Dealer 对股票（通常） |
 |---|---|---|---|
-| Wall↑ + **Bid** + OI↑ | Sell to Open（备兑/熊差 call 卖方） | Dealer 买入 call → **卖股票对冲** | **看空确认：上方形成盖子（cap）** |
-| Wall↓ + **Bid** + OI↓ | Sell to Close | Dealer 平仓 → **卖股票**（对冲移除） | 上方支撑撤除，偏空 |
-| Wall↑ + **Ask** + OI↑ | Buy to Open | Dealer 卖出 call → 买股票对冲 | 偏多，**不利于做空** |
-| Wall↓ + **Ask** + OI↓ | Buy to Close | Dealer 买股票 | 偏多，**不利于做空** |
+| Wall↑ + Ask + OI↑ | Buy to Open | Sell to Open | **买**股票对冲 |
+| Wall↑ + Bid + OI↑ | Sell to Open（备兑 / 熊市 call 价差） | Buy to Open | **卖**股票 |
+| Wall↓ + Bid + OI↓ | Sell to Close | Buy to Close | **卖**股票（对冲移除） |
+| Wall↓ + Ask + OI↓ | Buy to Close | Sell to Close | **买**股票 |
 
-**重要真相：OI 单独永远不足以判断 dealer 在买还是卖股票**——OI 增可来自客户 Buy to Open 或 Sell to Open，OI 减可来自 Sell to Close 或 Buy to Close。必须叠加 ask/bid 方向。
+**重要事实**：OI 单独永远不能判断 dealer 在买还是卖股票。OI 增可来自客户 Buy to Open 或 Sell to Open；OI 减可来自客户 Sell to Close 或 Buy to Close。所以 OI 本身永远不够。
 
-**最高置信度 = 四点全部一致**：① 结构位移动（`gex-levels`）② UW flow ③ 次日 OI 确认 ④ 价格行为。缺任何一点都降级处理。
+**置信度**：四点全部一致时置信度最高——① 结构 ② UW flow ③ 次日 OI 确认 ④ 价格行为。不依赖任何单一信号。
 
----
-
-## 7 · 数据坑与硬性 Gotchas
-
-1. **期权 flow 的 strike 在本账户上编码错位（约 33×）——永远不要用期权 flow 去画 strike 位/写墙。** 现价从 DP 的 NBBO 中点取，不用 `underlying_price`（同样不可靠）。
-2. **按意图净额计算，不按 call/put 计数。** "calls > puts" 是陷阱：ask 侧 = 主动买入；bid 侧 = 卖出/被写。**大额 call premium 打在 bid 上 = 卖 call = 盖子，不是点火。**
-3. **Flow 从不单独定方向**——只有当它与 DP% 方向 + SI/借券燃料一致时才加一档置信度；不一致时标注冲突、不下注。
-4. DP 约延迟 15 分钟（用于盘中结构足够）。
-5. `greek-exposure` 返回一年期序列——今天的敞口取 `date == 目标日` 的行，即 `max(date)`，**绝不取第一行**。
-6. `short-volume` payload 键是 `si` 不是 `data`；`gex-levels` payload 是嵌套字典 `data={date,time,…}`。
-7. SI / short-volume / short-data 各行按**降序**排列——取 `max(date)`，不是最后一行。
-8. UW CLI 输出在 JSON 前带 `UW usage: daily used=…` 横幅——解析前先剥掉（`grep -v "^UW usage"` 或从首个 `{` 起 `raw_decode`）。
 
 ---
 
-## 8 · 逐层运行日志（可审计性）
+## 7 · Flow 纪律与数据坑
 
-每一批分析必须输出"哪些规则层真正跑了 / 哪些失败"的日志，避免把部分运行误当成完整交叉验证：
+1. **期权 flow 的 strike 在本账户上编码错位（约 33×）——永远不用期权 flow 画 strike 位 / 写墙。** 现价取 DP 的 NBBO 中点，不用 `underlying_price`（同样不可靠）。〔PDF §8〕
+2. **按意图净额，不按 call/put 计数。** "calls > puts"是陷阱：ask 侧 = 买入（lifted），bid 侧 = 卖出（written）。**大额 call premium 打在 bid 上 = 写 call = 盖子，不是点火。**〔PDF §8〕
+3. **读 flow 要拆开**〔附录 2026-06-17 Olivia〕：结构（单腿 naked vs spread/collar/roll/risk-reversal——**多腿往往是对冲/调仓，不是方向押注**）、side（ask = 买 vs bid = 卖）、dealer 对冲 vs 真押注、IV/skew context（flow-IV 抬 = 付溢价）、vol vs OI（> OI = 新建仓）、**sweep / 重复 = 急迫度**、到期。缺这些拆解就喊多空 = 50% 抛硬币。
+4. **UW 期权流永不单独发起方向**〔附录 2026-06-17 Olivia〕：只在与 DP% 方向 + SI/借券燃料同向时加一格置信；不同向 → 标 conflict，不下注。主信号永远 = DP 方向 + SI 燃料，flow 只佐证。
+5. DP 约延迟 15 分钟（盘中结构够用）。〔PDF §8〕
+6. `greek-exposure` 返回一年期序列——今天取 `date == 目标日` 的行（`max(date)`），绝不取第一行。〔PDF §8〕
+7. `short-volume` payload 键是 `si` 不是 `data`；`gex-levels` payload 是嵌套字典 `data={date,time,…}`。〔PDF §8〕
+8. SI / short-volume / short-data 各行按降序排列——取 `max(date)`，不是最后一行。〔PDF §8〕
 
-- 每层输出 `✅ RAN {layer} as-of <date> rows=N` 或 `❌ FAIL {layer} reason: <具体原因>`；
-- 汇总一条覆盖率行 `N/8` 并贴到看板；
+---
+
+## 8 · 输出纪律
+
+### 8.1 严谨闸〔附录 2026-06-17 Olivia〕
+
+- 每条腿标 **as-of + [已验证 / 假设 / 缺失]**。
+- 因果判断所需的腿必须全部 = 已验证，否则**只报状态、不下结论**（别一边"定不了"一边下判）。
+- stale / T+2 / 两个快照 ≠ 价格行为；多窗必须真拉价格路径 + DP K 线。
+- 字段 / schema 没亲眼 fetch 到，不写进结论。
+
+### 8.2 确认空头表的硬规则〔附录〕
+
+- **财报**：每只确认票标"财报 MM-DD"或"财报未查"。已知 7 个自然日内有财报，或"未查 + THIN" → 弃权。
+- **THIN 链**（nstrk < 45）永不进确认空头表，上限 = 观察行；挂 ⚠THIN 旗保留行位也不行，必须物理不入表。（2026-07-29 TEVA +9.6% 教训。nstrk = 当日链上有效合约——volume>0、双边 NBBO 有效——的 strike 数〔附录 2026-09-01 链口径〕；数据还没接，接上之前标"缺失"）
+- **caveat 反向 = 机械降 tier**（07-17 档案条款升级为硬规）：凡文字里给某票挂"拥挤 / 燃料 / 相位可疑 / 降半档"类 caveat，该票必须整行降出确认表，禁止"降半档但保留行位"。
+- 报动机 + 证据链（因果），不要只丢"吸/派"二分标签。
+
+### 8.3 逐层运行日志〔PDF §9，Olivia 的可靠性要求〕
+
+每一批分析必须输出哪些规则层真正跑了、哪些失败，避免把部分运行误当成完整交叉验证：
+
+- 每层 `✅ RAN {layer} as-of <date> rows=N` 或 `❌ FAIL {layer} reason: <具体原因>`；
+- 覆盖率一行 `N/8`，贴到看板；
 - FAIL 是真实故障（空 payload / API 错误），永远不是"该层不可用"；
-- 每条腿标注各自的 as-of 日期（尤其 SI 的 2–3 周滞后）。
+- 每条腿标各自的 as-of（尤其 SI 的滞后）。
+
+### 8.4 格式〔附录·纪律〕
+
+Discord 不渲染 markdown 表格，表格一律放 ``` 代码块；诚实标 as-of。
 
 ---
 
-## 9 · 做空候选完整流水线（汇总）
+## 9 · 做空候选完整流水线
 
 ```
 候选名单
   │
-  ├─ ① Squeeze Veto（§2）：SI/借券费/可借量/近期急涨
-  │     └─ 任一触发 → 🚫 禁止做空（最多 flip 失守彩票单，≤0.25% 风险）
+  ├─ ⓪ 输入新鲜度闸（§1.3）：每层 as-of == 目标 session，否则头部标 ⚠、该层降为观察
   │
-  ├─ ② 熔断检查（§3）：全场正 gamma 压制或无 GEX 数据
-  │     └─ 触发 → 当日零确认做空，只出决策线
+  ├─ ① 🧨 挤仓否决（§2）：SI≥10% 或 SVR≥55% 连日 + DTC≤2 + |spot−flip|≤3%
+  │     └─ 🧨 → 做空绝对禁止；只发 flip 收复位 + call 彩票纪律；相位闸（SI/SVR 单日 −10pt）→ 降级偏晚
   │
-  ├─ ③ 量级闸门（§4.1）：DP 绝对量 + 大单参与度
-  │     └─ 量薄 → 不给方向，弃
+  ├─ ② 熔断（§3）：名单负 gamma ≤4 只或名单内绝大多数正 gamma，或当日无 GEX 数据
+  │     └─ 触发 → 零确认空头，只出判决线
   │
-  ├─ ④ 方向（§4.2）：真实逐档 DP% + 今日/1周/1月重心迁移
-  │     └─ 重心上移站稳 = 吸筹 → 弃；重心走平/下移 + 滞涨 → 继续
+  ├─ ③ 量级闸（§4.1）：DP 绝对量 + 大单参与度
+  │     └─ 量薄 → 不给方向
   │
-  ├─ ⑤ 动机（§5）：联合签名 → 必须命中"派发"指纹
-  │     └─ 命中其余五指纹任何一个 → 弃或降权
+  ├─ ④ 方向（§4.2）：每个高 DP 量价位 × 当日/3日/1周/1月，读 DP K 线
+  │     └─ 上迁站稳 = 吸货 → 弃；走平/下迁 + 停滞 → 继续
   │
-  ├─ ⑥ Dealer 对冲确认（§6）：gex-levels 结构 + flow 方向 + 次日 OI（UW/QuantData）+ 价格
-  │     └─ Wall↑+Bid+OI↑（盖子）或 Wall↓+Bid+OI↓（撤保护）→ 置信度升级
+  ├─ ⑤ 动机（§5）：判别关节 + 六指纹 + IV×RV regime；flow 按 §7.3 拆结构
+  │     └─ 必须命中"派发"；命中其余指纹 → 弃或降权
   │
-  └─ ⑦ 输出：仓位/意图/不对称性/失效位 + 8 层运行日志 + 各腿 as-of
+  ├─ ⑥ Dealer 确认（§6）：gex-levels 结构 + flow + 次日 OI + 价格 → 推断 dealer 买/卖股票
+  │     └─ 四点一致 = 最高置信度；不依赖任何单一信号
+  │
+  └─ ⑦ 输出（§8）：挤压反噬闸（SI/SVR≥50% 标风险；板块轧空相位 = veto）；
+        财报 7 天 / THIN / caveat 降级；仓位/意图/不对称性/失效位 + 证据链；
+        逐层日志 + 各腿 as-of 与 [已验证/假设/缺失]
 ```
 
-**输出纪律：** 每个确认的做空候选必须附带证据链（六指纹选一 + 决策表命中项）、失效位（通常为 gamma flip 或 DP 重心上沿收复）、以及数据覆盖率行。任何缺少 veto 检查或熔断检查的做空结论无效。
+**任何缺少 🧨 检查或熔断检查的做空结论无效。**
+
+---
+
+## 10 · 变更说明
+
+### 10.1 相对旧版（Fable 版）的主要改动
+
+- 挤仓否决：旧版"SI 高 / 借券紧 / 刚急涨"三选一、无数字 → 🧨 三条同时成立（附录四条去掉 vit/zvit）；不再有单独的"刚急涨"否决。
+- 🧨 彩票：旧版"flip 收复失败后做空" → 附录原文"flip 上方一档 call"。
+- 熔断：旧版"板块内 ≤4/35" → ZZ 的票列表（全场）。
+- 新增：相位闸、挤压反噬闸、逐价位四窗读法、hedge/basis 定义、flow 拆结构、flow-IV、IV×RV regime、输入新鲜度闸、严谨闸、财报 7 天、THIN、caveat 降级。
+- 删除 QuantData；次日 OI 只用 UW `oi-change`。
+- §6 按 DHR 原文核对后改回：去掉旧版自加的"做空含义"一列（"看空确认：上方形成盖子""上方支撑撤除，偏空""不利于做空"）和"盖子/撤保护 → 置信度升级""缺任何一点都降级"；补回漏掉的 Dealer Pivot。
+
+### 10.2 按"不看 cliff"去掉的附录条款
+
+- 🧨 的"vit/zvit 板内前列"；相位闸里的"ttX>1 外推同读偏晚"。
+- 指纹里的 tail / vit / tailTop 分量；护盘的"call 侧 vit 不扩张"；判别关节"tail + vit"。
+- 空头书（put_rank）：受阻（cross/clfX）、put 端 ≥2 项确认（floorX < 0.97 / putvitX > 1.1 / floor-spot 贴近 > 0.8）、floor 在升不空、put-vit 极值 + 刚暴跌 = 逼空燃料、薄链 pvitX 财报前读 hedging、低价票 fl/spot 打折。
+- Call Holder Trap（2026-08-18）：第一触发腿是 cliff 的 put/call 两侧同时加仓，整段暂不启用。
+
+### 10.3 已定（ZZ 2026-09-28：以 rulebook 为准）
+
+1. 熔断名单 = ZZ 给的票列表（`uwsf/watchlist.py`）；门槛照原文数字，负 gamma ≤ 4 只。
+2. 挤压反噬闸照原文：SI/SVR ≥ 50%。
+3. "板块轧空相位"照原文定性判断（板块当日普涨 / 逼空迹象），不另设数字。
+4. 🧨 照原文：只发 flip 收复触发位 + call 彩票纪律。
+5. Call Holder Trap 的触发腿是 cliff，不启用。
+6. "高 DP 量价位"照原文，不另设档数。
+7. THIN 的 nstrk 按附录链口径数；数据接上之前标"缺失"。
+8. 挤仓否决照附录 🧨 执行；PDF §4"以借券费 + SVR 为主、SI 降为背景"的提议附录里没有，不采用。
+9. 大单参与度照原文 16–21% / 3–4%。
+10. §6 只写 DHR 原文内容，不加"对做空的含义"；Dealer Pivot 照原文列出，UW 无此字段，标"缺失"。
+11. 结构位（flip / wall）用 UW `gex-levels`〔PDF §3〕。

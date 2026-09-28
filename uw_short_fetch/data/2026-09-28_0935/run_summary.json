@@ -1,0 +1,7381 @@
+{
+ "target_date": "2026-09-28",
+ "asof_cutoff": "2026-09-28T09:35:00-04:00",
+ "latest_trading_day": "2026-09-28",
+ "generated_at": "2026-09-28T10:33:35-04:00",
+ "usage": {
+  "x-uw-daily-req-count": "10121",
+  "x-uw-req-per-minute-remaining": "1000000",
+  "x-uw-req-per-minute-reset": "60000",
+  "x-uw-token-req-limit": "40000"
+ },
+ "requests": 903,
+ "cache_hits": 1061,
+ "universes": [
+  {
+   "status": "RAN",
+   "core": false,
+   "as_of": "2026-09-28",
+   "rows": 35,
+   "extra": "net_gamma<0=8/35",
+   "reason": null,
+   "notes": []
+  },
+  {
+   "status": "RAN",
+   "core": false,
+   "as_of": "2026-09-28",
+   "rows": 35,
+   "extra": "net_gamma<0=5/35",
+   "reason": null,
+   "notes": []
+  },
+  {
+   "status": "RAN",
+   "core": false,
+   "as_of": "2026-09-28",
+   "rows": 35,
+   "extra": "net_gamma<0=16/35",
+   "reason": null,
+   "notes": []
+  },
+  {
+   "status": "RAN",
+   "core": false,
+   "as_of": "2026-09-28",
+   "rows": 35,
+   "extra": "net_gamma<0=7/35",
+   "reason": null,
+   "notes": []
+  }
+ ],
+ "tickers": {
+  "LITE": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 51,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:58Z",
+     "rows": 68,
+     "extra": "blocks=68 spot=938.48",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:14.422000Z",
+     "rows": 36,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:59.061000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=-63.8870",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.652",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:07Z",
+     "rows": 27,
+     "extra": "blocks=27",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 668,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 4019,
+     "extra": "pages=11",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 300,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 31,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 203,
+     "extra": "days=4/4 D-partial strikes=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 300,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 22459,
+     "extra": "bins=201",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:33:04.630615Z",
+     "rows": 2,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 158,
+     "extra": "gamma_oi=5990443.93",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 203,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 133,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "COHR": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 24,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:51Z",
+     "rows": 22,
+     "extra": "blocks=22 spot=292.61",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:04.109000Z",
+     "rows": 3,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:33.785000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=-13764.1151",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 122,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.533",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:59Z",
+     "rows": 4,
+     "extra": "blocks=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 723,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1773,
+     "extra": "pages=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 152,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 33,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 110,
+     "extra": "days=4/4 D-partial strikes=7",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 152,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 14007,
+     "extra": "bins=47",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 158,
+     "extra": "gamma_oi=-4062507.85",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 155,
+     "extra": "contracts=6/6",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "AAOI": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 14,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:27Z",
+     "rows": 11,
+     "extra": "blocks=11 spot=101.75",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:31:08.703000Z",
+     "rows": 2,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:38.768000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=30428.3001",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.585",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:29Z",
+     "rows": 7,
+     "extra": "blocks=7",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 747,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1322,
+     "extra": "pages=3",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 137,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 61,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 108,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 137,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 8200,
+     "extra": "bins=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 136,
+     "extra": "gamma_oi=4285504.51",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 170,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 26,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "GLW": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "17/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 7,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:42Z",
+     "rows": 3,
+     "extra": "blocks=3 spot=153.795",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:34.804000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=-19982.7475",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.518",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload: no lit prints on 2026-09-28 before the cutoff",
+     "notes": []
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 614,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1674,
+     "extra": "pages=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 113,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 7,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 82,
+     "extra": "days=4/4 D-partial strikes=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 113,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 7408,
+     "extra": "bins=15",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:54.000000Z",
+     "rows": 141,
+     "extra": "gamma_oi=-1487813.2",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 179,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 51,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "AEHR": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 21,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:58Z",
+     "rows": 5,
+     "extra": "blocks=5 spot=100.665",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:30:07.041000Z",
+     "rows": 1,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:39.229000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=15069.1848",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.569",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:31:34Z",
+     "rows": 2,
+     "extra": "blocks=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 564,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 969,
+     "extra": "pages=3",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 118,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 20,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 10,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 108,
+     "extra": "days=4/4 D-partial strikes=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 118,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 7277,
+     "extra": "bins=42",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 101,
+     "extra": "gamma_oi=1651269.44",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 151,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 26,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "VRT": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 19,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:09Z",
+     "rows": 3,
+     "extra": "blocks=3 spot=251.52",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:32:44.805000Z",
+     "rows": 6,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:07.086000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=-8432.2798",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.510",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:21:15Z",
+     "rows": 2,
+     "extra": "blocks=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 643,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1530,
+     "extra": "pages=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 122,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 16,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 80,
+     "extra": "days=4/4 D-partial strikes=7",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 122,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 12459,
+     "extra": "bins=34",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:54.000000Z",
+     "rows": 106,
+     "extra": "gamma_oi=-3847959.74",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 179,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 104,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "NVT": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "15/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 14,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T12:53:50Z",
+     "rows": 1,
+     "extra": "blocks=1 spot=167.555",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:38.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=7875.9185",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.625",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload: no lit prints on 2026-09-28 before the cutoff",
+     "notes": []
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 329,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 610,
+     "extra": "pages=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 53,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload",
+     "notes": []
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 20,
+     "extra": "days=4/4 D-partial strikes=0",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload before the cutoff",
+     "notes": []
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 53,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 4618,
+     "extra": "bins=26",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:28.686000Z",
+     "rows": 18,
+     "extra": "gamma_oi=2151102.84",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 157,
+     "extra": "contracts=6/6",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 56,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "NBIS": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:58Z",
+     "rows": 78,
+     "extra": "blocks=78 spot=239.22",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:08.449000Z",
+     "rows": 16,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:05.872000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=95746.1134",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 45,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 484,
+     "extra": "ratio=0.510",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:46Z",
+     "rows": 19,
+     "extra": "blocks=19",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 818,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1712,
+     "extra": "pages=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 122,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 248,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 107,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 122,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 17369,
+     "extra": "bins=56",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:14.678917Z",
+     "rows": 9,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 176,
+     "extra": "gamma_oi=54164140.91",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 166,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 56,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "DELL": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 36,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:57Z",
+     "rows": 48,
+     "extra": "blocks=48 spot=554.555",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:56.223000Z",
+     "rows": 23,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:25.331000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=14097.8834",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.518",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:12Z",
+     "rows": 3,
+     "extra": "blocks=3",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 693,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 3172,
+     "extra": "pages=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 228,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 135,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 194,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 228,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 28459,
+     "extra": "bins=139",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:31.370344Z",
+     "rows": 7,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 146,
+     "extra": "gamma_oi=42202963.15",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 137,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "FLEX": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 18,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:33:30Z",
+     "rows": 0,
+     "extra": "blocks=0 spot=113.69",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k",
+      "no block prints on D"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:41.988000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=23111.5550",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.388",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 1,
+     "extra": "blocks=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 363,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 480,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 46,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-08-04",
+     "rows": 3,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-08-04",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 3,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 24,
+     "extra": "days=4/4 D-partial strikes=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:00.000000Z",
+     "rows": 3,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 46,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 7597,
+     "extra": "bins=35",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:52.000000Z",
+     "rows": 29,
+     "extra": "gamma_oi=2940765.59",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 145,
+     "extra": "contracts=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "MSFT": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 45,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:59Z",
+     "rows": 186,
+     "extra": "blocks=186 spot=505.32",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:27.759000Z",
+     "rows": 65,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:58:59.312000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=552861.3842",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.479",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:51Z",
+     "rows": 77,
+     "extra": "blocks=77",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 809,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 3270,
+     "extra": "pages=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 146,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 564,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 144,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 146,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 49298,
+     "extra": "bins=112",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:44.644461Z",
+     "rows": 44,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 168,
+     "extra": "gamma_oi=1417494232.7",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 195,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "META": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 41,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:59Z",
+     "rows": 808,
+     "extra": "blocks=808 spot=726.595",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:59.313000Z",
+     "rows": 177,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:43.525000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=253690.1368",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 115,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.517",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58Z",
+     "rows": 205,
+     "extra": "blocks=205",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 831,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 5947,
+     "extra": "pages=16",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 274,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 1629,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 254,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 274,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 54189,
+     "extra": "bins=145",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:50.674179Z",
+     "rows": 104,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 181,
+     "extra": "gamma_oi=1382697210.74",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 203,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 148,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "IBM": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 10,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:49Z",
+     "rows": 10,
+     "extra": "blocks=10 spot=220.69",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:32:59.652000Z",
+     "rows": 2,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:34.195000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=-47882.9982",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.417",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:11Z",
+     "rows": 0,
+     "extra": "blocks=0",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 556,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1654,
+     "extra": "pages=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 90,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 42,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 77,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 90,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9517,
+     "extra": "bins=18",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 95,
+     "extra": "gamma_oi=-18404072.47",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 158,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 183,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "NOW": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 11,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:52Z",
+     "rows": 57,
+     "extra": "blocks=57 spot=128.275",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:32:51.091000Z",
+     "rows": 7,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:06.473000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=33018.7201",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.512",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:19Z",
+     "rows": 5,
+     "extra": "blocks=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 715,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1942,
+     "extra": "pages=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 149,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 73,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 121,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 149,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9290,
+     "extra": "bins=22",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:14.678917Z",
+     "rows": 4,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 145,
+     "extra": "gamma_oi=6334430.57",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 181,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 104,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "DDOG": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 50,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:39Z",
+     "rows": 12,
+     "extra": "blocks=12 spot=263.275",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:30:07.047000Z",
+     "rows": 2,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:36.553000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=18182.8634",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.583",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:25Z",
+     "rows": 6,
+     "extra": "blocks=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 405,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1550,
+     "extra": "pages=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 93,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 23,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 87,
+     "extra": "days=4/4 D-partial strikes=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 93,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 14149,
+     "extra": "bins=100",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:31:10.591276Z",
+     "rows": 1,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 68,
+     "extra": "gamma_oi=13360599.77",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 147,
+     "extra": "contracts=6/6",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "MDB": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 48,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:57Z",
+     "rows": 179,
+     "extra": "blocks=179 spot=307.17",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:34.206000Z",
+     "rows": 41,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:00.205000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=5321.0722",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.417",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:49Z",
+     "rows": 112,
+     "extra": "blocks=112",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 383,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 2545,
+     "extra": "pages=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 158,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-09-24",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 26,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 111,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 158,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9564,
+     "extra": "bins=96",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:56.716271Z",
+     "rows": 17,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 86,
+     "extra": "gamma_oi=5530686.11",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 173,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 26,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "MRK": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 8,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:33:05Z",
+     "rows": 3,
+     "extra": "blocks=3 spot=147.63",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:07.227000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=164109.2386",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.364",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T11:05:37Z",
+     "rows": 1,
+     "extra": "blocks=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 391,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 1095,
+     "extra": "pages=3",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 70,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 14,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 68,
+     "extra": "days=4/4 D-partial strikes=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 70,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 7720,
+     "extra": "bins=15",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:56.000000Z",
+     "rows": 33,
+     "extra": "gamma_oi=37896611.63",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 184,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "RVMD": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:33:19Z",
+     "rows": 0,
+     "extra": "blocks=0 spot=202.225",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k",
+      "no block prints on D"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:48.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=9583.6358",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.616",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:02Z",
+     "rows": 2,
+     "extra": "blocks=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 342,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 842,
+     "extra": "pages=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 54,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-25",
+     "rows": 10,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-06-25",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 3,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 24,
+     "extra": "days=4/4 D-partial strikes=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:00.000000Z",
+     "rows": 2,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 54,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9079,
+     "extra": "bins=57",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:28.142000Z",
+     "rows": 23,
+     "extra": "gamma_oi=3875642.22",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 159,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 45,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "CRVS": {
+   "coverage": {
+    "core": "7/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 4,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "FAIL",
+     "core": true,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload: no dark pool prints on 2026-09-28 before the cutoff",
+     "notes": []
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:58:50.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=13659.8242",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.630",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 2,
+     "extra": "blocks=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 336,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 278,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 32,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-05-14",
+     "rows": 4,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-05-14",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 12,
+     "extra": "days=4/4 D-partial strikes=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:31:00.000000Z",
+     "rows": 2,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 32,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1823,
+     "extra": "bins=5",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:28.000000Z",
+     "rows": 17,
+     "extra": "gamma_oi=-9800.03",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 156,
+     "extra": "contracts=6/6",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 153,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "VKTX": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:40Z",
+     "rows": 0,
+     "extra": "blocks=0 spot=34.68",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k",
+      "no block prints on D"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:10.161000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=489119.2916",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.500",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:33:52Z",
+     "rows": 2,
+     "extra": "blocks=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 694,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 814,
+     "extra": "pages=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 87,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 70,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 76,
+     "extra": "days=4/4 D-partial strikes=7",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 87,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 6307,
+     "extra": "bins=17",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 102,
+     "extra": "gamma_oi=5811744.85",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 133,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 98,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "TEVA": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "17/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 4,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:14:18Z",
+     "rows": 1,
+     "extra": "blocks=1 spot=38.555",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:11.459000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=416309.9549",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.390",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload: no lit prints on 2026-09-28 before the cutoff",
+     "notes": []
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 375,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 646,
+     "extra": "pages=2",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 54,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-16",
+     "rows": 15,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-09-16",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 3,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 42,
+     "extra": "days=4/4 D-partial strikes=3",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 4,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 54,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 2607,
+     "extra": "bins=7",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:54.000000Z",
+     "rows": 34,
+     "extra": "gamma_oi=7637384.79",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 142,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 26,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "VTRS": {
+   "coverage": {
+    "core": "7/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 3,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "FAIL",
+     "core": true,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload: no dark pool prints on 2026-09-28 before the cutoff",
+     "notes": []
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 0,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff",
+      "no trades with premium >= 50,000"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:50.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=412175.1561",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.322",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:01Z",
+     "rows": 1,
+     "extra": "blocks=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 344,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 188,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 23,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-05-07",
+     "rows": 2,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "latest.date=2026-05-07",
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 1,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 17,
+     "extra": "days=4/4 D-partial strikes=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00.000000Z",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 23,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 2894,
+     "extra": "bins=4",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff",
+      "no flow alerts on D before the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:56.000000Z",
+     "rows": 18,
+     "extra": "gamma_oi=1268123.45",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 181,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  },
+  "SLV": {
+   "coverage": {
+    "core": "8/8",
+    "supplemental": "18/21"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 6,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25"
+     ]
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:58Z",
+     "rows": 53,
+     "extra": "blocks=53 spot=55.385",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints and cumulative day volume up to the cutoff",
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T13:34:01.076000Z",
+     "rows": 31,
+     "extra": "premium>=50,000 pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: trades up to the cutoff"
+     ]
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25 2026-09-25T19:59:58.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff"
+     ]
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28",
+     "rows": 251,
+     "extra": "net_gamma=1372018.9467",
+     "reason": null,
+     "notes": [
+      "point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff"
+     ]
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-08-31",
+     "rows": 126,
+     "extra": "lag=28d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 28 calendar days behind 2026-09-28",
+      "point-in-time: latest settlement date on or before D (publication lag not modeled)"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-25",
+     "rows": 500,
+     "extra": "ratio=0.516",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25"
+     ]
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-28T10:25:37Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: latest borrow update at or before the cutoff"
+     ]
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:32:48Z",
+     "rows": 6,
+     "extra": "blocks=6",
+     "reason": null,
+     "notes": [
+      "point-in-time: prints up to the cutoff",
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 250,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily bars through 2026-09-25"
+     ]
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:30:00Z",
+     "rows": 805,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)"
+     ]
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 3550,
+     "extra": "pages=10",
+     "reason": null,
+     "notes": [
+      "point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff"
+     ]
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot with no time filter; not point-in-time (OI side is in oi-change)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 206,
+     "extra": "prev=2026-09-25",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 29,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25"
+     ]
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: prior close 2026-09-25"
+     ]
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date or time parameter; not point-in-time",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:35:00Z",
+     "rows": 343,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": [
+      "point-in-time: 2026-09-28 strategies executed by the cutoff"
+     ]
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 150,
+     "extra": "days=4/4 D-partial strikes=8",
+     "reason": null,
+     "notes": [
+      "point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial"
+     ]
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:00.000000Z",
+     "rows": 5,
+     "extra": null,
+     "reason": null,
+     "notes": [
+      "point-in-time: minutes completed by the cutoff"
+     ]
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28",
+     "rows": 206,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 3845,
+     "extra": "bins=12",
+     "reason": null,
+     "notes": [
+      "point-in-time: full-day aggregate: last completed session 2026-09-25"
+     ]
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:33:28.785411Z",
+     "rows": 6,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "point-in-time: alerts created by the cutoff"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-28T13:34:58.000000Z",
+     "rows": 167,
+     "extra": "gamma_oi=42112293.36",
+     "reason": null,
+     "notes": [
+      "point-in-time: latest exposure snapshot at or before the cutoff"
+     ]
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 149,
+     "extra": "contracts=6/6",
+     "reason": null,
+     "notes": [
+      "point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change"
+     ]
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 152,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": [
+      "point-in-time: series through 2026-09-25"
+     ]
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-25",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  }
+ }
+}

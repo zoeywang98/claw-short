@@ -1,0 +1,1503 @@
+UW short-engine fetch · target 2026-09-28 as of 09:35 ET · latest trading day 2026-09-28 · run 2026-09-28 10:33 EDT
+UW usage: daily used=10121/40000 · this run: 903 requests, 1061 cache hits, 87s
+note: point-in-time as of 2026-09-28 09:35 ET: rows after the cutoff are dropped; end-of-day-only sources use the prior session 2026-09-25; OI and daily greek exposure for 2026-09-28 are computed at the open and kept
+calendar: Mon · 2 weekdays to month end (2026-09-30) · 2 to quarter end · last quad witching 2026-09-18 (10d ago)
+universe [Communication Services · top 35 by market cap on 2026-09-25] as-of 2026-09-28: net gamma < 0 → 8/35 (NFLX, RDDT, BIDU, TTWO, SE, SPOT, OMC, AMX); null=0
+universe [Healthcare · top 35 by market cap on 2026-09-25] as-of 2026-09-28: net gamma < 0 → 5/35 (UNH, NVO, SNY, CI, NVS); null=0
+universe [Industrials · top 35 by market cap on 2026-09-25] as-of 2026-09-28: net gamma < 0 → 16/35 (BA, VRT, UPS, GE, WM, RTX, LMT, FDX, GD, PWR, CMI, HWM, ADP, NOC, RSG, NSC); null=0
+universe [Technology · top 35 by market cap on 2026-09-25] as-of 2026-09-28: net gamma < 0 → 7/35 (ORCL, UBER, CRM, IBM, WDC, KLAC, SAP); null=0
+watchlist group [光模块/光学] net gamma < 0 → 3/5 (LITE, COHR, GLW)
+watchlist group [AI基建/电力] net gamma < 0 → 1/5 (VRT)
+watchlist group [软件/企服] net gamma < 0 → 1/6 (IBM)
+watchlist group [医药] net gamma < 0 → 0/6
+watchlist group [商品ETF] net gamma < 0 → 0/1
+✅ RAN screener-batch as-of 2026-09-25 rows=23
+     note: point-in-time: screener rows are end-of-day snapshots; using 2026-09-25
+✅ RAN correlations as-of 2026-09-25 rows=90
+✅ RAN sector-etf-flows as-of 2026-09-25 rows=120 etfs=XLC,XLV,XLI,XLK
+
+== LITE ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=51 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:58Z rows=68 blocks=68 spot=938.48
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:14.422000Z rows=36 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:59.061000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=-63.8870
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.652
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:07Z rows=27 blocks=27
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=668 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=4019 pages=11
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=300 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=31 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=203 days=4/4 D-partial strikes=6
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=300
+✅ RAN offlit-levels as-of 2026-09-25 rows=22459 bins=201
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:33:04.630615Z rows=2 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=158 gamma_oi=5990443.93
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=203 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=133 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 938.48 (DP NBBO mid @ 2026-09-28T13:34:58Z)
+session through 2026-09-28T13:35:00Z: prev close 941.65 · premarket vol 217,081 · RTH open 947.98 · last 936.7384 (-0.5% vs prev close) · RTH vol 191,502
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 21.7% + lit 2.8% = 24.5% of day volume 407,982
+walls at cutoff (today's opening OI, spot 938.48): call 1000.0 / put 890.0 / magnet 1000.0 · prior-session gex-levels 2026-09-25: vol call 950.0 / put 935.0 / flip 947.67; oi call 950.0 / put 935.0
+
+== COHR ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=24 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:51Z rows=22 blocks=22 spot=292.61
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:04.109000Z rows=3 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:33.785000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=-13764.1151
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=122 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.533
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:59Z rows=4 blocks=4
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=723 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1773 pages=5
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=152 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=33 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=110 days=4/4 D-partial strikes=7
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=152
+✅ RAN offlit-levels as-of 2026-09-25 rows=14007 bins=47
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=158 gamma_oi=-4062507.85
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=155 contracts=6/6
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 292.61 (DP NBBO mid @ 2026-09-28T13:34:51Z)
+session through 2026-09-28T13:35:00Z: prev close 295.83 · premarket vol 184,834 · RTH open 291.15 · last 292.78 (-1.0% vs prev close) · RTH vol 264,149
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 5.8% + lit 1.2% = 6.9% of day volume 446,153
+walls at cutoff (today's opening OI, spot 292.61): call 320.0 / put 145.0 / magnet 250.0 · prior-session gex-levels 2026-09-25: vol call 300.0 / put 295.0 / flip 302.13; oi call 310.0 / put 287.5
+
+== AAOI ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:27Z rows=11 blocks=11 spot=101.75
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:31:08.703000Z rows=2 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=30428.3001
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:32:29Z rows=7 blocks=7
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=747 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1322 pages=3
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=137 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=61 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=108 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=137
+✅ RAN offlit-levels as-of 2026-09-25 rows=8200 bins=25
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=136 gamma_oi=4285504.51
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=170 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=26 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 101.75 (DP NBBO mid @ 2026-09-28T13:34:27Z)
+session through 2026-09-28T13:35:00Z: prev close 101.4 · premarket vol 408,118 · RTH open 100.178 · last 100.67 (-0.7% vs prev close) · RTH vol 352,322
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 4.9% + lit 4.6% = 9.5% of day volume 740,215
+walls at cutoff (today's opening OI, spot 101.75): call 110.0 / put 60.0 / magnet 110.0 · prior-session gex-levels 2026-09-25: vol call 103.0 / put 101.0 / flip 101.58; oi call 110.0 / put 99.0
+
+== GLW ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=7 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:42Z rows=3 blocks=3 spot=153.795
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:34.804000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=-19982.7475
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.518
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+❌ FAIL lit-blocks reason: empty payload: no lit prints on 2026-09-28 before the cutoff
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=614 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1674 pages=4
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=113 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=7 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=82 days=4/4 D-partial strikes=4
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=113
+✅ RAN offlit-levels as-of 2026-09-25 rows=7408 bins=15
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:54.000000Z rows=141 gamma_oi=-1487813.2
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=179 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=51 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 17/21
+spot 153.795 (DP NBBO mid @ 2026-09-28T13:34:42Z)
+session through 2026-09-28T13:35:00Z: prev close 156.74 · premarket vol 178,979 · RTH open 154.15 · last 153.73 (-1.9% vs prev close) · RTH vol 214,428
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 1.2% + lit n/a = 1.2% of day volume 383,906
+walls at cutoff (today's opening OI, spot 153.795): call 165.0 / put 60.0 / magnet 165.0 · prior-session gex-levels 2026-09-25: vol call 157.5 / put 155.0 / flip 163.8; oi call 165.0 / put 60.0
+
+== AEHR ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=21 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:58Z rows=5 blocks=5 spot=100.665
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:30:07.041000Z rows=1 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:39.229000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=15069.1848
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.569
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:31:34Z rows=2 blocks=2
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=564 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=969 pages=3
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=118 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=20
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=10 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=108 days=4/4 D-partial strikes=6
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=118
+✅ RAN offlit-levels as-of 2026-09-25 rows=7277 bins=42
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=101 gamma_oi=1651269.44
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=151 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=26 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 100.665 (DP NBBO mid @ 2026-09-28T13:34:58Z)
+session through 2026-09-28T13:35:00Z: prev close 104.39 · premarket vol 111,306 · RTH open 101.45 · last 100.33 (-3.9% vs prev close) · RTH vol 219,996
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 6.1% + lit 0.0% = 6.1% of day volume 330,817
+walls at cutoff (today's opening OI, spot 100.665): call 110.0 / put 100.0 / magnet 110.0 · prior-session gex-levels 2026-09-25: vol call 130.0 / put 104.0 / flip 102.94; oi call 105.0 / put 100.0
+
+== VRT ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=19 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:09Z rows=3 blocks=3 spot=251.52
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:32:44.805000Z rows=6 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:07.086000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=-8432.2798
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.510
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:21:15Z rows=2 blocks=2
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=643 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1530 pages=4
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=122 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=16 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=80 days=4/4 D-partial strikes=7
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=122
+✅ RAN offlit-levels as-of 2026-09-25 rows=12459 bins=34
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:54.000000Z rows=106 gamma_oi=-3847959.74
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=179 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=104 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 251.52 (DP NBBO mid @ 2026-09-28T13:34:09Z)
+session through 2026-09-28T13:35:00Z: prev close 253.28 · premarket vol 56,681 · RTH open 253.0 · last 250.615 (-1.1% vs prev close) · RTH vol 140,071
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 1.5% + lit 1.5% = 3.0% of day volume 191,455
+walls at cutoff (today's opening OI, spot 251.52): call 260.0 / put 230.0 / magnet 220.0 · prior-session gex-levels 2026-09-25: vol call 257.5 / put 250.0 / flip 250.43; oi call 260.0 / put 252.5
+
+== NVT ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T12:53:50Z rows=1 blocks=1 spot=167.555
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.000000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=7875.9185
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.625
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+❌ FAIL lit-blocks reason: empty payload: no lit prints on 2026-09-28 before the cutoff
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=329 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=610 pages=2
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=53 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL option-sentiment reason: empty payload
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=0 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=20 days=4/4 D-partial strikes=0
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+❌ FAIL net-prem-ticks reason: empty payload before the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=53
+✅ RAN offlit-levels as-of 2026-09-25 rows=4618 bins=26
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:28.686000Z rows=18 gamma_oi=2151102.84
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=157 contracts=6/6
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=56 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 15/21
+spot 167.555 (DP NBBO mid @ 2026-09-28T12:53:50Z)
+session through 2026-09-28T13:35:00Z: prev close 164.41 · premarket vol 735 · RTH open 163.55 · last 163.82 (-0.4% vs prev close) · RTH vol 20,943
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 59.5% + lit n/a = 59.5% of day volume 2,205
+walls at cutoff (today's opening OI, spot 167.555): call 180.0 / put 165.0 / magnet 180.0 · prior-session gex-levels 2026-09-25: vol call 175.0 / put 140.0 / flip 169.14; oi call 180.0 / put 150.0
+
+== NBIS ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=29 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:58Z rows=78 blocks=78 spot=239.22
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:08.449000Z rows=16 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:05.872000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=95746.1134
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=45 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=484 ratio=0.510
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:46Z rows=19 blocks=19
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=818 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1712 pages=5
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=122 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=248 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=107 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=122
+✅ RAN offlit-levels as-of 2026-09-25 rows=17369 bins=56
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:14.678917Z rows=9 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=176 gamma_oi=54164140.91
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=166 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=56 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 239.22 (DP NBBO mid @ 2026-09-28T13:34:58Z)
+session through 2026-09-28T13:35:00Z: prev close 237.33 · premarket vol 538,860 · RTH open 235.35 · last 239.1801 (0.8% vs prev close) · RTH vol 667,172
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 14.1% + lit 2.3% = 16.3% of day volume 1,205,663
+walls at cutoff (today's opening OI, spot 239.22): call 300.0 / put 235.0 / magnet 300.0 · prior-session gex-levels 2026-09-25: vol call 250.0 / put 237.5 / flip 238.04; oi call 300.0 / put 235.0
+
+== DELL ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=36 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:57Z rows=48 blocks=48 spot=554.555
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:56.223000Z rows=23 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:25.331000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=14097.8834
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.518
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:12Z rows=3 blocks=3
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=693 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=3172 pages=8
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=228 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=135 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=194 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=228
+✅ RAN offlit-levels as-of 2026-09-25 rows=28459 bins=139
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:31.370344Z rows=7 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=146 gamma_oi=42202963.15
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=137 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 554.555 (DP NBBO mid @ 2026-09-28T13:34:57Z)
+session through 2026-09-28T13:35:00Z: prev close 562.89 · premarket vol 198,030 · RTH open 551.74 · last 553.86 (-1.6% vs prev close) · RTH vol 207,416
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 15.5% + lit 0.6% = 16.1% of day volume 405,073
+walls at cutoff (today's opening OI, spot 554.555): call 600.0 / put 550.0 / magnet 600.0 · prior-session gex-levels 2026-09-25: vol call 570.0 / put 562.5 / flip 563.14; oi call 600.0 / put 560.0
+
+== FLEX ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=18 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:33:30Z rows=0 blocks=0 spot=113.69
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+     note: no block prints on D
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:41.988000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=23111.5550
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.388
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:00Z rows=1 blocks=1
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=363 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=480 pages=1
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=46 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-08-04 rows=3
+     note: latest.date=2026-08-04
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=3 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=24 days=4/4 D-partial strikes=4
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:32:00.000000Z rows=3
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=46
+✅ RAN offlit-levels as-of 2026-09-25 rows=7597 bins=35
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:52.000000Z rows=29 gamma_oi=2940765.59
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=145 contracts=5/5
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 113.69 (DP NBBO mid @ 2026-09-28T13:33:30Z)
+session through 2026-09-28T13:35:00Z: prev close 114.68 · premarket vol 6,012 · RTH open 112.495 · last 112.56 (-1.8% vs prev close) · RTH vol 97,521
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 0.0% + lit 0.0% = 0.0% of day volume 95,271
+walls at cutoff (today's opening OI, spot 113.69): call 120.0 / put 110.0 / magnet 120.0 · prior-session gex-levels 2026-09-25: vol call 120.0 / put 95.0 / flip 110.33; oi call 120.0 / put 110.0
+
+== MSFT ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=45 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:59Z rows=186 blocks=186 spot=505.32
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:27.759000Z rows=65 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:58:59.312000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=552861.3842
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.479
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:51Z rows=77 blocks=77
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=809 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=3270 pages=8
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=146 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=564 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=144 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=146
+✅ RAN offlit-levels as-of 2026-09-25 rows=49298 bins=112
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:44.644461Z rows=44 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=168 gamma_oi=1417494232.7
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=195 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 505.32 (DP NBBO mid @ 2026-09-28T13:34:59Z)
+session through 2026-09-28T13:35:00Z: prev close 516.17 · premarket vol 770,042 · RTH open 505.45 · last 505.62 (-2.0% vs prev close) · RTH vol 1,185,255
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 8.7% + lit 3.3% = 12.1% of day volume 1,955,233
+walls at cutoff (today's opening OI, spot 505.32): call 510.0 / put 505.0 / magnet 510.0 · prior-session gex-levels 2026-09-25: vol call 530.0 / put 515.0 / flip 515.4; oi call 550.0 / put 515.0
+
+== META ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=41 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:59Z rows=808 blocks=808 spot=726.595
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:59.313000Z rows=177 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:43.525000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=253690.1368
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=115 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.517
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:58Z rows=205 blocks=205
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=831 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=5947 pages=16
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=274 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=1629 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=254 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=274
+✅ RAN offlit-levels as-of 2026-09-25 rows=54189 bins=145
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:50.674179Z rows=104 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=181 gamma_oi=1382697210.74
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=203 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=148 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 726.595 (DP NBBO mid @ 2026-09-28T13:34:59Z)
+session through 2026-09-28T13:35:00Z: prev close 751.66 · premarket vol 1,708,827 · RTH open 750.425 · last 726.3306 (-3.4% vs prev close) · RTH vol 1,963,115
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 16.1% + lit 3.4% = 19.5% of day volume 3,671,728
+walls at cutoff (today's opening OI, spot 726.595): call 750.0 / put 700.0 / magnet 750.0 · prior-session gex-levels 2026-09-25: vol call 760.0 / put 745.0 / flip 752.49; oi call 800.0 / put 750.0
+
+== IBM ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=10 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:49Z rows=10 blocks=10 spot=220.69
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:32:59.652000Z rows=2 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:34.195000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=-47882.9982
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.417
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:32:11Z rows=0 blocks=0
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=556 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1654 pages=5
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=90 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=42 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=77 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=90
+✅ RAN offlit-levels as-of 2026-09-25 rows=9517 bins=18
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=95 gamma_oi=-18404072.47
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=158 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=183 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 220.69 (DP NBBO mid @ 2026-09-28T13:34:49Z)
+session through 2026-09-28T13:35:00Z: prev close 225.51 · premarket vol 76,913 · RTH open 222.48 · last 220.59 (-2.2% vs prev close) · RTH vol 248,265
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 4.9% + lit 0.0% = 4.9% of day volume 323,876
+walls at cutoff (today's opening OI, spot 220.69): call 260.0 / put None / magnet 220.0 · prior-session gex-levels 2026-09-25: vol call 227.5 / put 180.0 / flip 226.2; oi call 260.0 / put None
+
+== NOW ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=11 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:52Z rows=57 blocks=57 spot=128.275
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:32:51.091000Z rows=7 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:06.473000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=33018.7201
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.512
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:32:19Z rows=5 blocks=5
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=715 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1942 pages=4
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=149 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=73 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=121 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=149
+✅ RAN offlit-levels as-of 2026-09-25 rows=9290 bins=22
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:14.678917Z rows=4 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=145 gamma_oi=6334430.57
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=181 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=104 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 128.275 (DP NBBO mid @ 2026-09-28T13:34:52Z)
+session through 2026-09-28T13:35:00Z: prev close 135.62 · premarket vol 604,276 · RTH open 129.005 · last 128.3 (-5.4% vs prev close) · RTH vol 1,385,778
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 12.1% + lit 0.6% = 12.7% of day volume 1,979,531
+walls at cutoff (today's opening OI, spot 128.275): call 150.0 / put 102.0 / magnet 150.0 · prior-session gex-levels 2026-09-25: vol call 136.0 / put 133.0 / flip 135.27; oi call 150.0 / put 102.0
+
+== DDOG ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=50 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:39Z rows=12 blocks=12 spot=263.275
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:30:07.047000Z rows=2 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:36.553000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=18182.8634
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.583
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:25Z rows=6 blocks=6
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=405 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1550 pages=4
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=93 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=23 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=87 days=4/4 D-partial strikes=6
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=93
+✅ RAN offlit-levels as-of 2026-09-25 rows=14149 bins=100
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:31:10.591276Z rows=1 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=68 gamma_oi=13360599.77
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=147 contracts=6/6
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 263.275 (DP NBBO mid @ 2026-09-28T13:34:39Z)
+session through 2026-09-28T13:35:00Z: prev close 268.13 · premarket vol 69,613 · RTH open 255.5 · last 264.7399 (-1.3% vs prev close) · RTH vol 212,008
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 12.8% + lit 1.7% = 14.5% of day volume 279,664
+walls at cutoff (today's opening OI, spot 263.275): call 300.0 / put 260.0 / magnet 300.0 · prior-session gex-levels 2026-09-25: vol call 280.0 / put 255.0 / flip 267.61; oi call 270.0 / put 260.0
+
+== MDB ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=48 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:57Z rows=179 blocks=179 spot=307.17
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:34.206000Z rows=41 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:00.205000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=5321.0722
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.417
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:34:49Z rows=112 blocks=112
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=383 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=2545 pages=6
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=158 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-24 rows=30
+     note: latest.date=2026-09-24
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=26 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=111 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=158
+✅ RAN offlit-levels as-of 2026-09-25 rows=9564 bins=96
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:34:56.716271Z rows=17 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=86 gamma_oi=5530686.11
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=173 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=26 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 307.17 (DP NBBO mid @ 2026-09-28T13:34:57Z)
+session through 2026-09-28T13:35:00Z: prev close 410.44 · premarket vol 1,643,836 · RTH open 311.236 · last 307.355 (-25.1% vs prev close) · RTH vol 1,538,540
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 8.6% + lit 4.8% = 13.4% of day volume 3,178,021
+walls at cutoff (today's opening OI, spot 307.17): call 500.0 / put 205.0 / magnet 500.0 · prior-session gex-levels 2026-09-25: vol call 440.0 / put 407.5 / flip 407.56; oi call 450.0 / put 390.0
+
+== MRK ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=8 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:33:05Z rows=3 blocks=3 spot=147.63
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:07.227000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=164109.2386
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.364
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T11:05:37Z rows=1 blocks=1
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=391 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=1095 pages=3
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=70 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=14 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=68 days=4/4 D-partial strikes=5
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=70
+✅ RAN offlit-levels as-of 2026-09-25 rows=7720 bins=15
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:56.000000Z rows=33 gamma_oi=37896611.63
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=184 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 147.63 (DP NBBO mid @ 2026-09-28T13:33:05Z)
+session through 2026-09-28T13:35:00Z: prev close 148.78 · premarket vol 19,080 · RTH open 147.675 · last 148.31 (-0.3% vs prev close) · RTH vol 187,794
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 2.3% + lit 1.5% = 3.8% of day volume 190,904
+walls at cutoff (today's opening OI, spot 147.63): call 155.0 / put 145.0 / magnet 155.0 · prior-session gex-levels 2026-09-25: vol call 149.0 / put 148.0 / flip 151.75; oi call 150.0 / put 105.0
+
+== RVMD ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=29 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:33:19Z rows=0 blocks=0 spot=202.225
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+     note: no block prints on D
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:48.000000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=9583.6358
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.616
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:02Z rows=2 blocks=2
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=342 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=842 pages=2
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=54 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-06-25 rows=10
+     note: latest.date=2026-06-25
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=3 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=24 days=4/4 D-partial strikes=6
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:32:00.000000Z rows=2
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=54
+✅ RAN offlit-levels as-of 2026-09-25 rows=9079 bins=57
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:28.142000Z rows=23 gamma_oi=3875642.22
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=159 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=45 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 202.225 (DP NBBO mid @ 2026-09-28T13:33:19Z)
+session through 2026-09-28T13:35:00Z: prev close 204.97 · premarket vol 3,054 · RTH open 203.51 · last 203.2647 (-0.8% vs prev close) · RTH vol 37,813
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 0.0% + lit 0.0% = 0.0% of day volume 38,411
+walls at cutoff (today's opening OI, spot 202.225): call 210.0 / put 200.0 / magnet 200.0 · prior-session gex-levels 2026-09-25: vol call 210.0 / put 185.0 / flip 199.57; oi call 210.0 / put 200.0
+
+== CRVS ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=4 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+❌ FAIL darkpool reason: empty payload: no dark pool prints on 2026-09-28 before the cutoff
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:58:50.000000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=13659.8242
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.630
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 7/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:00Z rows=2 blocks=2
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=336 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=278 pages=1
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=32 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-05-14 rows=4
+     note: latest.date=2026-05-14
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=0 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=12 days=4/4 D-partial strikes=4
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:31:00.000000Z rows=2
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=32
+✅ RAN offlit-levels as-of 2026-09-25 rows=1823 bins=5
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:28.000000Z rows=17 gamma_oi=-9800.03
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=156 contracts=6/6
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=153 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+session through 2026-09-28T13:35:00Z: prev close 11.62 · premarket vol 711 · RTH open 11.66 · last 11.425 (-1.7% vs prev close) · RTH vol 51,062
+
+== VKTX ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=9 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:40Z rows=0 blocks=0 spot=34.68
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+     note: no block prints on D
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:10.161000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=489119.2916
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.500
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:33:52Z rows=2 blocks=2
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=694 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=814 pages=2
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=87 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=70 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=76 days=4/4 D-partial strikes=7
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=87
+✅ RAN offlit-levels as-of 2026-09-25 rows=6307 bins=17
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=102 gamma_oi=5811744.85
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=133 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=98 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 34.68 (DP NBBO mid @ 2026-09-28T13:34:40Z)
+session through 2026-09-28T13:35:00Z: prev close 35.56 · premarket vol 87,934 · RTH open 34.8333 · last 34.79 (-2.2% vs prev close) · RTH vol 333,015
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 0.0% + lit 5.2% = 5.2% of day volume 410,774
+walls at cutoff (today's opening OI, spot 34.68): call 40.0 / put 30.0 / magnet 40.0 · prior-session gex-levels 2026-09-25: vol call 40.0 / put 35.5 / flip 34.62; oi call 40.0 / put 30.0
+
+== TEVA ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=4 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:14:18Z rows=1 blocks=1 spot=38.555
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:11.459000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=416309.9549
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.390
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+❌ FAIL lit-blocks reason: empty payload: no lit prints on 2026-09-28 before the cutoff
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=375 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=646 pages=2
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=54 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-16 rows=15
+     note: latest.date=2026-09-16
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=3 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=42 days=4/4 D-partial strikes=3
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=4
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=54
+✅ RAN offlit-levels as-of 2026-09-25 rows=2607 bins=7
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:54.000000Z rows=34 gamma_oi=7637384.79
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=142 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=26 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 17/21
+spot 38.555 (DP NBBO mid @ 2026-09-28T13:14:18Z)
+session through 2026-09-28T13:35:00Z: prev close 39.19 · premarket vol 176,817 · RTH open 38.35 · last 38.84 (-0.9% vs prev close) · RTH vol 138,546
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 72.6% + lit n/a = 72.6% of day volume 175,246
+walls at cutoff (today's opening OI, spot 38.555): call 40.0 / put 35.0 / magnet 40.0 · prior-session gex-levels 2026-09-25: vol call 39.5 / put 39.0 / flip 39.72; oi call 40.0 / put 39.0
+
+== VTRS ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=3 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+❌ FAIL darkpool reason: empty payload: no dark pool prints on 2026-09-28 before the cutoff
+✅ RAN option-trades as-of 2026-09-28 rows=0 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+     note: no trades with premium >= 50,000
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:50.000000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=412175.1561
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.322
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 7/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:30:01Z rows=1 blocks=1
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=344 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=188 pages=1
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=23 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-05-07 rows=2
+     note: latest.date=2026-05-07
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=1 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=17 days=4/4 D-partial strikes=4
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:30:00.000000Z rows=1
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=23
+✅ RAN offlit-levels as-of 2026-09-25 rows=2894 bins=4
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:35:00Z rows=0 pages=1
+     note: point-in-time: alerts created by the cutoff
+     note: no flow alerts on D before the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:56.000000Z rows=18 gamma_oi=1268123.45
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=181 contracts=7/7
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+session through 2026-09-28T13:35:00Z: prev close 17.83 · premarket vol 2,357 · RTH open 17.62 · last 17.73 (-0.6% vs prev close) · RTH vol 134,684
+
+== SLV ==
+✅ RAN darkpool-levels as-of 2026-09-25 rows=6 days=22/22
+     note: point-in-time: 2026-09-28 is still in session at the cutoff; price-levels is a full-day aggregate, so windows end at the last completed session 2026-09-25
+✅ RAN darkpool as-of 2026-09-28T13:34:58Z rows=53 blocks=53 spot=55.385
+     note: point-in-time: prints and cumulative day volume up to the cutoff
+     note: UW dark pool feed only carries prints with premium >= $100k
+✅ RAN option-trades as-of 2026-09-28T13:34:01.076000Z rows=31 premium>=50,000 pages=1
+     note: point-in-time: trades up to the cutoff
+✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:58.000000Z rows=12 days=6 sources=vol,oi
+     note: point-in-time: 2026-09-28 levels are rebuilt through the session (look-ahead); using 2026-09-25 levels; see spot-gex for exposure at the cutoff
+✅ RAN greek-exposure as-of 2026-09-28 rows=251 net_gamma=1372018.9467
+     note: point-in-time: UW computes daily greek exposure from open interest at the open, so the D row is known at the cutoff
+✅ RAN short-interest as-of 2026-08-31 rows=126 lag=28d
+     note: FINRA short interest lags; 28 calendar days behind 2026-09-28
+     note: point-in-time: latest settlement date on or before D (publication lag not modeled)
+✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.516
+     note: point-in-time: 2026-09-28 short volume is published after the close; latest known session 2026-09-25
+✅ RAN short-data as-of 2026-09-28T10:25:37Z rows=1000
+     note: point-in-time: latest borrow update at or before the cutoff
+coverage 8/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-09-28T13:32:48Z rows=6 blocks=6
+     note: point-in-time: prints up to the cutoff
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-09-25 rows=250
+     note: point-in-time: daily bars through 2026-09-25
+✅ RAN ohlc-5m as-of 2026-09-28T13:30:00Z rows=805 days=5/5
+     note: point-in-time: 2026-09-28 bars closed by the cutoff (last bar starts 2026-09-28T13:30:00Z)
+✅ RAN oi-change as-of 2026-09-28 rows=3550 pages=10
+     note: point-in-time: OI is published before the open and volumes are from the prior session, so the D table is known at the cutoff
+❌ FAIL option-contracts reason: live snapshot with no time filter; not point-in-time (OI side is in oi-change)
+✅ RAN oi-per-strike as-of 2026-09-28 rows=206 prev=2026-09-25
+✅ RAN options-volume as-of 2026-09-25 rows=29
+     note: point-in-time: daily rows through 2026-09-25
+✅ RAN interpolated-iv as-of 2026-09-25 rows=9
+     note: point-in-time: prior close 2026-09-25
+✅ RAN option-sentiment as-of 2026-09-25 rows=30
+     note: point-in-time: prior close 2026-09-25
+❌ FAIL unusualness reason: endpoint has no date or time parameter; not point-in-time
+❌ FAIL options-pulse reason: no 10-minute bucket had closed by the cutoff (first bucket ends 09:40 ET)
+✅ RAN multi-leg as-of 2026-09-28T13:35:00Z rows=343 days=5 min_size=50
+     note: point-in-time: 2026-09-28 strategies executed by the cutoff
+✅ RAN flow-per-strike as-of 2026-09-25 rows=150 days=4/4 D-partial strikes=8
+     note: point-in-time: complete days through 2026-09-25; 2026-09-28 up to the cutoff is a top-strikes subset in d_partial
+✅ RAN net-prem-ticks as-of 2026-09-28T13:34:00.000000Z rows=5
+     note: point-in-time: minutes completed by the cutoff
+✅ RAN greek-exposure-strike as-of 2026-09-28 rows=206
+✅ RAN offlit-levels as-of 2026-09-25 rows=3845 bins=12
+     note: point-in-time: full-day aggregate: last completed session 2026-09-25
+✅ RAN flow-alerts as-of 2026-09-28T13:33:28.785411Z rows=6 pages=1
+     note: point-in-time: alerts created by the cutoff
+✅ RAN spot-gex as-of 2026-09-28T13:34:58.000000Z rows=167 gamma_oi=42112293.36
+     note: point-in-time: latest exposure snapshot at or before the cutoff
+✅ RAN contract-history as-of 2026-09-25 rows=149 contracts=6/6
+     note: point-in-time: daily rows through 2026-09-25; D's opening OI is in oi-change
+✅ RAN rr-skew as-of 2026-09-25 rows=152 expiry=2026-10-16 delta=25
+     note: point-in-time: series through 2026-09-25
+✅ RAN screener as-of 2026-09-25 rows=1
+supplemental 18/21
+spot 55.385 (DP NBBO mid @ 2026-09-28T13:34:58Z)
+session through 2026-09-28T13:35:00Z: prev close 58.14 · premarket vol 3,021,526 · RTH open 55.3212 · last 55.3725 (-4.8% vs prev close) · RTH vol 1,035,969
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 10.7% + lit 0.7% = 11.4% of day volume 4,056,773
+walls at cutoff (today's opening OI, spot 55.385): call 60.0 / put 30.0 / magnet 60.0 · prior-session gex-levels 2026-09-25: vol call 64.0 / put 58.0 / flip 58.2; oi call 60.0 / put 58.0
