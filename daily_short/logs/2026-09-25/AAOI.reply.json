@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 97745,
+ "stop_reason": "end_turn",
+ "session_id": "848e0acc-b835-4beb-9142-855f5ec1554c",
+ "total_cost_usd": 2.1442886,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 243147,
+  "cache_read_input_tokens": 19523,
+  "output_tokens": 9760,
+  "output_tokens_details": {
+   "thinking_tokens": 6717
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 243147,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 9760,
+    "cache_read_input_tokens": 19523,
+    "cache_creation_input_tokens": 243147,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 243147
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 9760,
+   "cacheReadInputTokens": 19523,
+   "cacheCreationInputTokens": 243147,
+   "webSearchRequests": 0,
+   "costUSD": 2.1442886,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 6717,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**AAOI** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：**通过（边缘）**\n- SI% float 14.29%，as-of 2026-08-31，滞后 25 天。该值不算低，按 §1.3 只作背景参考。\n- 实时借券费率 0.4084，单位未明确；rebate 3.4716 为正值。近 20 日在 0.3018–0.518 之间，有缓升但不紧张。\n- 可借量 3,500,000 股，近 20 日在 3.0M–3.8M 之间，稳定，没有枯竭。\n- T+1 空头成交比 0.585，处于近 20 日 0.471–0.637 区间内，没有异常。\n- 近 5 日 −3.58%，21 日 −10.87%，没有急涨。\n- 实时借券与 T+1 两条主导证据都干净；SI 偏高但属陈旧数据，已降级为背景。\n\n② 熔断：**未熔断**\n- Technology 池负 gamma 6/35，高于 ≤4/35 的阈值，但接近。\n- 本票 net gamma +2,053.97，接近零；前一日为 −7,189.79，刚翻正。\n\n③ 量级：**薄**\n- 1D DP 绝对量 2,355,500 股，低于 1M 日均约 2.80M（58,832,800 / 21 日）。\n- relative_volume 0.836，stock_vol_pctile 9.9。\n- 大单参与度 either 口径 8.14%（dark 6.33% + lit 1.82%），by_size 口径仅 1.92%，远低于 16–21% 的机构区间，接近散户噪音档。\n- 最大几笔在盘后，价格 101.40：\n  - 32,123 股，average_price_trade\n  - 31,051 股，prior_reference_price\n  - 24,637 股，prior_reference_price\n- 按流水线规则，量薄即不给方向，弃。\n\n④ 方向：**不明（偏派发形态，但因量薄不采信）**\n\n| 窗口 | DP% | top8 重心 |\n|---|---|---|\n| 1D | 55.9% | 101.80 |\n| 1W | 51.8% | 103.99 |\n| 1M | 51.5% | 103.13 |\n\n- 重心迁移：\n  - 快照：end-21 为 112.25，end-5 为 102.19，end 为 101.80，整体下移。\n  - 逐日：9/21 107.39，9/22 106.65，9/23 102.22，9/24 100.36，9/25 101.80。冲高后在更低位置重建。\n- 价格位置：\n  - 收盘 101.40，NBBO 中点 101.56。\n  - 站不上 1D 的 102 / 103 / 104 档，其中 102 档 dark 846,924，DP% 71.1%。\n  - 也低于 1W 的 105–108 档。\n- 反向证据：9/14–9/17 重心在 96.30–98.66，现价高于该低档，1M 窗口内不是单向下移。\n- DP% 在三个窗口间只有温和变化（51.5 → 51.8 → 55.9），没有持续迁移。\n\n⑤ 动机：**Gamma 对冲（无方向）**；叠加季末再平衡，进一步降权\n- DP 与 gamma 位置：1D 最大两档 102 与 101 夹住 vol gamma flip 101.58、magnet 101 和 vol put wall 101。盘中 99.97–105.03 反复穿越 flip，机械且双向。\n- OI 变化：\n  - call OI +10,367，从 174,273 升到 184,640，没有走平或下降。\n  - 10/2 C105 +1,056，前一日 ask 4,546 对 bid 1,391，以 ask 为主。\n  - 10/2 C110 +3,282，前一日 ask 3,186 对 bid 3,547，基本均衡。\n  - put OI +3,357，但主要来自 bid 侧卖出：11/20 P60 +698（bid 698），10/2 P82 +607（bid 611）。这是卖 put，不是买保护。\n- IV：iv30d 0.832，一周前 0.842，一月前 0.953，处于压缩状态；iv_rank 1.35。\n- Skew：25d RR（10/16）从 −0.043 降到 −0.081，上行尾部偏弱。这是唯一支持派发的期权侧信号。\n- Flow（premium ≥ 5 万）：\n  - net call +1.35M，net put −0.35M。\n  - 大量是 70/71、72/73、75/76 的 7DTE 深度实值 1-wide 垂直价差，ask 与 bid 两腿成对，净意图接近零，需要剔除。\n  - 剔除后是温和偏多：10/2 C110 ask 800 张；0DTE C105 ask 2,000 张；3/19/27 P120 在 bid 侧卖出。\n  - 看空侧只有 1/15/27 P95 ask 200 张（31 万）。\n- 借券：费率缓升，可借量稳定。\n- 与派发指纹的冲突：call OI 明显上升，put 以卖出为主，不满足派发的完整签名。\n- 季末：3 个工作日后到季末，盘后出现 prior_reference_price / average_price_trade 大宗，按 §5 第 5 条进一步降权。\n\n⑥ Dealer：**无命中**\n- 结构位（gex_levels）：\n\n| 口径 | call wall | put wall | gamma flip | magnet |\n|---|---|---|---|---|\n| vol | 103（−14，自 117） | 101（+4） | 101.58（+0.41） | 101（−4） |\n| OI | 110（0） | 99（+39，自 60） | 103.44（−0.58） | 101（−9） |\n\n- 交叉核对：strike 表的 put wall 为 60，magnet 为 110，与 gex_levels OI 口径不一致，已记录分歧。\n- Flow 意图：\n  - 9/25 在 110 行权价：call ask 3,516 对 bid 2,807，偏 ask，不构成盖子。\n  - 9/24 在 110 行权价：bid 4,994 对 ask 4,418，基本均衡；次日 OI +3,332。但 OI 口径的墙持平（Wall 没有上移），bid 优势太弱，不算\"Wall↑ + Bid + OI↑\"。\n  - 9/24 在 117 行权价：bid 1,662 对 ask 23，但次日 OI −18，而且墙已移走，不成立。\n- 9/25 flow 的次日 OI：未明确，需要 9/28 的数据确认。\n- 价格：现价低于 vol call wall 103 和 OI gamma flip 103.44，贴着 vol flip。\n\n**仓位 / 意图 / 不对称性**：Dealer 净 gamma 接近零，钉在 vol flip 101.58 与 magnet 101 附近，DP 放量是围绕这一结构的机械对冲。期权侧近月 call 建仓，put 以卖出为主，不支持派发。SI 14.3%（陈旧）加空头成交比约 0.58，在上方是燃料而不是卖压；下方 99（OI put wall）到 101 有结构支撑。整体不对称性不利于做空。\n\n**失效位**：\n- 以下条件同时满足前，不构成 setup：\n  - 1D 大单参与度回到 ≥16%。\n  - 价格有效跌破 99.97（9/25 RTH 低点）和 OI put wall 99。\n  - DP 在更低档位重建。\n  - call OI 走平或下降。\n- 若价格收复 OI gamma flip 103.44 或 1W 重心 103.99，现有偏派发形态作废。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:10:00Z rows=82 blocks=82 spot=101.56\n✅ RAN option-trades as-of 2026-09-25T19:58:58.955000Z rows=65 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=2053.9676\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+ "ttft_ms": 71077,
+ "type": "result",
+ "duration_ms": 97816,
+ "uuid": "e5b90a27-1efe-442b-bb27-6bed83e0068e",
+ "ttft_stream_ms": 3142,
+ "time_to_request_ms": 71,
+ "first_content_frame_ms": 3142,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

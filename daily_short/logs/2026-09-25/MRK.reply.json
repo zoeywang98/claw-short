@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 75749,
+ "stop_reason": "end_turn",
+ "session_id": "9a997e6b-1e51-467b-9612-7d4a3eb4e3d0",
+ "total_cost_usd": 1.2962126,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 143170,
+  "cache_read_input_tokens": 19523,
+  "output_tokens": 7347,
+  "output_tokens_details": {
+   "thinking_tokens": 4494
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 143170,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 7347,
+    "cache_read_input_tokens": 19523,
+    "cache_creation_input_tokens": 143170,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 143170
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 7347,
+   "cacheReadInputTokens": 19523,
+   "cacheCreationInputTokens": 143170,
+   "webSearchRequests": 0,
+   "costUSD": 1.2962126,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4494,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**MRK** · 医药 · Healthcare · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：SI% float 1.23%（as-of 2026-08-31，滞后 25 天，仅作背景）· 实时借券费率 0.25%（2026-09-25T15:24:50Z；近 20 日在 0.25–0.41% 之间，无上行）· 可借量 10,000,000 股（较 09-10 的 8.3M 回升）· T+1 空头成交比 0.364（09-25；09-23/09-24 为 0.160/0.151，较 9 月上中旬 0.45–0.64 明显回落）· 近 5 日 +1.30% / 21 日 −2.82%（无急涨）→ **通过**\n\n② 熔断：Healthcare 池负 gamma 8/35（大于 4/35）· 本票 net gamma +214,935（正值，日增 +22%）· 医药分组 1/6 仅作参考 → **未熔断**\n\n③ 量级：\n- 1D DP 绝对量 3,857,460 股，DP% 0.855；全日成交 8,292,430 股。\n- 大单参与度 19.66%（145 笔，其中按规模 11 笔 = 14.7%），处于 16–21% 的机构区间。\n- 其中盘后大宗 784,543 股，占 9.46%。最大一笔 489,802 股 @148.78，时间 16:29，prior_reference_price，价格等于收盘价。\n- 结论：**足够**（盘后参考价大宗按 §5 第 5 条降权，见 ⑤）\n\n④ 方向：\n- 各窗口 DP% 与 top8 重心：\n  - 1D：DP% 0.855，重心 147.928；3.34M 集中在 148.00 一档。\n  - 1W：DP% 0.823，重心 148.78；最大档 148.00（7.06M）。151.00（2.33M）和 150.75/150.00 为上沿。\n  - 1M：DP% 0.858，重心 147.566；最大档 148.00（16.59M）和 147.00（12.05M）。\n- 迁移路径：08-26 重心 153.261 → 09-15 低点 143.007 → 09-18 为 146.02 → 09-22 为 151.088 → 09-25 为 147.928。\n  - 1M 维度：重心下移。\n  - 下跌后档位向上重建，并非在更低位置重建。\n  - 1W→1D：回落 0.85。\n- 价格位置：收盘 148.78。\n  - 站上 1D 全部主档（148/147.75/147）和 1M 主档（148/147/146/144/143）。\n  - 未站上 1W 上沿 149/150/150.75/151。\n  - 高点逐日降低：153.57 → 151.46 → 149.98，有滞涨迹象。\n- 结论：区间 143–153 内双向重建，DP% 三窗口无持续迁移 → **不明**\n\n⑤ 动机：选 **库存转移（中性偏多）**，派发被 §5 判别式排除。证据链：\n- **OI**：\n  - 全链 call OI +5,380、put OI +3,917。\n  - 新开仓（量 > OI）：\n    - 270617C150：OI 767→1,473，前日 ask 705 张，$1.23M。\n    - 261002C150：OI 409→1,164，前日 ask 626 张。\n    - 280121C190：今日 ask 300 张，原 OI 48。\n- **Flow（ask/bid 意图净额）**：\n  - call_ask $668,435 vs call_bid $66,960，净买 call。\n  - 280121P170 在 bid 侧 $1,266,000，为卖 put，偏多。\n  - 280121 125P/190C 在 ask 侧买入长期宽跨，尾部扩张。\n  - 270617C80 深度价内 3,450 张 cross，$24.15M，无方向。\n- **IV**：iv30d 从 0.261（1w）升至 0.303，iv_rank_1m 为 100；60D 分位 0.941，365D 分位 0.953。IV 在扩张，不是压缩。\n- **借券**：费率 0.25% 平稳，可借量充足，空头成交比回落，无空头燃料累积。\n- **Gamma 位置**：现价 148.74 紧贴 OI flip 148.61，处于 vol put wall 148 与 call wall 149 之间。1D DP 集中在 148，带有 gamma 对冲特征。\n- **判别式**：Call OI↑ + IV↑ + 活跃度扩张 → 与派发不共存。\n- **附注 1**：put 端有 261002P143 ask 1,082 张 +1,015 OI，属对冲成分，按方向降权处理。\n- **附注 2**：季末前 3 个交易日，盘后 prior_reference_price 大宗按基金再平衡降权。\n- **附注 3**：财报 2026-10-29，已落入 60D IV 期限。\n\n⑥ Dealer：\n- **结构（gex_levels）**：\n  - OI 口径：call wall 155→150（−5），put wall 146→105（−41），gamma flip 148.83→148.61（−0.22）。\n  - Vol 口径：call wall 150→149，put wall 145→148，flip 149.05→151.75（+2.7）。\n  - 分歧：OI put wall 105 与 strike 表 146 不一致，以 gex_levels 为准，记录在案。\n- **09-24 flow 与 09-25 OI 对照（Wall↓ 情形）**：\n  - 150 行权价：call premium ask $1,570,970 vs bid $361,890（ask 净额）→ call OI +3,091。\n  - 155 行权价：bid 略占优（$85,173 vs $62,939）→ OI +265，并未下降。\n- **09-25 flow**：\n  - 150：ask $189,224 vs bid $116,562。\n  - 155：bid $291,205 vs ask $176,943。\n  - 160：ask $385,603 vs bid $135,191。\n  - 次日 OI：未明确。\n- **决策表**：Wall↓ 但 OI↑，四行均不成立 → **无命中**。新墙 150 呈 ask + OI↑（买入开仓），偏向 dealer 买股对冲，不利于做空。\n\n**仓位 / 意图 / 不对称性**：\n- 仓位与意图：机构在 148 附近以 DP 大宗加长期 call/价内 cross 挪库存并建期权仓，上方有 150 call wall 和 150–151 的 DP 上沿压价，形成 148–150 的正 gamma 钉扎区。\n- 不对称性：空头无借券燃料，但 call OI 和 IV 同步扩张，下行派发签名缺失。做空无结构优势。\n\n**失效位**：当前不构成 setup，只有同时满足以下条件才重新评估做空：\n- 收盘跌破 148.61（OI gamma flip）与 148 DP 主档，且 1D/1W 重心继续下移至 147 以下；\n- call OI 走平或下降，IV 压缩。\n\n若日后建立空头，失效位为收复 151.00（1W DP 上沿）/ 151.75（vol gamma flip）。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=8 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:41:55Z rows=145 blocks=145 spot=148.74\n✅ RAN option-trades as-of 2026-09-25T19:31:25.427000Z rows=7 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:07.227000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=214934.9462\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.364\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+ "ttft_ms": 49748,
+ "type": "result",
+ "duration_ms": 75845,
+ "uuid": "c562f9ad-5b34-4537-8722-bf20e21295b9",
+ "ttft_stream_ms": 2024,
+ "time_to_request_ms": 50,
+ "first_content_frame_ms": 2025,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

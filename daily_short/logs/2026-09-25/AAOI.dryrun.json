@@ -1,0 +1,554 @@
+{
+  "runId": "cd1a5dc5-af6b-4ec3-8d8d-f2765020f90b",
+  "status": "ok",
+  "summary": "completed",
+  "result": {
+    "payloads": [
+      {
+        "text": "**AAOI** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：\n- SI% float 14.29%（as-of 2026-08-31，滞后 25 天）。数值偏高，但按 §1.3 只作背景参考；days_to_cover 1.32。\n- 实时借券费率 fee_rate 0.4084（单位未明确），rebate 3.472。近 20 日费率在 0.30–0.52 之间，走势平稳。\n- 可借量 3.5M 股，约为 float 84.57M 的 4.1%。近 20 日在 3.0M–3.8M 之间，平稳。\n- T+1 空头成交比 0.585。近 20 日在 0.47–0.64 之间，没有异常。\n- 近 5 日 −3.6%，21 日 −10.9%，3 个月 −26.8%，没有急涨。\n- → **通过**（附保留：SI 背景偏高）\n\n② 熔断：\n- Technology 池负 gamma 6/35，高于 §3 规定的 ≤4/35 熔断线。\n- 本票 net gamma +2,054，接近零，偏正。前一日为 −7,190。\n- watchlist 光模块/光学组负 gamma 2/5，仅作参考。\n- → **未熔断**\n\n③ 量级：\n- 1D DP 绝对量 2.355M 股，DP% 55.9%。低于 1W 日均约 2.83M 和 1M 日均约 2.80M。股票成交量分位 9.9（decile 1），relative volume 0.84。\n- 大单参与度：either 口径 8.14%（dark 6.33%），by_size 口径仅 1.92%。远低于 §4 的机构区间 16–21%，by_size 已接近散户噪音水平。\n- → **薄**：按 §4 第 1 步不许强行给方向，流水线到此弃掉。\n\n④ 方向（只列事实）：\n- **DP% 与 top8 重心：**\n  - 1D：DP% 55.9%，重心 101.8\n  - 1W：DP% 51.8%，重心 104.0\n  - 1M：DP% 51.5%，重心 103.1\n- **快照迁移：** end-21 重心 112.3 → end-5 102.2 → end 101.8，档位整体下移。\n- **价格位置：** 现价 101.6（DP NBBO 中点），收盘 101.4。站不上 1D 高 DP% 档（102.0 为 71%，101.8 为 71%，103.0 为 63%），也低于 1W 和 1M 重心。下方 100.0 档 DP% 69.9%。\n- 形态上偏派发，但量级闸门没过，**不认定方向**。\n- 数据异常：`last_22_bars` 是 2025 年的日期，价格约 26–34，与现价不符。本步改用 derived 和 screener 的收益率。\n\n⑤ 动机：选\"派发\"，但签名不完整，不成立。\n- **符合派发的证据：**\n  - DP 档位下移，价格阴跌。\n  - IV 压缩：iv30 0.832；前 1 日 0.856，前 1 周 0.842，前 1 月 0.953；1 年分位 0.4。\n  - 25Δ RR 从 −0.041 走到 −0.081，put 变贵。\n- **冲突的证据：**\n  - Call OI 上升：174.3k → 184.6k（+10,367），明显多于 Put OI +3,357。§5 派发要求 Call OI 走平或下降。\n  - 次日 OI 确认的是 ask 侧新开仓：10/02 110C OI +3,282（前一日 ask 量 3,186），105C +1,056（ask 量 4,546），125C +794。这是 Buy to Open。\n  - 9/25 call 按意图净额为 ask 侧：ask premium 4.663M 对 bid 3.312M，net call premium +1.28M。multi-leg 中 call vertical 打 ask 的有 10 笔，合计 6.40M。\n- **季末排除项：** 距季末 3 个交易日。盘后 DP 大单 7 笔，共 97k 股，在 101.4 按 prior_reference_price 和 average_price_trade 成交。§5 第 5 条\"基金再平衡\"只部分符合：期权侧不平，没有跨名字的篮子数据。仍需降权。\n- **gamma 位置：** 现价 101.6 正好等于 vol 口径的 flip 101.6，低于 OI 口径的 flip 103.4。\n\n⑥ Dealer：\n- **OI 口径结构位：**\n  - call wall 110，日变 0\n  - put wall 99，日变 +39（上一日为 60）\n  - gamma flip 103.4，日变 −0.58\n  - magnet 101，日变 −9\n- **vol 口径结构位：**\n  - call wall 103，日变 −14\n  - put wall 101，日变 +4\n  - flip 101.6，日变 +0.41\n- **交叉核对分歧：** strike table 的 put wall 为 60，与 gex_levels 的 99 不一致。按 §7.1 以 gex_levels 为准。\n- **flow 意图净额：** call 偏 ask（主动买入），put 净额 −0.35M。\n- **次日 OI：** 9/24 的 flow 已经确认为 call Buy to Open。9/25 flow 的次日 OI 未明确。\n- **决策表：** OI 口径 call wall 没动；vol 口径 Wall↓ + Ask + OI↑ 不在表内。→ **无命中**。只看 110C 这一处，是 ask 侧新开仓且 OI↑，方向偏多，不利于做空。\n\n**仓位 / 意图 / 不对称性**：DP 档位从 112 区一路下移到 101–102，价格压在各档下方，形态上像供给在上方。但量级偏薄，大单参与度只有 8%，而且 ask 侧的 call 在 110、105、125 真实新开仓，与派发签名直接冲突；季末再平衡还会带来机械性干扰。不对称性不在空头一侧。\n\n**失效位**：\n- **看空思路作废：** 收复 OI 口径 gamma flip 103.4，或 1W DP 重心 104.0。\n- **要升级成 setup，须同时满足：**\n  - 大单参与度回到 16–21% 区间；\n  - 跌破 OI 口径 put wall 99，且收复不了 101.6 的 vol flip；\n  - ask 侧 call 不再新增 OI；\n  - 季末（9/30）过后仍然成立。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:10:00Z rows=82 blocks=82 spot=101.56\n✅ RAN option-trades as-of 2026-09-25T19:58:58.955000Z rows=65 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=2053.9676\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+        "mediaUrl": null
+      }
+    ],
+    "meta": {
+      "durationMs": 66991,
+      "finalPromptText": "[Sun 2026-09-27 23:43 EDT] 你是做空候选分析员。下面依次是：规则文档 SHORT_ENGINE.md 全文、输出格式、当日市场数据、一只票的数据。\n\n纪律：\n- 只依据 SHORT_ENGINE.md 判断；与它冲突的直觉一律不用。\n- 所有数据都已经在这条消息里。不要调用任何工具，不要读写文件，不要向用户提问。\n- 数字只用下面数据里出现的；数据里没有的写\"未明确\"，不要猜。\n- 严格按 §9 流水线顺序：先 ① 挤仓否决，再 ② 熔断；① 或 ② 触发时，后面各步只列关键事实，结论按 §2 / §3 的规定写。\n- 熔断判断用该票所属 sector（screener.sector）对应的 universe_gamma 那一行（negative/n）；watchlist 分组的负 gamma 数只作参考。\n- 画墙只用 gex_levels，永远不用期权 flow 的 strike（§7.1）。flow 按 ask/bid 意图净额读（§7.2）。\n- 月末 / 季末（calendar_flags）要考虑 §5 第 5 条\"基金再平衡\"排除项。\n- 只输出下面的格式，不要前言、不要结尾客套。\n\n## 输出格式\n\n**<TICKER>** · <分组> · <sector> · 数据日 <D> · 核心覆盖 <N>/8\n**结论**：🚫 禁止做空 / ⛔ 熔断，只出决策线 / ⚪ 不构成 setup / ✅ 做空候选（置信度：低 / 中 / 高）\n\n① 挤仓否决：SI% float（as-of，滞后 X 天）· 实时借券费率 · 可借量 · T+1 空头成交比 · 近 5 日 / 21 日涨跌 → 通过 / 否决\n② 熔断：<sector> 池负 gamma X/35 · 本票 net gamma → 熔断 / 未熔断\n③ 量级：1D DP 绝对量 · 大单参与度 → 足够 / 薄\n④ 方向：1D / 1W / 1M 的 DP% 与 top8 重心 · 迁移方向 · 价格是否站上各档 → 派发 / 吸筹 / 不明\n⑤ 动机：六指纹选一 + 证据链（OI、ask 侧 flow、IV、借券、gamma 位置）\n⑥ Dealer：call wall / put wall / gamma flip 及日间变化 · flow 意图净额 · 次日 OI → 决策表命中项（没有就写\"无命中\"）\n\n**仓位 / 意图 / 不对称性**：一到三句\n**失效位**：价格或条件\n**运行日志**：\n（逐行照抄 run_log_core）\ncoverage <N>/8 · SI as-of <日期>（滞后 X 天）\n\n\n## SHORT_ENGINE.md\n\n# SHORT_ENGINE.md — 做空候选分析唯一规则文档\n\n> 本文档是今后做空候选分析的**唯一**规则来源，由 RULEBOOK（UW 暗池/期权流/GEX 规则书）与 Dealer Hedging Rules 提炼合并而成，只保留做空相关逻辑。与旧文档冲突时，以本文档为准。\n>\n> **数据源只有两个：Unusual Whales API（简称 UW API）和 QuantData 网页版。** 不使用 MenthorQ、OptionData 或任何其他来源；所有\"结构位\"（Call Wall / Put Wall / Gamma Flip）一律来自 UW `gex-levels`，\"OI 是否真实变化\"一律用 UW 期权链 OI 数据或 QuantData 网页的 OI 变化页面做次日确认。\n\n---\n\n## 0 · 唯一不可动摇的框架\n\n- **不预测价格。** 找的是\"谁在什么位置、为什么这样持仓\"的名字，输出的是仓位、意图、不对称性和失效位（invalidation），不是目标价。\n- **暗池（DP）成交量不是信号，只是量级闸门**——它只说明\"发生了事情\"。方向来自真实的逐档 DP% 与多窗口价格迁移；动机来自多信号联合签名。**永远不要**用自制的\"重心 vs 现价偏移\"代替真实 DP%，**永远不要**用单一快照定方向（这正是 AXTI/NBIS 误判的根源）。\n- 所有概率均为风险中性/隐含概率，不是 alpha。\n\n---\n\n## 1 · 数据源与层级映射\n\n### 1.1 UW API 端点（8 层）\n\n| 角色 | 层 | UW API 端点 | 关键字段 |\n|---|---|---|---|\n| Trigger | DP 方向 | `darkpool-levels` | 逐档 DP%（dark vs regular volume） |\n| Safety | DP 大单 | `darkpool` | 大宗成交的时间/规模 |\n| Flow | 期权意图 | `option-trades` | side（ask/bid）、premium、sweep |\n| Ready | GEX 墙 | `gex-levels` | gamma_flip / magnet / call_wall / put_wall |\n| Ready | 做市商 gamma | `greek-exposure` | 一年期序列；今天 = `max(date)` 行 |\n| Veto | 空头持仓 | `short-interest` | si_float、days_to_cover、fee_rate、shares_available |\n| Veto | 空头成交比 | `short-volume` | short_volume_ratio（payload 键是 `si` 不是 `data`） |\n| Veto | 借券 | `short-data` | 实时借券费率 + 可借股数 |\n\n8 层全部可经 REST 运行——失败就是真实故障（空 payload / API 错误），不存在\"该层不可用\"。\n\n**DP% 原语（唯一合法算法）：** 每个价位档 `pct = dark_pool_volume / (dark_pool_volume + regular_volume)`。这才是真实逐档 DP%。\n\n### 1.2 QuantData 网页版的用途\n\nQuantData 只做**交叉验证与次日确认**，不做首发信号：\n\n- 次日确认 OI 变化（对应原 OptionData 的角色）：昨天的 flow 是否真的变成了新持仓。\n- 暗池大单打印、GEX 结构位的第二视角核对（与 UW API 数字不一致时，以 UW API 为准并记录分歧）。\n\n### 1.3 数据新鲜度表（每条腿必须标注 as-of）\n\n| 层 | 节奏 | 典型滞后 |\n|---|---|---|\n| `darkpool-levels` / `darkpool` | 实时（约延迟 15 分钟） | 当日 |\n| `option-trades`（flow） | 盘中实时 | 当日 |\n| `gex-levels` / `greek-exposure` | 实时；序列为一年期 | 当日（取 `max(date)`，不是第一行） |\n| `short-interest`（SI% float） | FINRA 双月结算 | **滞后约 2–3 周** |\n| `short-volume`（场外空头比） | T+1 | 前一交易日 |\n| `short-data`（借券费/可借量） | 实时 | 当日 |\n\n**Veto 权重规则：** 因 SI% float 滞后约 2 周，挤仓否决以**实时借券费率 + T+1 空头成交比**为主导，SI% float 降级为背景参考。用陈旧触发换取实时借券证据。\n\n---\n\n## 2 · 强制前置：挤仓否决（Squeeze Veto）\n\n**在给任何做空候选排名之前必须先跑。** 检查 SI%、场外空头成交比、借券费率 + 可借量。\n\n- **SI 高，或借券紧张（费率高/可借量少），或该名字刚刚急涨 → 🚫 禁止做空。** 暗池看不到被迫回补的买家；这种名字上的高空头比例是**燃料，不是卖压**——不要读反。\n- 此类名字最多只允许\"flip 收复失败后的限定风险彩票单\"：风险 ≤ 0.25% 账户，且不追穿越 gamma flip 超过 1 ATR 的价格。\n- **全部干净（低 SI + 低费率 + 可借充足）→ 该做空候选才允许进入后续分析。**\n\n---\n\n## 3 · 强制熔断：做空引擎断路器（Circuit Breaker）\n\n若做市商 gamma 全场是正 gamma 压制（板块内负 gamma 名字 ≤ 4/35，或等效证据表明多数名字处于正 gamma）：\n\n- **做空引擎熔断：当日零确认做空**，只允许输出决策线（\"跌破 X 之前不构成 setup\"）。\n- 正 gamma 毯子之下，派发阶梯会被逢跌买入直接买穿——做空不成立。\n- **当日拿不到 GEX 数据 → 默认熔断**（保守处理）。\n\n---\n\n## 4 · 三步读取顺序（量级 → 方向 → 动机）\n\n硬性顺序，不许跳步，不许用记忆里的近似值代替实拉数据。\n\n### 第 1 步 · 量级闸门（Magnitude）\n\n- 绝对 DP 成交量是否足够大？**绝对量 = 置信度，永远不定方向。**\n- 大单参与度约 16–21% = 机构（可信）；约 3–4% = 散户噪音（打折）。\n- 量太薄 → 不许强行给方向。\n\n### 第 2 步 · 方向（Direction）\n\n方向 = 真实逐档 DP%（§1.1 原语）+ 多窗口迁移。拉 `darkpool-levels --date <D>` 覆盖今日 / 1 周 / 1 月三个窗口，计算 top-8 档的 DP 加权重心，比较迁移：\n\n- **做空关注的形态：重心下移或走平、下跌后档位在更低位置重建、价格站不上各档 → 派发（distribution）/看空。**\n- 重心上移且价格逐级站稳 = 吸筹/看多 → **不是做空候选，直接排除。**\n- 单窗口偏移不是方向；两个快照不是价格行为——必须拉真实多窗口价格路径，读 DP 价格带的 K 线，而不是名义金额。\n\n### 第 3 步 · 动机（Motive）\n\n动机 = 跨 OI-vs-volume、ask 侧 flow-IV、SI/借券、gamma 位置的**联合签名因果推断**，从六指纹中选一个并给出证据链。禁止只贴\"吸筹/派发\"二元标签。\n\n---\n\n## 5 · 动机指纹：唯一的做空指纹与五个排除项\n\n同样的 DP 大单，动机不同 → 交易方向相反。读联合签名，不读规模。\n\n### ✅ 唯一可做空的指纹：派发（Distribution）\n\n- DP 量大且 DP% 高，**但档位不上移**（走平/下移）；\n- 价格滞涨或阴跌；\n- Call OI 走平/下降，或 Put OI 上升；\n- IV 走平/压缩；活跃度（vitality）走平/收缩；上行尾部收缩。\n- **滞涨本身就是派发的早期信号，先于重心下移出现。**\n\n### 🚫 五个排除指纹（出现任何一个 → 不是做空理由）\n\n1. **吸筹（Accumulation）→ 看多。** DP 集中在现价及下方、档位逐窗口上移、价格逐级站稳、Call OI↑、IV 从压缩低位扩张。\n2. **库存转移（Inventory transfer）→ 中性偏多。** 盘后大宗 DP 但 Call OI↑ + IV↑ + 期权量 > OI（新仓）+ 尾部与活跃度扩张。这是机构挪库存建期权仓，不是供给砸盘。**判别式：派发从不与 Call OI + IV + 活跃度同步上升共存。**\n3. **Gamma 对冲 → 无方向。** DP 聚集在 gamma 墙/flip 附近、现价穿越关键位时放量、机械且双向、DP% 无持续迁移、IV 不必扩张。是 dealer delta 对冲，不是观点。\n4. **对冲/领口（Hedge/Collar）→ 方向降权。** DP 伴随保护性结构（Put OI↑ / collar）、IV↑ 但价格不破位、call 侧活跃度不扩张。是持有人给多头上保险，不是离场——**DP 成交量 ≠ 出货。**\n5. **基金再平衡 → 机械性，降权。** 月末/季末或指数调仓时段的大宗 DP、跨相关名字呈篮子状、无期权确认（OI/IV 平）、DP% 只在单一窗口尖峰、价格均值回归。不是知情交易。\n\n---\n\n## 6 · Dealer 对冲确认（结构 + flow + OI 三点合一）\n\n原则：**结构位（UW `gex-levels`）回答\"结构性风险在哪\"；UW flow 回答\"今天谁在主动交易\"；次日 OI（UW 期权链 / QuantData）回答\"持仓是否真的变了\"；价格回答\"定位是否被确认\"。永远不用单一工具下结论。**\n\n### 6.1 四步法\n\n1. **结构（UW `gex-levels`）**：只观察 Call Wall / Put Wall / Gamma Flip 的位置与移动。墙从 360 移到 365 只能得出\"风险中心从 360 移到 365\"，**不许**直接推断 dealer 挪仓或客户看多。\n2. **Flow（UW `option-trades`）**：看 ask/bid、sweep、premium、volume vs OI。同一时段 360 bid + 365 ask 常提示 roll；连续 ask sweep 提示激进买入。\n3. **OI 次日确认**：360 OI 降了吗？365 OI 升了吗？只有确认后才知道昨天的交易变成了新持仓。\n4. **推断 dealer 对冲方向**（见决策表）。\n\n### 6.2 决策表（做空视角）\n\n| 信号组合 | 客户行为 | Dealer 对冲 | 做空含义 |\n|---|---|---|---|\n| Wall↑ + **Bid** + OI↑ | Sell to Open（备兑/熊差 call 卖方） | Dealer 买入 call → **卖股票对冲** | **看空确认：上方形成盖子（cap）** |\n| Wall↓ + **Bid** + OI↓ | Sell to Close | Dealer 平仓 → **卖股票**（对冲移除） | 上方支撑撤除，偏空 |\n| Wall↑ + **Ask** + OI↑ | Buy to Open | Dealer 卖出 call → 买股票对冲 | 偏多，**不利于做空** |\n| Wall↓ + **Ask** + OI↓ | Buy to Close | Dealer 买股票 | 偏多，**不利于做空** |\n\n**重要真相：OI 单独永远不足以判断 dealer 在买还是卖股票**——OI 增可来自客户 Buy to Open 或 Sell to Open，OI 减可来自 Sell to Close 或 Buy to Close。必须叠加 ask/bid 方向。\n\n**最高置信度 = 四点全部一致**：① 结构位移动（`gex-levels`）② UW flow ③ 次日 OI 确认 ④ 价格行为。缺任何一点都降级处理。\n\n---\n\n## 7 · 数据坑与硬性 Gotchas\n\n1. **期权 flow 的 strike 在本账户上编码错位（约 33×）——永远不要用期权 flow 去画 strike 位/写墙。** 现价从 DP 的 NBBO 中点取，不用 `underlying_price`（同样不可靠）。\n2. **按意图净额计算，不按 call/put 计数。** \"calls > puts\" 是陷阱：ask 侧 = 主动买入；bid 侧 = 卖出/被写。**大额 call premium 打在 bid 上 = 卖 call = 盖子，不是点火。**\n3. **Flow 从不单独定方向**——只有当它与 DP% 方向 + SI/借券燃料一致时才加一档置信度；不一致时标注冲突、不下注。\n4. DP 约延迟 15 分钟（用于盘中结构足够）。\n5. `greek-exposure` 返回一年期序列——今天的敞口取 `date == 目标日` 的行，即 `max(date)`，**绝不取第一行**。\n6. `short-volume` payload 键是 `si` 不是 `data`；`gex-levels` payload 是嵌套字典 `data={date,time,…}`。\n7. SI / short-volume / short-data 各行按**降序**排列——取 `max(date)`，不是最后一行。\n8. UW CLI 输出在 JSON 前带 `UW usage: daily used=…` 横幅——解析前先剥掉（`grep -v \"^UW usage\"` 或从首个 `{` 起 `raw_decode`）。\n\n---\n\n## 8 · 逐层运行日志（可审计性）\n\n每一批分析必须输出\"哪些规则层真正跑了 / 哪些失败\"的日志，避免把部分运行误当成完整交叉验证：\n\n- 每层输出 `✅ RAN {layer} as-of <date> rows=N` 或 `❌ FAIL {layer} reason: <具体原因>`；\n- 汇总一条覆盖率行 `N/8` 并贴到看板；\n- FAIL 是真实故障（空 payload / API 错误），永远不是\"该层不可用\"；\n- 每条腿标注各自的 as-of 日期（尤其 SI 的 2–3 周滞后）。\n\n---\n\n## 9 · 做空候选完整流水线（汇总）\n\n```\n候选名单\n  │\n  ├─ ① Squeeze Veto（§2）：SI/借券费/可借量/近期急涨\n  │     └─ 任一触发 → 🚫 禁止做空（最多 flip 失守彩票单，≤0.25% 风险）\n  │\n  ├─ ② 熔断检查（§3）：全场正 gamma 压制或无 GEX 数据\n  │     └─ 触发 → 当日零确认做空，只出决策线\n  │\n  ├─ ③ 量级闸门（§4.1）：DP 绝对量 + 大单参与度\n  │     └─ 量薄 → 不给方向，弃\n  │\n  ├─ ④ 方向（§4.2）：真实逐档 DP% + 今日/1周/1月重心迁移\n  │     └─ 重心上移站稳 = 吸筹 → 弃；重心走平/下移 + 滞涨 → 继续\n  │\n  ├─ ⑤ 动机（§5）：联合签名 → 必须命中\"派发\"指纹\n  │     └─ 命中其余五指纹任何一个 → 弃或降权\n  │\n  ├─ ⑥ Dealer 对冲确认（§6）：gex-levels 结构 + flow 方向 + 次日 OI（UW/QuantData）+ 价格\n  │     └─ Wall↑+Bid+OI↑（盖子）或 Wall↓+Bid+OI↓（撤保护）→ 置信度升级\n  │\n  └─ ⑦ 输出：仓位/意图/不对称性/失效位 + 8 层运行日志 + 各腿 as-of\n```\n\n**输出纪律：** 每个确认的做空候选必须附带证据链（六指纹选一 + 决策表命中项）、失效位（通常为 gamma flip 或 DP 重心上沿收复）、以及数据覆盖率行。任何缺少 veto 检查或熔断检查的做空结论无效。\n\n\n## 当日市场数据（market_brief）\n\n{\"universe_gamma\":[{\"status\":\"RAN\",\"label\":\"Communication Services · top 35 by market cap\",\"as_of\":\"2026-09-25\",\"n\":35,\"negative\":7,\"negative_names\":[\"NFLX\",\"NTES\",\"AMX\",\"SE\",\"TTWO\",\"BIDU\",\"OMC\"],\"null\":0},{\"status\":\"RAN\",\"label\":\"Healthcare · top 35 by market cap\",\"as_of\":\"2026-09-25\",\"n\":35,\"negative\":8,\"negative_names\":[\"UNH\",\"NVS\",\"NVO\",\"CVS\",\"GSK\",\"SYK\",\"SNY\",\"CI\"],\"null\":0},{\"status\":\"RAN\",\"label\":\"Industrials · top 35 by market cap\",\"as_of\":\"2026-09-25\",\"n\":35,\"negative\":16,\"negative_names\":[\"SPCX\",\"RTX\",\"BA\",\"LMT\",\"ADP\",\"PWR\",\"VRT\",\"HWM\",\"GD\",\"WM\",\"NOC\",\"CMI\",\"UPS\",\"NSC\",\"FDX\",\"RSG\"],\"null\":0},{\"status\":\"RAN\",\"label\":\"Technology · top 35 by market cap\",\"as_of\":\"2026-09-25\",\"n\":35,\"negative\":6,\"negative_names\":[\"ORCL\",\"SAP\",\"KLAC\",\"IBM\",\"WDC\",\"UBER\"],\"null\":0}],\"calendar_flags\":{\"date\":\"2026-09-25\",\"weekday\":\"Fri\",\"weekdays_to_month_end\":3,\"weekdays_to_quarter_end\":3,\"month_end\":\"2026-09-30\",\"quarter_end\":\"2026-09-30\",\"monthly_opex\":\"2026-09-18\",\"is_monthly_opex\":false,\"last_quad_witching\":\"2026-09-18\",\"days_since_quad_witching\":7,\"is_quad_witching\":false,\"note\":\"weekday counts ignore exchange holidays\"},\"watchlist_group_gamma\":[{\"label\":\"光模块/光学\",\"n\":5,\"negative\":2,\"negative_names\":[\"COHR\",\"GLW\"],\"missing\":[]},{\"label\":\"AI基建/电力\",\"n\":5,\"negative\":1,\"negative_names\":[\"VRT\"],\"missing\":[]},{\"label\":\"软件/企服\",\"n\":6,\"negative\":1,\"negative_names\":[\"IBM\"],\"missing\":[]},{\"label\":\"医药\",\"n\":6,\"negative\":1,\"negative_names\":[\"CRVS\"],\"missing\":[]},{\"label\":\"商品ETF\",\"n\":1,\"negative\":0,\"negative_names\":[],\"missing\":[]}]}\n\n## 本票数据（AAOI brief）\n\n{\"ticker\":\"AAOI\",\"group\":\"光模块/光学\",\"target_date\":\"2026-09-25\",\"coverage\":{\"core\":\"8/8\",\"supplemental\":\"21/21\"},\"as_of\":{\"darkpool-levels\":\"2026-09-25\",\"darkpool\":\"2026-09-25T23:10:00Z\",\"option-trades\":\"2026-09-25T19:58:58.955000Z\",\"gex-levels\":\"2026-09-25 2026-09-25T19:59:38.768000Z\",\"greek-exposure\":\"2026-09-25\",\"short-interest\":\"2026-08-31\",\"short-volume\":\"2026-09-25\",\"short-data\":\"2026-09-25T15:24:50Z\",\"lit-blocks\":\"2026-09-25T21:47:02Z\",\"ohlc-daily\":\"2026-09-25\",\"ohlc-5m\":\"2026-09-25T23:55:00Z\",\"oi-change\":\"2026-09-25\",\"option-contracts\":\"2026-09-25T21:45:13Z\",\"oi-per-strike\":\"2026-09-25\",\"options-volume\":\"2026-09-25\",\"interpolated-iv\":\"2026-09-25\",\"option-sentiment\":\"2026-09-25\",\"unusualness\":\"2026-09-25\",\"options-pulse\":\"2026-09-25 1620\",\"multi-leg\":\"2026-09-25\",\"flow-per-strike\":\"2026-09-25\",\"net-prem-ticks\":\"2026-09-25\",\"greek-exposure-strike\":\"2026-09-25\",\"offlit-levels\":\"2026-09-25\",\"flow-alerts\":\"2026-09-25T19:53:44.753143Z\",\"spot-gex\":\"2026-09-25T19:59:38.768000Z\",\"contract-history\":\"2026-09-25\",\"rr-skew\":\"2026-09-25\",\"screener\":\"2026-09-25\"},\"run_log_core\":[\"✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22\",\"✅ RAN darkpool as-of 2026-09-25T23:10:00Z rows=82 blocks=82 spot=101.56\",\"✅ RAN option-trades as-of 2026-09-25T19:58:58.955000Z rows=65 premium>=50,000 pages=1\",\"✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi\",\"✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=2053.9676\",\"✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\",\"✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585\",\"✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\"],\"derived\":{\"spot\":{\"mid\":101.6,\"bid\":101.5,\"ask\":101.6,\"as_of\":\"2026-09-25T23:10:00Z\",\"print_price\":101.5,\"source\":\"darkpool NBBO midpoint\"},\"spot_rth_close\":{\"mid\":101.4,\"bid\":101.3,\"ask\":101.4,\"as_of\":\"2026-09-25T19:59:59Z\"},\"session_so_far\":{\"through\":\"2026-09-26T00:00:00Z\",\"prev_close\":101.0,\"premarket_volume\":192079,\"premarket_high\":103.8,\"premarket_low\":101.4,\"rth_open\":101.8,\"rth_high\":105.0,\"rth_low\":99.97,\"rth_volume\":4852009,\"last\":101.4,\"gap_open_vs_prev_close\":0.007226,\"last_vs_prev_close\":0.003343},\"block_participation\":{\"day_volume\":5499476,\"day_volume_source\":\"darkpool print `volume` (consolidated day volume at the latest print)\",\"definition\":{\"min_shares\":10000,\"min_premium\":200000,\"rule\":\"size >= min_shares OR premium >= min_premium\"},\"excluded_auction_shares\":{\"dark\":0,\"lit\":343580},\"either\":{\"dark_block_shares\":347856,\"lit_block_shares\":99847,\"pct_dark\":0.06325,\"pct_lit\":0.01816,\"pct_total\":0.08141},\"by_size\":{\"dark_block_shares\":105811,\"lit_block_shares\":0,\"pct_dark\":0.01924,\"pct_lit\":0.0,\"pct_total\":0.01924},\"by_premium\":{\"dark_block_shares\":347856,\"lit_block_shares\":99847,\"pct_dark\":0.06325,\"pct_lit\":0.01816,\"pct_total\":0.08141}},\"walls_crosscheck\":{\"spot\":101.6,\"call_wall\":110.0,\"put_wall\":60.0,\"gamma_magnet\":110.0,\"source\":\"greek-exposure/strike (OI basis, greeks as of the open)\",\"vs_gex_levels_oi\":{\"call_wall\":{\"gex_levels\":110.0,\"strike_table\":110.0,\"agree\":true},\"put_wall\":{\"gex_levels\":99.0,\"strike_table\":60.0,\"agree\":false},\"gamma_magnet\":{\"gex_levels\":101.0,\"strike_table\":110.0,\"agree\":false}}}},\"darkpool_levels\":{\"windows\":{\"1D\":{\"from\":\"2026-09-25\",\"to\":\"2026-09-25\",\"days_present\":1,\"dark_total\":2355000.0,\"regular_total\":1857000.0,\"dp_pct\":0.5592,\"centroid_top8\":101.8,\"dark_vwap_all\":101.8,\"top8\":[{\"price\":104.0,\"dark\":155600.0,\"regular\":124800.0,\"dp_pct\":0.5549},{\"price\":103.0,\"dark\":272200.0,\"regular\":161500.0,\"dp_pct\":0.6276},{\"price\":102.8,\"dark\":54740.0,\"regular\":26120.0,\"dp_pct\":0.6769},{\"price\":102.0,\"dark\":846900.0,\"regular\":344400.0,\"dp_pct\":0.7109},{\"price\":101.8,\"dark\":90850.0,\"regular\":36650.0,\"dp_pct\":0.7126},{\"price\":101.0,\"dark\":721800.0,\"regular\":1045000.0,\"dp_pct\":0.4084},{\"price\":100.8,\"dark\":34530.0,\"regular\":25340.0,\"dp_pct\":0.5767},{\"price\":100.0,\"dark\":147700.0,\"regular\":63700.0,\"dp_pct\":0.6987}]},\"1W\":{\"from\":\"2026-09-21\",\"to\":\"2026-09-25\",\"days_present\":5,\"dark_total\":14130000.0,\"regular_total\":13140000.0,\"dp_pct\":0.5181,\"centroid_top8\":104.0,\"dark_vwap_all\":104.1,\"top8\":[{\"price\":108.0,\"dark\":1396000.0,\"regular\":2343000.0,\"dp_pct\":0.3734},{\"price\":107.0,\"dark\":1841000.0,\"regular\":2086000.0,\"dp_pct\":0.4689},{\"price\":106.0,\"dark\":1131000.0,\"regular\":672700.0,\"dp_pct\":0.6271},{\"price\":105.0,\"dark\":651900.0,\"regular\":323300.0,\"dp_pct\":0.6685},{\"price\":103.0,\"dark\":1031000.0,\"regular\":461300.0,\"dp_pct\":0.691},{\"price\":102.0,\"dark\":1945000.0,\"regular\":822800.0,\"dp_pct\":0.7028},{\"price\":101.0,\"dark\":2065000.0,\"regular\":4169000.0,\"dp_pct\":0.3312},{\"price\":100.0,\"dark\":758400.0,\"regular\":281700.0,\"dp_pct\":0.7291}]},\"1M\":{\"from\":\"2026-08-27\",\"to\":\"2026-09-25\",\"days_present\":21,\"dark_total\":58830000.0,\"regular_total\":55350000.0,\"dp_pct\":0.5152,\"centroid_top8\":103.1,\"dark_vwap_all\":104.3,\"top8\":[{\"price\":107.0,\"dark\":3451000.0,\"regular\":3824000.0,\"dp_pct\":0.4744},{\"price\":106.0,\"dark\":3702000.0,\"regular\":2889000.0,\"dp_pct\":0.5617},{\"price\":105.0,\"dark\":4484000.0,\"regular\":7354000.0,\"dp_pct\":0.3788},{\"price\":104.0,\"dark\":2648000.0,\"regular\":1704000.0,\"dp_pct\":0.6084},{\"price\":103.0,\"dark\":3351000.0,\"regular\":4187000.0,\"dp_pct\":0.4446},{\"price\":102.0,\"dark\":3760000.0,\"regular\":1794000.0,\"dp_pct\":0.677},{\"price\":101.0,\"dark\":4776000.0,\"regular\":5820000.0,\"dp_pct\":0.4507},{\"price\":98.0,\"dark\":3847000.0,\"regular\":3854000.0,\"dp_pct\":0.4996}]}},\"snapshots\":{\"end\":{\"date\":\"2026-09-25\",\"dp_pct\":0.5592,\"dark_total\":2355000.0,\"centroid_top8\":101.8,\"top8_prices\":[104.0,103.0,102.8,102.0,101.8,101.0,100.8,100.0]},\"end-5\":{\"date\":\"2026-09-18\",\"dp_pct\":0.3965,\"dark_total\":3768000.0,\"centroid_top8\":102.2,\"top8_prices\":[105.0,104.0,103.0,102.0,101.0,100.8,100.0,99.0]},\"end-21\":{\"date\":\"2026-08-26\",\"dp_pct\":0.5382,\"dark_total\":2120000.0,\"centroid_top8\":112.3,\"top8_prices\":[118.0,114.0,113.0,112.8,112.0,111.0,110.8,110.0]}}},\"darkpool\":{\"spot\":{\"mid\":101.6,\"bid\":101.5,\"ask\":101.6,\"as_of\":\"2026-09-25T23:10:00Z\",\"print_price\":101.5,\"source\":\"darkpool NBBO midpoint\"},\"spot_rth_close\":{\"mid\":101.4,\"bid\":101.3,\"ask\":101.4,\"as_of\":\"2026-09-25T19:59:59Z\"},\"day_volume\":5499476,\"blocks\":{\"either\":{\"count\":82,\"shares\":347856,\"premium\":35520000.0,\"pct_of_day_volume\":0.06325},\"by_size\":{\"count\":4,\"shares\":105811,\"premium\":10750000.0,\"pct_of_day_volume\":0.01924},\"by_premium\":{\"count\":82,\"shares\":347856,\"premium\":35520000.0,\"pct_of_day_volume\":0.06325},\"after_hours\":{\"count\":7,\"shares\":97122,\"premium\":9847000.0,\"pct_of_day_volume\":0.01766},\"auction\":{\"count\":0,\"shares\":0,\"premium\":0,\"pct_of_day_volume\":0.0}},\"largest\":[{\"et\":\"17:22:23\",\"price\":101.4,\"size\":32123,\"premium\":3257000.0,\"nbbo_mid\":101.5,\"ext_hours\":true,\"sale_cond\":\"average_price_trade\"},{\"et\":\"16:00:25\",\"price\":101.4,\"size\":31051,\"premium\":3149000.0,\"nbbo_mid\":101.4,\"ext_hours\":true,\"sale_cond\":\"prior_reference_price\"},{\"et\":\"16:00:20\",\"price\":101.4,\"size\":24637,\"premium\":2498000.0,\"nbbo_mid\":101.4,\"ext_hours\":true,\"sale_cond\":\"prior_reference_price\"},{\"et\":\"13:29:53\",\"price\":102.5,\"size\":18000,\"premium\":1845000.0,\"nbbo_mid\":102.4,\"ext_hours\":false,\"sale_cond\":null},{\"et\":\"10:55:36\",\"price\":101.2,\"size\":8345,\"premium\":844800.0,\"nbbo_mid\":101.1,\"ext_hours\":false,\"sale_cond\":null},{\"et\":\"15:57:08\",\"price\":101.3,\"size\":7500,\"premium\":759400.0,\"nbbo_mid\":101.2,\"ext_hours\":false,\"sale_cond\":null},{\"et\":\"12:44:58\",\"price\":102.7,\"size\":7013,\"premium\":720500.0,\"nbbo_mid\":102.6,\"ext_hours\":false,\"sale_cond\":null},{\"et\":\"14:37:33\",\"price\":102.4,\"size\":6676,\"premium\":683900.0,\"nbbo_mid\":102.6,\"ext_hours\":false,\"sale_cond\":null}]},\"option_trades\":{\"min_premium\":50000,\"truncated\":false,\"aggregates\":{\"premium_by_type_side\":{\"put_bid\":1296000.0,\"call_mid\":4188000.0,\"call_bid\":3312000.0,\"call_ask\":4663000.0,\"put_ask\":947300.0,\"put_mid\":307200.0},\"contracts_by_type_side\":{\"put_bid\":305,\"call_mid\":2130,\"call_bid\":1756,\"call_ask\":5626,\"put_ask\":305,\"put_mid\":60},\"net_call_premium\":1351000.0,\"net_put_premium\":-348600.0,\"bullish_premium\":5959000.0,\"bearish_premium\":4259000.0,\"sweep_count\":0,\"vol_gt_oi_count\":39,\"strike_mismatch_count\":0,\"top_contracts\":[{\"sym\":\"AAOI261002C00072000\",\"type\":\"call\",\"strike\":72.0,\"expiry\":\"2026-10-02\",\"ask_premium\":1317000.0,\"bid_premium\":0.0,\"ask_contracts\":442,\"bid_contracts\":0,\"sweeps\":0,\"trades\":4,\"open_interest\":0},{\"sym\":\"AAOI261002C00073000\",\"type\":\"call\",\"strike\":73.0,\"expiry\":\"2026-10-02\",\"ask_premium\":0.0,\"bid_premium\":1273000.0,\"ask_contracts\":0,\"bid_contracts\":442,\"sweeps\":0,\"trades\":4,\"open_interest\":128},{\"sym\":\"AAOI280121P00150000\",\"type\":\"put\",\"strike\":150.0,\"expiry\":\"2028-01-21\",\"ask_premium\":505800.0,\"bid_premium\":508500.0,\"ask_contracts\":69,\"bid_contracts\":69,\"sweeps\":0,\"trades\":3,\"open_interest\":106},{\"sym\":\"AAOI261002C00075000\",\"type\":\"call\",\"strike\":75.0,\"expiry\":\"2026-10-02\",\"ask_premium\":944300.0,\"bid_premium\":0.0,\"ask_contracts\":352,\"bid_contracts\":0,\"sweeps\":0,\"trades\":5,\"open_interest\":7},{\"sym\":\"AAOI261002C00076000\",\"type\":\"call\",\"strike\":76.0,\"expiry\":\"2026-10-02\",\"ask_premium\":0.0,\"bid_premium\":909400.0,\"ask_contracts\":0,\"bid_contracts\":352,\"sweeps\":0,\"trades\":5,\"open_interest\":0},{\"sym\":\"AAOI261002C00070000\",\"type\":\"call\",\"strike\":70.0,\"expiry\":\"2026-10-02\",\"ask_premium\":605900.0,\"bid_premium\":0.0,\"ask_contracts\":188,\"bid_contracts\":0,\"sweeps\":0,\"trades\":2,\"open_interest\":2},{\"sym\":\"AAOI261002C00071000\",\"type\":\"call\",\"strike\":71.0,\"expiry\":\"2026-10-02\",\"ask_premium\":0.0,\"bid_premium\":587300.0,\"ask_contracts\":0,\"bid_contracts\":188,\"sweeps\":0,\"trades\":2,\"open_interest\":0},{\"sym\":\"AAOI261016C00105000\",\"type\":\"call\",\"strike\":105.0,\"expiry\":\"2026-10-16\",\"ask_premium\":190000.0,\"bid_premium\":275800.0,\"ask_contracts\":250,\"bid_contracts\":394,\"sweeps\":0,\"trades\":4,\"open_interest\":347},{\"sym\":\"AAOI260925C00077000\",\"type\":\"call\",\"strike\":77.0,\"expiry\":\"2026-09-25\",\"ask_premium\":435500.0,\"bid_premium\":0.0,\"ask_contracts\":182,\"bid_contracts\":0,\"sweeps\":0,\"trades\":5,\"open_interest\":95},{\"sym\":\"AAOI270319P00120000\",\"type\":\"put\",\"strike\":120.0,\"expiry\":\"2027-03-19\",\"ask_premium\":0.0,\"bid_premium\":424900.0,\"ask_contracts\":0,\"bid_contracts\":116,\"sweeps\":0,\"trades\":3,\"open_interest\":304},{\"sym\":\"AAOI270617C00300000\",\"type\":\"call\",\"strike\":300.0,\"expiry\":\"2027-06-17\",\"ask_premium\":321800.0,\"bid_premium\":0.0,\"ask_contracts\":450,\"bid_contracts\":0,\"sweeps\":0,\"trades\":2,\"open_interest\":964},{\"sym\":\"AAOI270115P00095000\",\"type\":\"put\",\"strike\":95.0,\"expiry\":\"2027-01-15\",\"ask_premium\":310000.0,\"bid_premium\":0.0,\"ask_contracts\":200,\"bid_contracts\":0,\"sweeps\":0,\"trades\":1,\"open_interest\":1655}]}},\"gex_levels\":{\"levels_date\":\"2026-09-25\",\"day_over_day_change\":{\"vol\":{\"from\":\"2026-09-24\",\"to\":\"2026-09-25\",\"call_wall\":-14.0,\"put_wall\":4.0,\"gamma_flip\":0.41,\"gamma_magnet\":-4.0},\"oi\":{\"from\":\"2026-09-24\",\"to\":\"2026-09-25\",\"call_wall\":0.0,\"put_wall\":39.0,\"gamma_flip\":-0.58,\"gamma_magnet\":-9.0}},\"latest\":{\"requested\":\"2026-09-25\",\"date\":\"2026-09-25\",\"time\":\"2026-09-25T19:59:38.768000Z\",\"source\":\"vol\",\"call_wall\":103.0,\"put_wall\":101.0,\"gamma_flip\":101.6,\"gamma_magnet\":101.0},\"latest_oi\":{\"requested\":\"2026-09-25\",\"date\":\"2026-09-25\",\"time\":\"2026-09-25T19:59:38.768000Z\",\"source\":\"oi\",\"call_wall\":110.0,\"put_wall\":99.0,\"gamma_flip\":103.4,\"gamma_magnet\":101.0},\"series\":{\"vol\":[{\"date\":\"2026-09-18\",\"call_wall\":106.0,\"put_wall\":104.0,\"gamma_flip\":104.4,\"gamma_magnet\":105.0},{\"date\":\"2026-09-21\",\"call_wall\":117.0,\"put_wall\":98.0,\"gamma_flip\":108.7,\"gamma_magnet\":130.0},{\"date\":\"2026-09-22\",\"call_wall\":115.0,\"put_wall\":105.0,\"gamma_flip\":107.1,\"gamma_magnet\":105.0},{\"date\":\"2026-09-23\",\"call_wall\":110.0,\"put_wall\":101.0,\"gamma_flip\":101.7,\"gamma_magnet\":110.0},{\"date\":\"2026-09-24\",\"call_wall\":117.0,\"put_wall\":97.0,\"gamma_flip\":101.2,\"gamma_magnet\":105.0},{\"date\":\"2026-09-25\",\"call_wall\":103.0,\"put_wall\":101.0,\"gamma_flip\":101.6,\"gamma_magnet\":101.0}],\"oi\":[{\"date\":\"2026-09-18\",\"call_wall\":105.0,\"put_wall\":104.0,\"gamma_flip\":108.7,\"gamma_magnet\":105.0},{\"date\":\"2026-09-21\",\"call_wall\":110.0,\"put_wall\":105.0,\"gamma_flip\":103.8,\"gamma_magnet\":110.0},{\"date\":\"2026-09-22\",\"call_wall\":110.0,\"put_wall\":105.0,\"gamma_flip\":107.4,\"gamma_magnet\":110.0},{\"date\":\"2026-09-23\",\"call_wall\":110.0,\"put_wall\":60.0,\"gamma_flip\":104.1,\"gamma_magnet\":110.0},{\"date\":\"2026-09-24\",\"call_wall\":110.0,\"put_wall\":60.0,\"gamma_flip\":104.0,\"gamma_magnet\":110.0},{\"date\":\"2026-09-25\",\"call_wall\":110.0,\"put_wall\":99.0,\"gamma_flip\":103.4,\"gamma_magnet\":101.0}]}},\"greek_exposure\":{\"today\":{\"date\":\"2026-09-25\",\"call_gamma\":160200.0,\"put_gamma\":-158200.0,\"call_delta\":6342000.0,\"put_delta\":-4024000.0,\"call_vanna\":3772000.0,\"put_vanna\":1466000.0,\"call_charm\":-34770000.0,\"put_charm\":2520000.0,\"net_gamma\":2054.0,\"net_delta\":2317000.0,\"net_vanna\":5238000.0,\"net_charm\":-32250000.0},\"series_21d\":[{\"date\":\"2026-08-27\",\"net_gamma\":41330.0,\"net_delta\":3359000.0},{\"date\":\"2026-08-28\",\"net_gamma\":23750.0,\"net_delta\":2162000.0},{\"date\":\"2026-08-31\",\"net_gamma\":-9245.0,\"net_delta\":1418000.0},{\"date\":\"2026-09-01\",\"net_gamma\":-12420.0,\"net_delta\":942700.0},{\"date\":\"2026-09-02\",\"net_gamma\":-17650.0,\"net_delta\":594000.0},{\"date\":\"2026-09-03\",\"net_gamma\":-19760.0,\"net_delta\":277600.0},{\"date\":\"2026-09-04\",\"net_gamma\":-18800.0,\"net_delta\":759200.0},{\"date\":\"2026-09-08\",\"net_gamma\":15170.0,\"net_delta\":2307000.0},{\"date\":\"2026-09-09\",\"net_gamma\":33750.0,\"net_delta\":3015000.0},{\"date\":\"2026-09-10\",\"net_gamma\":8359.0,\"net_delta\":1415000.0},{\"date\":\"2026-09-11\",\"net_gamma\":21590.0,\"net_delta\":2140000.0},{\"date\":\"2026-09-14\",\"net_gamma\":-22510.0,\"net_delta\":492000.0},{\"date\":\"2026-09-15\",\"net_gamma\":-13750.0,\"net_delta\":483700.0},{\"date\":\"2026-09-16\",\"net_gamma\":-12550.0,\"net_delta\":1181000.0},{\"date\":\"2026-09-17\",\"net_gamma\":23280.0,\"net_delta\":2202000.0},{\"date\":\"2026-09-18\",\"net_gamma\":53350.0,\"net_delta\":2516000.0},{\"date\":\"2026-09-21\",\"net_gamma\":44220.0,\"net_delta\":3193000.0},{\"date\":\"2026-09-22\",\"net_gamma\":47770.0,\"net_delta\":3335000.0},{\"date\":\"2026-09-23\",\"net_gamma\":44840.0,\"net_delta\":3167000.0},{\"date\":\"2026-09-24\",\"net_gamma\":-7190.0,\"net_delta\":1242000.0},{\"date\":\"2026-09-25\",\"net_gamma\":2054.0,\"net_delta\":2317000.0}]},\"short_interest\":{\"latest\":{\"market_date\":\"2026-08-31\",\"si_float\":0.1429,\"si_float_with_synth_long_pct_of_total_shares\":0.125,\"days_to_cover\":1.32,\"short_interest\":12090000.0,\"total_float\":84570000.0,\"fee_rate\":0.3022,\"rebate_rate\":3.328,\"short_shares_available\":3300000.0},\"lag_days\":25,\"series\":[{\"market_date\":\"2026-08-31\",\"si_float\":0.1429,\"days_to_cover\":1.32,\"fee_rate\":0.3022,\"short_shares_available\":3300000.0},{\"market_date\":\"2026-08-14\",\"si_float\":0.1232,\"days_to_cover\":1.0,\"fee_rate\":0.359,\"short_shares_available\":3700000.0},{\"market_date\":\"2026-07-31\",\"si_float\":0.1234,\"days_to_cover\":1.2,\"fee_rate\":0.4123,\"short_shares_available\":3400000.0},{\"market_date\":\"2026-07-15\",\"si_float\":0.1238,\"days_to_cover\":1.14,\"fee_rate\":0.2666,\"short_shares_available\":3900000.0},{\"market_date\":\"2026-06-30\",\"si_float\":0.134,\"days_to_cover\":1.0,\"fee_rate\":0.2888,\"short_shares_available\":2300000.0},{\"market_date\":\"2026-06-15\",\"si_float\":0.1275,\"days_to_cover\":1.0,\"fee_rate\":0.25,\"short_shares_available\":4000000.0}]},\"short_volume\":{\"latest\":{\"market_date\":\"2026-09-25\",\"short_volume\":1335000.0,\"total_volume\":2283000.0,\"short_volume_ratio\":0.5847},\"ratio_20d\":[{\"market_date\":\"2026-09-25\",\"short_volume_ratio\":0.5847},{\"market_date\":\"2026-09-24\",\"short_volume_ratio\":0.5862},{\"market_date\":\"2026-09-23\",\"short_volume_ratio\":0.4708},{\"market_date\":\"2026-09-22\",\"short_volume_ratio\":0.6192},{\"market_date\":\"2026-09-21\",\"short_volume_ratio\":0.5465},{\"market_date\":\"2026-09-18\",\"short_volume_ratio\":0.5503},{\"market_date\":\"2026-09-17\",\"short_volume_ratio\":0.5527},{\"market_date\":\"2026-09-16\",\"short_volume_ratio\":0.5152},{\"market_date\":\"2026-09-15\",\"short_volume_ratio\":0.5365},{\"market_date\":\"2026-09-14\",\"short_volume_ratio\":0.5606},{\"market_date\":\"2026-09-11\",\"short_volume_ratio\":0.5339},{\"market_date\":\"2026-09-10\",\"short_volume_ratio\":0.6367},{\"market_date\":\"2026-09-09\",\"short_volume_ratio\":0.5684},{\"market_date\":\"2026-09-08\",\"short_volume_ratio\":0.528},{\"market_date\":\"2026-09-04\",\"short_volume_ratio\":0.4958},{\"market_date\":\"2026-09-03\",\"short_volume_ratio\":0.4832},{\"market_date\":\"2026-09-02\",\"short_volume_ratio\":0.5123},{\"market_date\":\"2026-09-01\",\"short_volume_ratio\":0.5641},{\"market_date\":\"2026-08-31\",\"short_volume_ratio\":0.5604},{\"market_date\":\"2026-08-28\",\"short_volume_ratio\":0.5023}]},\"short_data\":{\"latest\":{\"timestamp\":\"2026-09-25T15:24:50Z\",\"fee_rate\":0.4084,\"rebate_rate\":3.472,\"short_shares_available\":3500000},\"daily_20d\":[{\"date\":\"2026-09-25\",\"fee_rate\":0.4084,\"short_shares_available\":3500000},{\"date\":\"2026-09-24\",\"fee_rate\":0.4048,\"short_shares_available\":3300000},{\"date\":\"2026-09-23\",\"fee_rate\":0.4124,\"short_shares_available\":3100000},{\"date\":\"2026-09-22\",\"fee_rate\":0.4093,\"short_shares_available\":3500000},{\"date\":\"2026-09-21\",\"fee_rate\":0.3763,\"short_shares_available\":3600000},{\"date\":\"2026-09-18\",\"fee_rate\":0.3804,\"short_shares_available\":3300000},{\"date\":\"2026-09-17\",\"fee_rate\":0.3476,\"short_shares_available\":3700000},{\"date\":\"2026-09-16\",\"fee_rate\":0.3485,\"short_shares_available\":3700000},{\"date\":\"2026-09-15\",\"fee_rate\":0.3518,\"short_shares_available\":3800000},{\"date\":\"2026-09-14\",\"fee_rate\":0.3857,\"short_shares_available\":3500000},{\"date\":\"2026-09-11\",\"fee_rate\":0.3475,\"short_shares_available\":3600000},{\"date\":\"2026-09-10\",\"fee_rate\":0.3988,\"short_shares_available\":3600000},{\"date\":\"2026-09-09\",\"fee_rate\":0.4043,\"short_shares_available\":3500000},{\"date\":\"2026-09-08\",\"fee_rate\":0.518,\"short_shares_available\":3400000},{\"date\":\"2026-09-04\",\"fee_rate\":0.3533,\"short_shares_available\":3300000},{\"date\":\"2026-09-03\",\"fee_rate\":0.3059,\"short_shares_available\":3500000},{\"date\":\"2026-09-02\",\"fee_rate\":0.3062,\"short_shares_available\":3400000},{\"date\":\"2026-09-01\",\"fee_rate\":0.3025,\"short_shares_available\":3300000},{\"date\":\"2026-08-31\",\"fee_rate\":0.3018,\"short_shares_available\":3300000},{\"date\":\"2026-08-28\",\"fee_rate\":0.3606,\"short_shares_available\":3000000}]},\"price\":{\"derived\":{\"close\":101.4,\"ret_1d\":0.003662,\"ret_5d\":-0.03585,\"ret_21d\":-0.1086,\"atr14_simple\":6.609,\"high_20d\":116.9,\"low_20d\":94.0},\"columns\":[\"date\",\"open\",\"high\",\"low\",\"close\",\"volume\"],\"last_22_bars\":[[\"2025-09-25\",25.74,26.64,24.79,26.34,4339284],[\"2025-09-26\",26.3,26.44,25.45,25.77,2730658],[\"2025-09-29\",26.3,26.5,25.71,25.94,3107426],[\"2025-09-30\",25.8,26.8,25.13,25.93,3542994],[\"2025-10-01\",25.3,28.45,25.25,28.42,3735940],[\"2025-10-02\",28.96,29.38,27.84,27.98,3673704],[\"2025-10-03\",28.05,28.79,26.87,27.93,3937586],[\"2025-10-06\",29.1,34.47,28.4,33.79,10810263],[\"2025-10-07\",33.66,34.62,29.77,31.34,7945755],[\"2025-10-08\",31.73,32.45,30.86,32.22,3170365],[\"2025-10-09\",32.44,34.1,31.12,32.37,5021899],[\"2025-10-10\",33.16,35.2,27.12,27.15,8797018],[\"2025-10-13\",28.5,29.42,27.5,29.1,4528310],[\"2025-10-14\",27.8,29.34,26.66,28.48,4114251],[\"2025-10-15\",30.0,33.03,29.18,32.95,6786277],[\"2025-10-16\",32.95,33.26,30.93,31.14,3988667],[\"2025-10-17\",30.51,32.48,28.87,31.92,4668742],[\"2025-10-20\",32.89,35.85,32.6,34.14,6475281],[\"2025-10-21\",34.01,35.32,32.71,33.4,4134324],[\"2025-10-22\",32.36,32.85,28.85,29.98,5268996],[\"2025-10-23\",29.9,32.08,29.85,31.4,3943218],[\"2025-10-24\",32.13,34.39,31.5,34.01,4461778]]},\"oi_change\":{\"totals\":{\"call_oi_diff\":10367,\"put_oi_diff\":3357},\"top_increase\":[{\"sym\":\"AAOI261002C00110000\",\"type\":\"call\",\"strike\":110.0,\"expiry\":\"2026-10-02\",\"dte\":7,\"curr_oi\":4460,\"last_oi\":1178,\"oi_diff\":3282,\"prev_ask_volume\":3186},{\"sym\":\"AAOI261002C00105000\",\"type\":\"call\",\"strike\":105.0,\"expiry\":\"2026-10-02\",\"dte\":7,\"curr_oi\":2238,\"last_oi\":1182,\"oi_diff\":1056,\"prev_ask_volume\":4546},{\"sym\":\"AAOI261016C00120000\",\"type\":\"call\",\"strike\":120.0,\"expiry\":\"2026-10-16\",\"dte\":21,\"curr_oi\":4063,\"last_oi\":3064,\"oi_diff\":999,\"prev_ask_volume\":457},{\"sym\":\"AAOI261002C00125000\",\"type\":\"call\",\"strike\":125.0,\"expiry\":\"2026-10-02\",\"dte\":7,\"curr_oi\":1194,\"last_oi\":400,\"oi_diff\":794,\"prev_ask_volume\":927},{\"sym\":\"AAOI261120P00060000\",\"type\":\"put\",\"strike\":60.0,\"expiry\":\"2026-11-20\",\"dte\":56,\"curr_oi\":720,\"last_oi\":22,\"oi_diff\":698,\"prev_ask_volume\":0},{\"sym\":\"AAOI261002P00082000\",\"type\":\"put\",\"strike\":82.0,\"expiry\":\"2026-10-02\",\"dte\":7,\"curr_oi\":823,\"last_oi\":216,\"oi_diff\":607,\"prev_ask_volume\":2},{\"sym\":\"AAOI261016C00100000\",\"type\":\"call\",\"strike\":100.0,\"expiry\":\"2026-10-16\",\"dte\":21,\"curr_oi\":982,\"last_oi\":534,\"oi_diff\":448,\"prev_ask_volume\":211},{\"sym\":\"AAOI260925C00104000\",\"type\":\"call\",\"strike\":104.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":648,\"last_oi\":211,\"oi_diff\":437,\"prev_ask_volume\":589},{\"sym\":\"AAOI260925C00102000\",\"type\":\"call\",\"strike\":102.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":504,\"last_oi\":185,\"oi_diff\":319,\"prev_ask_volume\":549},{\"sym\":\"AAOI260925P00097000\",\"type\":\"put\",\"strike\":97.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":682,\"last_oi\":381,\"oi_diff\":301,\"prev_ask_volume\":137},{\"sym\":\"AAOI260925P00101000\",\"type\":\"put\",\"strike\":101.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":753,\"last_oi\":482,\"oi_diff\":271,\"prev_ask_volume\":198},{\"sym\":\"AAOI260925C00103000\",\"type\":\"call\",\"strike\":103.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":372,\"last_oi\":112,\"oi_diff\":260,\"prev_ask_volume\":267}],\"top_decrease\":[{\"sym\":\"AAOI260925P00120000\",\"type\":\"put\",\"strike\":120.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":2,\"last_oi\":130,\"oi_diff\":-128,\"prev_ask_volume\":0},{\"sym\":\"AAOI260925P00122000\",\"type\":\"put\",\"strike\":122.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":0,\"last_oi\":117,\"oi_diff\":-117,\"prev_ask_volume\":1},{\"sym\":\"AAOI260925P00125000\",\"type\":\"put\",\"strike\":125.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":0,\"last_oi\":93,\"oi_diff\":-93,\"prev_ask_volume\":0},{\"sym\":\"AAOI260925C00110000\",\"type\":\"call\",\"strike\":110.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":4448,\"last_oi\":4531,\"oi_diff\":-83,\"prev_ask_volume\":958},{\"sym\":\"AAOI260925P00108000\",\"type\":\"put\",\"strike\":108.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":663,\"last_oi\":742,\"oi_diff\":-79,\"prev_ask_volume\":98},{\"sym\":\"AAOI260925C00125000\",\"type\":\"call\",\"strike\":125.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":906,\"last_oi\":979,\"oi_diff\":-73,\"prev_ask_volume\":27},{\"sym\":\"AAOI260925C00123000\",\"type\":\"call\",\"strike\":123.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":204,\"last_oi\":261,\"oi_diff\":-57,\"prev_ask_volume\":11},{\"sym\":\"AAOI260925P00105000\",\"type\":\"put\",\"strike\":105.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":585,\"last_oi\":640,\"oi_diff\":-55,\"prev_ask_volume\":28},{\"sym\":\"AAOI260925P00130000\",\"type\":\"put\",\"strike\":130.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":0,\"last_oi\":44,\"oi_diff\":-44,\"prev_ask_volume\":2},{\"sym\":\"AAOI260925C00114000\",\"type\":\"call\",\"strike\":114.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":260,\"last_oi\":303,\"oi_diff\":-43,\"prev_ask_volume\":43},{\"sym\":\"AAOI261218C00160000\",\"type\":\"call\",\"strike\":160.0,\"expiry\":\"2026-12-18\",\"dte\":84,\"curr_oi\":674,\"last_oi\":712,\"oi_diff\":-38,\"prev_ask_volume\":20},{\"sym\":\"AAOI260925P00103000\",\"type\":\"put\",\"strike\":103.0,\"expiry\":\"2026-09-25\",\"dte\":0,\"curr_oi\":429,\"last_oi\":464,\"oi_diff\":-35,\"prev_ask_volume\":33}]},\"options_volume_5d\":[{\"date\":\"2026-09-21\",\"call_volume\":50130.0,\"put_volume\":16340.0,\"call_volume_ask_side\":22090.0,\"call_volume_bid_side\":21720.0,\"put_volume_ask_side\":6015.0,\"put_volume_bid_side\":7412.0,\"net_call_premium\":-1304000.0,\"net_put_premium\":1078000.0,\"put_premium\":17110000.0,\"call_premium\":41970000.0,\"avg_30_day_call_volume\":36530.0,\"avg_30_day_put_volume\":19440.0,\"avg_7_day_call_volume\":29880.0,\"avg_7_day_put_volume\":14600.0,\"bearish_premium\":23700000.0,\"bullish_premium\":21320000.0,\"put_open_interest\":137800.0,\"call_open_interest\":143900.0,\"avg_3_day_put_volume\":14840.0,\"avg_3_day_call_volume\":37720.0},{\"date\":\"2026-09-22\",\"call_volume\":39910.0,\"put_volume\":12800.0,\"call_volume_ask_side\":16220.0,\"call_volume_bid_side\":18920.0,\"put_volume_ask_side\":5708.0,\"put_volume_bid_side\":5044.0,\"net_call_premium\":-3172000.0,\"net_put_premium\":-287000.0,\"put_premium\":6048000.0,\"call_premium\":27710000.0,\"avg_30_day_call_volume\":35440.0,\"avg_30_day_put_volume\":18390.0,\"avg_7_day_call_volume\":32740.0,\"avg_7_day_put_volume\":14790.0,\"bearish_premium\":15140000.0,\"bullish_premium\":12250000.0,\"put_open_interest\":143200.0,\"call_open_interest\":158300.0,\"avg_3_day_put_volume\":16360.0,\"avg_3_day_call_volume\":44720.0},{\"date\":\"2026-09-23\",\"call_volume\":31220.0,\"put_volume\":11420.0,\"call_volume_ask_side\":11030.0,\"call_volume_bid_side\":16620.0,\"put_volume_ask_side\":4767.0,\"put_volume_bid_side\":4637.0,\"net_call_premium\":-2321000.0,\"net_put_premium\":-759600.0,\"put_premium\":9234000.0,\"call_premium\":17940000.0,\"avg_30_day_call_volume\":35240.0,\"avg_30_day_put_volume\":17930.0,\"avg_7_day_call_volume\":34740.0,\"avg_7_day_put_volume\":13720.0,\"bearish_premium\":10910000.0,\"bullish_premium\":9353000.0,\"put_open_interest\":149400.0,\"call_open_interest\":169800.0,\"avg_3_day_put_volume\":15990.0,\"avg_3_day_call_volume\":47270.0},{\"date\":\"2026-09-24\",\"call_volume\":38570.0,\"put_volume\":11690.0,\"call_volume_ask_side\":17830.0,\"call_volume_bid_side\":16990.0,\"put_volume_ask_side\":4438.0,\"put_volume_bid_side\":5827.0,\"net_call_premium\":150800.0,\"net_put_premium\":-894100.0,\"put_premium\":6599000.0,\"call_premium\":13320000.0,\"avg_30_day_call_volume\":35440.0,\"avg_30_day_put_volume\":17880.0,\"avg_7_day_call_volume\":35810.0,\"avg_7_day_put_volume\":13280.0,\"bearish_premium\":7670000.0,\"bullish_premium\":8715000.0,\"put_open_interest\":153800.0,\"call_open_interest\":174300.0,\"avg_3_day_put_volume\":13520.0,\"avg_3_day_call_volume\":40420.0},{\"date\":\"2026-09-25\",\"call_volume\":44270.0,\"put_volume\":13310.0,\"call_volume_ask_side\":21580.0,\"call_volume_bid_side\":17400.0,\"put_volume_ask_side\":5739.0,\"put_volume_bid_side\":5392.0,\"net_call_premium\":1276000.0,\"net_put_premium\":-378800.0,\"put_premium\":8033000.0,\"call_premium\":21220000.0,\"avg_30_day_call_volume\":34610.0,\"avg_30_day_put_volume\":17540.0,\"avg_7_day_call_volume\":39000.0,\"avg_7_day_put_volume\":13820.0,\"bearish_premium\":10480000.0,\"bullish_premium\":12130000.0,\"put_open_interest\":157100.0,\"call_open_interest\":184600.0,\"avg_3_day_put_volume\":11970.0,\"avg_3_day_call_volume\":36570.0}],\"interpolated_iv\":[{\"days\":1,\"volatility\":0.812,\"implied_move_perc\":0.07,\"percentile\":0.015},{\"days\":5,\"volatility\":0.816,\"implied_move_perc\":0.074,\"percentile\":0.021},{\"days\":7,\"volatility\":0.818,\"implied_move_perc\":0.076,\"percentile\":0.026},{\"days\":14,\"volatility\":0.81,\"implied_move_perc\":0.107,\"percentile\":0.011},{\"days\":30,\"volatility\":0.832,\"implied_move_perc\":0.161,\"percentile\":0.003},{\"days\":60,\"volatility\":0.947,\"implied_move_perc\":0.257,\"percentile\":0.081},{\"days\":90,\"volatility\":0.912,\"implied_move_perc\":0.303,\"percentile\":0.014},{\"days\":180,\"volatility\":0.937,\"implied_move_perc\":0.435,\"percentile\":0.046},{\"days\":365,\"volatility\":0.93,\"implied_move_perc\":0.603,\"percentile\":0.0}],\"option_sentiment\":{\"latest\":{\"date\":\"2026-09-25\",\"ticker\":\"AAOI\",\"components\":{\"avar\":{\"norm\":0.9426,\"value\":0.1885},\"vwks\":{\"norm\":0.3454,\"value\":0.02763}},\"direction\":\"bullish\",\"updated_at\":\"2026-09-25T23:20:00.906245Z\",\"score\":\"58.43\",\"vwks\":\"0.027632\",\"avar\":\"0.188529\",\"sample_size\":54},\"history_10\":[{\"date\":\"2026-09-14\",\"direction\":\"bullish\",\"score\":\"83.92\",\"vwks\":\"0.08847\",\"avar\":\"0.119581\"},{\"date\":\"2026-09-15\",\"direction\":\"bullish\",\"score\":\"69.27\",\"vwks\":\"0.064955\",\"avar\":\"0.102756\"},{\"date\":\"2026-09-16\",\"direction\":\"bullish\",\"score\":\"50.42\",\"vwks\":\"0.043417\",\"avar\":\"0.08927\"},{\"date\":\"2026-09-17\",\"direction\":\"bullish\",\"score\":\"77.02\",\"vwks\":\"0.105831\",\"avar\":\"0.085094\"},{\"date\":\"2026-09-18\",\"direction\":\"bearish\",\"score\":\"-25.78\",\"vwks\":\"0.000669\",\"avar\":\"-0.131422\"},{\"date\":\"2026-09-21\",\"direction\":\"bullish\",\"score\":\"39.35\",\"vwks\":\"0.030131\",\"avar\":\"0.08376\"},{\"date\":\"2026-09-22\",\"direction\":\"bullish\",\"score\":\"40.28\",\"vwks\":\"0.026743\",\"avar\":\"0.101096\"},{\"date\":\"2026-09-23\",\"direction\":\"bullish\",\"score\":\"75.29\",\"vwks\":\"0.069677\",\"avar\":\"0.11514\"},{\"date\":\"2026-09-24\",\"direction\":\"bullish\",\"score\":\"59.16\",\"vwks\":\"0.052888\",\"avar\":\"0.097481\"},{\"date\":\"2026-09-25\",\"direction\":\"bullish\",\"score\":\"58.43\",\"vwks\":\"0.027632\",\"avar\":\"0.188529\"}]},\"rr_skew_25d\":{\"expiry\":\"2026-10-16\",\"series_10\":[{\"date\":\"2026-09-14\",\"risk_reversal\":-0.05608},{\"date\":\"2026-09-15\",\"risk_reversal\":-0.09082},{\"date\":\"2026-09-16\",\"risk_reversal\":-0.06535},{\"date\":\"2026-09-17\",\"risk_reversal\":-0.04414},{\"date\":\"2026-09-18\",\"risk_reversal\":-0.04143},{\"date\":\"2026-09-21\",\"risk_reversal\":-0.04325},{\"date\":\"2026-09-22\",\"risk_reversal\":-0.04605},{\"date\":\"2026-09-23\",\"risk_reversal\":-0.06337},{\"date\":\"2026-09-24\",\"risk_reversal\":-0.06879},{\"date\":\"2026-09-25\",\"risk_reversal\":-0.08085}]},\"multi_leg_last2d\":{\"2026-09-24\":{\"count\":5,\"by_strategy_side\":{\"put_vertical_spread|ask\":{\"count\":1,\"contracts\":68,\"total_premium\":20530.0},\"call_vertical_spread|None\":{\"count\":2,\"contracts\":149,\"total_premium\":658600.0},\"put_calendar|None\":{\"count\":1,\"contracts\":55,\"total_premium\":284400.0},\"call_vertical_spread|bid\":{\"count\":1,\"contracts\":60,\"total_premium\":2340.0}},\"risk_reversals\":[]},\"2026-09-25\":{\"count\":19,\"by_strategy_side\":{\"put_vertical_spread|bid\":{\"count\":2,\"contracts\":162,\"total_premium\":85520.0},\"call_vertical_spread|None\":{\"count\":4,\"contracts\":635,\"total_premium\":3493000.0},\"call_vertical_spread|ask\":{\"count\":10,\"contracts\":1170,\"total_premium\":6395000.0},\"call_vertical_spread|bid\":{\"count\":1,\"contracts\":190,\"total_premium\":12160.0},\"call_diagonal_spread|bid\":{\"count\":1,\"contracts\":70,\"total_premium\":24850.0},\"call_diagonal_spread|ask\":{\"count\":1,\"contracts\":100,\"total_premium\":7300.0}},\"risk_reversals\":[]}},\"screener\":{\"ticker\":\"AAOI\",\"date\":\"2026-09-25\",\"sector\":\"Technology\",\"industry_type\":\"Semiconductors\",\"marketcap\":8573000000.0,\"close\":101.4,\"one_day_perc\":0.003343,\"one_week_perc\":-0.03615,\"one_month_perc\":-0.1041,\"three_month_perc\":-0.2683,\"week_52_high\":233.7,\"week_52_low\":18.5,\"atr_14\":8.178,\"relative_volume\":0.8365,\"avg30_volume\":6588000.0,\"iv30d\":0.832,\"iv30d_1d\":0.856,\"iv30d_1w\":0.842,\"iv30d_1m\":0.953,\"iv_rank\":1.349,\"iv_rank_1m\":8.029,\"iv_percentile_1m\":5.0,\"iv_percentile_1y\":0.4,\"realized_volatility\":0.6558,\"implied_move_perc\":0.161,\"implied_move_perc_30\":0.161,\"call_open_interest\":184600.0,\"put_open_interest\":157100.0,\"prev_call_oi\":174300.0,\"prev_put_oi\":153800.0,\"avg_30_day_call_oi\":169500.0,\"avg_30_day_put_oi\":156600.0,\"call_volume\":44270.0,\"put_volume\":13310.0,\"avg_30_day_call_volume\":34610.0,\"avg_30_day_put_volume\":17540.0,\"net_call_premium\":1276000.0,\"net_put_premium\":-378800.0,\"net_premium\":1655000.0,\"bullish_premium\":12130000.0,\"bearish_premium\":10480000.0,\"cum_dir_delta\":142300.0,\"cum_dir_gamma\":19670.0,\"cum_dir_vega\":14940.0,\"gex_daily_net_gex\":2054.0,\"gex_daily_call_gex\":160200.0,\"gex_daily_put_gex\":-158200.0,\"gex_net_change\":9244.0,\"gex_perc_change\":-1.286,\"gex_ratio\":0.9872,\"gex_daily_net_delta\":2317000.0,\"etf_share_flow\":null,\"next_earnings_date\":\"2026-11-05\",\"er_time\":\"unknown\"},\"unusualness\":{\"date\":\"2026-09-25\",\"stock_vol_pctile\":9.9,\"stock_vol_decile\":1,\"opt_vol_pctile\":53.8,\"opt_vol_decile\":6,\"opt_samples\":91,\"stock_samples\":91},\"options_pulse_latest\":{\"put_txn\":440,\"call_txn\":7049,\"sntm_score\":0.88,\"trd_dt\":\"2026-09-25\",\"undly\":\"AAOI\",\"hr_min\":\"1620\",\"intvl_sntm_score\":0.0}}",
+      "finalAssistantVisibleText": "**AAOI** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：\n- SI% float 14.29%（as-of 2026-08-31，滞后 25 天）。数值偏高，但按 §1.3 只作背景参考；days_to_cover 1.32。\n- 实时借券费率 fee_rate 0.4084（单位未明确），rebate 3.472。近 20 日费率在 0.30–0.52 之间，走势平稳。\n- 可借量 3.5M 股，约为 float 84.57M 的 4.1%。近 20 日在 3.0M–3.8M 之间，平稳。\n- T+1 空头成交比 0.585。近 20 日在 0.47–0.64 之间，没有异常。\n- 近 5 日 −3.6%，21 日 −10.9%，3 个月 −26.8%，没有急涨。\n- → **通过**（附保留：SI 背景偏高）\n\n② 熔断：\n- Technology 池负 gamma 6/35，高于 §3 规定的 ≤4/35 熔断线。\n- 本票 net gamma +2,054，接近零，偏正。前一日为 −7,190。\n- watchlist 光模块/光学组负 gamma 2/5，仅作参考。\n- → **未熔断**\n\n③ 量级：\n- 1D DP 绝对量 2.355M 股，DP% 55.9%。低于 1W 日均约 2.83M 和 1M 日均约 2.80M。股票成交量分位 9.9（decile 1），relative volume 0.84。\n- 大单参与度：either 口径 8.14%（dark 6.33%），by_size 口径仅 1.92%。远低于 §4 的机构区间 16–21%，by_size 已接近散户噪音水平。\n- → **薄**：按 §4 第 1 步不许强行给方向，流水线到此弃掉。\n\n④ 方向（只列事实）：\n- **DP% 与 top8 重心：**\n  - 1D：DP% 55.9%，重心 101.8\n  - 1W：DP% 51.8%，重心 104.0\n  - 1M：DP% 51.5%，重心 103.1\n- **快照迁移：** end-21 重心 112.3 → end-5 102.2 → end 101.8，档位整体下移。\n- **价格位置：** 现价 101.6（DP NBBO 中点），收盘 101.4。站不上 1D 高 DP% 档（102.0 为 71%，101.8 为 71%，103.0 为 63%），也低于 1W 和 1M 重心。下方 100.0 档 DP% 69.9%。\n- 形态上偏派发，但量级闸门没过，**不认定方向**。\n- 数据异常：`last_22_bars` 是 2025 年的日期，价格约 26–34，与现价不符。本步改用 derived 和 screener 的收益率。\n\n⑤ 动机：选\"派发\"，但签名不完整，不成立。\n- **符合派发的证据：**\n  - DP 档位下移，价格阴跌。\n  - IV 压缩：iv30 0.832；前 1 日 0.856，前 1 周 0.842，前 1 月 0.953；1 年分位 0.4。\n  - 25Δ RR 从 −0.041 走到 −0.081，put 变贵。\n- **冲突的证据：**\n  - Call OI 上升：174.3k → 184.6k（+10,367），明显多于 Put OI +3,357。§5 派发要求 Call OI 走平或下降。\n  - 次日 OI 确认的是 ask 侧新开仓：10/02 110C OI +3,282（前一日 ask 量 3,186），105C +1,056（ask 量 4,546），125C +794。这是 Buy to Open。\n  - 9/25 call 按意图净额为 ask 侧：ask premium 4.663M 对 bid 3.312M，net call premium +1.28M。multi-leg 中 call vertical 打 ask 的有 10 笔，合计 6.40M。\n- **季末排除项：** 距季末 3 个交易日。盘后 DP 大单 7 笔，共 97k 股，在 101.4 按 prior_reference_price 和 average_price_trade 成交。§5 第 5 条\"基金再平衡\"只部分符合：期权侧不平，没有跨名字的篮子数据。仍需降权。\n- **gamma 位置：** 现价 101.6 正好等于 vol 口径的 flip 101.6，低于 OI 口径的 flip 103.4。\n\n⑥ Dealer：\n- **OI 口径结构位：**\n  - call wall 110，日变 0\n  - put wall 99，日变 +39（上一日为 60）\n  - gamma flip 103.4，日变 −0.58\n  - magnet 101，日变 −9\n- **vol 口径结构位：**\n  - call wall 103，日变 −14\n  - put wall 101，日变 +4\n  - flip 101.6，日变 +0.41\n- **交叉核对分歧：** strike table 的 put wall 为 60，与 gex_levels 的 99 不一致。按 §7.1 以 gex_levels 为准。\n- **flow 意图净额：** call 偏 ask（主动买入），put 净额 −0.35M。\n- **次日 OI：** 9/24 的 flow 已经确认为 call Buy to Open。9/25 flow 的次日 OI 未明确。\n- **决策表：** OI 口径 call wall 没动；vol 口径 Wall↓ + Ask + OI↑ 不在表内。→ **无命中**。只看 110C 这一处，是 ask 侧新开仓且 OI↑，方向偏多，不利于做空。\n\n**仓位 / 意图 / 不对称性**：DP 档位从 112 区一路下移到 101–102，价格压在各档下方，形态上像供给在上方。但量级偏薄，大单参与度只有 8%，而且 ask 侧的 call 在 110、105、125 真实新开仓，与派发签名直接冲突；季末再平衡还会带来机械性干扰。不对称性不在空头一侧。\n\n**失效位**：\n- **看空思路作废：** 收复 OI 口径 gamma flip 103.4，或 1W DP 重心 104.0。\n- **要升级成 setup，须同时满足：**\n  - 大单参与度回到 16–21% 区间；\n  - 跌破 OI 口径 put wall 99，且收复不了 101.6 的 vol flip；\n  - ask 侧 call 不再新增 OI；\n  - 季末（9/30）过后仍然成立。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:10:00Z rows=82 blocks=82 spot=101.56\n✅ RAN option-trades as-of 2026-09-25T19:58:58.955000Z rows=65 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=2053.9676\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+      "finalAssistantRawText": "**AAOI** · 光模块/光学 · Technology · 数据日 2026-09-25 · 核心覆盖 8/8\n**结论**：⚪ 不构成 setup\n\n① 挤仓否决：\n- SI% float 14.29%（as-of 2026-08-31，滞后 25 天）。数值偏高，但按 §1.3 只作背景参考；days_to_cover 1.32。\n- 实时借券费率 fee_rate 0.4084（单位未明确），rebate 3.472。近 20 日费率在 0.30–0.52 之间，走势平稳。\n- 可借量 3.5M 股，约为 float 84.57M 的 4.1%。近 20 日在 3.0M–3.8M 之间，平稳。\n- T+1 空头成交比 0.585。近 20 日在 0.47–0.64 之间，没有异常。\n- 近 5 日 −3.6%，21 日 −10.9%，3 个月 −26.8%，没有急涨。\n- → **通过**（附保留：SI 背景偏高）\n\n② 熔断：\n- Technology 池负 gamma 6/35，高于 §3 规定的 ≤4/35 熔断线。\n- 本票 net gamma +2,054，接近零，偏正。前一日为 −7,190。\n- watchlist 光模块/光学组负 gamma 2/5，仅作参考。\n- → **未熔断**\n\n③ 量级：\n- 1D DP 绝对量 2.355M 股，DP% 55.9%。低于 1W 日均约 2.83M 和 1M 日均约 2.80M。股票成交量分位 9.9（decile 1），relative volume 0.84。\n- 大单参与度：either 口径 8.14%（dark 6.33%），by_size 口径仅 1.92%。远低于 §4 的机构区间 16–21%，by_size 已接近散户噪音水平。\n- → **薄**：按 §4 第 1 步不许强行给方向，流水线到此弃掉。\n\n④ 方向（只列事实）：\n- **DP% 与 top8 重心：**\n  - 1D：DP% 55.9%，重心 101.8\n  - 1W：DP% 51.8%，重心 104.0\n  - 1M：DP% 51.5%，重心 103.1\n- **快照迁移：** end-21 重心 112.3 → end-5 102.2 → end 101.8，档位整体下移。\n- **价格位置：** 现价 101.6（DP NBBO 中点），收盘 101.4。站不上 1D 高 DP% 档（102.0 为 71%，101.8 为 71%，103.0 为 63%），也低于 1W 和 1M 重心。下方 100.0 档 DP% 69.9%。\n- 形态上偏派发，但量级闸门没过，**不认定方向**。\n- 数据异常：`last_22_bars` 是 2025 年的日期，价格约 26–34，与现价不符。本步改用 derived 和 screener 的收益率。\n\n⑤ 动机：选\"派发\"，但签名不完整，不成立。\n- **符合派发的证据：**\n  - DP 档位下移，价格阴跌。\n  - IV 压缩：iv30 0.832；前 1 日 0.856，前 1 周 0.842，前 1 月 0.953；1 年分位 0.4。\n  - 25Δ RR 从 −0.041 走到 −0.081，put 变贵。\n- **冲突的证据：**\n  - Call OI 上升：174.3k → 184.6k（+10,367），明显多于 Put OI +3,357。§5 派发要求 Call OI 走平或下降。\n  - 次日 OI 确认的是 ask 侧新开仓：10/02 110C OI +3,282（前一日 ask 量 3,186），105C +1,056（ask 量 4,546），125C +794。这是 Buy to Open。\n  - 9/25 call 按意图净额为 ask 侧：ask premium 4.663M 对 bid 3.312M，net call premium +1.28M。multi-leg 中 call vertical 打 ask 的有 10 笔，合计 6.40M。\n- **季末排除项：** 距季末 3 个交易日。盘后 DP 大单 7 笔，共 97k 股，在 101.4 按 prior_reference_price 和 average_price_trade 成交。§5 第 5 条\"基金再平衡\"只部分符合：期权侧不平，没有跨名字的篮子数据。仍需降权。\n- **gamma 位置：** 现价 101.6 正好等于 vol 口径的 flip 101.6，低于 OI 口径的 flip 103.4。\n\n⑥ Dealer：\n- **OI 口径结构位：**\n  - call wall 110，日变 0\n  - put wall 99，日变 +39（上一日为 60）\n  - gamma flip 103.4，日变 −0.58\n  - magnet 101，日变 −9\n- **vol 口径结构位：**\n  - call wall 103，日变 −14\n  - put wall 101，日变 +4\n  - flip 101.6，日变 +0.41\n- **交叉核对分歧：** strike table 的 put wall 为 60，与 gex_levels 的 99 不一致。按 §7.1 以 gex_levels 为准。\n- **flow 意图净额：** call 偏 ask（主动买入），put 净额 −0.35M。\n- **次日 OI：** 9/24 的 flow 已经确认为 call Buy to Open。9/25 flow 的次日 OI 未明确。\n- **决策表：** OI 口径 call wall 没动；vol 口径 Wall↓ + Ask + OI↑ 不在表内。→ **无命中**。只看 110C 这一处，是 ask 侧新开仓且 OI↑，方向偏多，不利于做空。\n\n**仓位 / 意图 / 不对称性**：DP 档位从 112 区一路下移到 101–102，价格压在各档下方，形态上像供给在上方。但量级偏薄，大单参与度只有 8%，而且 ask 侧的 call 在 110、105、125 真实新开仓，与派发签名直接冲突；季末再平衡还会带来机械性干扰。不对称性不在空头一侧。\n\n**失效位**：\n- **看空思路作废：** 收复 OI 口径 gamma flip 103.4，或 1W DP 重心 104.0。\n- **要升级成 setup，须同时满足：**\n  - 大单参与度回到 16–21% 区间；\n  - 跌破 OI 口径 put wall 99，且收复不了 101.6 的 vol flip；\n  - ask 侧 call 不再新增 OI；\n  - 季末（9/30）过后仍然成立。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-25 rows=14 days=22/22\n✅ RAN darkpool as-of 2026-09-25T23:10:00Z rows=82 blocks=82 spot=101.56\n✅ RAN option-trades as-of 2026-09-25T19:58:58.955000Z rows=65 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-25 2026-09-25T19:59:38.768000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-25 rows=250 net_gamma=2053.9676\n✅ RAN short-interest as-of 2026-08-31 rows=126 lag=25d\n✅ RAN short-volume as-of 2026-09-25 rows=500 ratio=0.585\n✅ RAN short-data as-of 2026-09-25T15:24:50Z rows=1000\ncoverage 8/8 · SI as-of 2026-08-31（滞后 25 天）",
+      "systemPromptReport": {
+        "source": "run",
+        "generatedAt": 1790567030034,
+        "sessionId": "short-2026-09-25-AAOI",
+        "sessionKey": "agent:claw-short:explicit:short-2026-09-25-aaoi",
+        "provider": "claude-cli",
+        "model": "claude-opus-5-5",
+        "workspaceDir": "/Users/yuwang/.openclaw/workspace-claw-short",
+        "bootstrapMaxChars": 20000,
+        "bootstrapTotalMaxChars": 60000,
+        "bootstrapTruncation": {
+          "warningMode": "always",
+          "warningShown": false,
+          "truncatedFiles": 0,
+          "nearLimitFiles": 0,
+          "totalNearLimit": false
+        },
+        "sandbox": {
+          "mode": "off",
+          "sandboxed": false
+        },
+        "systemPrompt": {
+          "chars": 13624,
+          "hash": "450d32c9632b69f0b5367ce538880f93c3fc8f39313088fa0fef036f387c0f8b",
+          "projectContextChars": 1199,
+          "nonProjectContextChars": 12425
+        },
+        "currentTurn": {
+          "promptChars": 40626,
+          "runtimeContextChars": 155
+        },
+        "injectedWorkspaceFiles": [
+          {
+            "name": "AGENTS.md",
+            "path": "/Users/yuwang/.openclaw/workspace-claw-short/AGENTS.md",
+            "missing": false,
+            "rawChars": 185,
+            "injectedChars": 185,
+            "truncated": false
+          },
+          {
+            "name": "SOUL.md",
+            "path": "/Users/yuwang/.openclaw/workspace-claw-short/SOUL.md",
+            "missing": true,
+            "rawChars": 0,
+            "injectedChars": 75,
+            "truncated": false
+          },
+          {
+            "name": "IDENTITY.md",
+            "path": "/Users/yuwang/.openclaw/workspace-claw-short/IDENTITY.md",
+            "missing": true,
+            "rawChars": 0,
+            "injectedChars": 79,
+            "truncated": false
+          }
+        ],
+        "skills": {
+          "promptChars": 0,
+          "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": []
+        },
+        "tools": {
+          "listChars": 0,
+          "schemaChars": 77539,
+          "entries": [
+            {
+              "name": "dashboard",
+              "summaryChars": 1373,
+              "summaryHash": "b2fb814de22c52538a217bc3ad182b640974e66917d53e4857b5e1f904a1d1a9",
+              "schemaChars": 2581,
+              "schemaHash": "b52bda4f48ffdfd6e73d7bb2754f4d4b701e4aa2657da891efe38e9061b59c64",
+              "propertiesCount": 13
+            },
+            {
+              "name": "nodes",
+              "summaryChars": 516,
+              "summaryHash": "0ddada295a8604352fb098058e6462eda948afaac4fa62cabdaba0a5d2258ed7",
+              "schemaChars": 2897,
+              "schemaHash": "a1e60098fe934b0ce0fe2efe8e41421721a85ec6acfb33cd969796f029ff5a43",
+              "propertiesCount": 37
+            },
+            {
+              "name": "mobile_ui",
+              "summaryChars": 469,
+              "summaryHash": "bf1837a0eb9c82b6ac1da6394111f4786423d2a19831ec69acbd0a1466822810",
+              "schemaChars": 2042,
+              "schemaHash": "8750f2f6ed3052edcdae2037dfa9433d73a8ef31bd86c5057413c253b65975d4",
+              "propertiesCount": 8
+            },
+            {
+              "name": "computer",
+              "summaryChars": 487,
+              "summaryHash": "3da35ad4c561a541b64fce34096453bce4096649e4b591cb5ea6b2909c7d08cb",
+              "schemaChars": 4807,
+              "schemaHash": "64964c8e2e5c282f6568762221614f2f53d02dff77e72ecc537d073c81a4355d",
+              "propertiesCount": 54
+            },
+            {
+              "name": "automations",
+              "summaryChars": 5324,
+              "summaryHash": "47bae24deaf475613396e3fbbf06abf63c4e76996b3f34c744fa8a01615b63f2",
+              "schemaChars": 8636,
+              "schemaHash": "43a8259f7ebadf31445bc271090a972e9200931b0e1b3298b4f5ef0bee23e389",
+              "propertiesCount": 17
+            },
+            {
+              "name": "sessions",
+              "summaryChars": 570,
+              "summaryHash": "8f01409558a608bcc1f6ddafd8da85820ca4bd480c1b04d6265e9e482aae5461",
+              "schemaChars": 4067,
+              "schemaHash": "ed8e94ec6e8ee030a0cd7d32aa2132f8e22c29c76ad5adffa5c166b433eb8c47",
+              "propertiesCount": 23
+            },
+            {
+              "name": "theme",
+              "summaryChars": 790,
+              "summaryHash": "89c28af46851a2eac2c7b868a9b561064952917277a5384e3a526ace3742cd64",
+              "schemaChars": 4453,
+              "schemaHash": "5aa260ea4a2f98d1b8b11deb77cd2a3d50d4a336c28fc6a407f20f34623af9e3",
+              "propertiesCount": 5
+            },
+            {
+              "name": "terminal",
+              "summaryChars": 281,
+              "summaryHash": "7cd87f59b6645de1e5e9f45cc730410e1bc1bb1ee90a2bb5a50e7a09b9a7af88",
+              "schemaChars": 419,
+              "schemaHash": "4ebd33330c3b006d29d39aed6bfce7bc3d5a9f81025bbb7ce9c81d3da88e4491",
+              "propertiesCount": 5
+            },
+            {
+              "name": "portal",
+              "summaryChars": 681,
+              "summaryHash": "52e614d6c72bedba4886a2e10ce202ef9f4434080932ab47adbd8489875571ce",
+              "schemaChars": 543,
+              "schemaHash": "161c931b8fd5c04b902e301fc89df9324a8a354a9a0afd247c87c93f7ab35dfe",
+              "propertiesCount": 7
+            },
+            {
+              "name": "message",
+              "summaryChars": 509,
+              "summaryHash": "9fd8c15547865bea632d8f43045ee0735efa7fb423b872ac3467781d5eaf7c9b",
+              "schemaChars": 10704,
+              "schemaHash": "0b2afbff5e8cef08acd37b6b64dcd687fc4df3bb6ca7b0381e32d418a3c7a8c4",
+              "propertiesCount": 113
+            },
+            {
+              "name": "tts",
+              "summaryChars": 245,
+              "summaryHash": "841f7db9ad3ece79d54c59de7395e7a8591d24327be97750c4d76c1bff5a107a",
+              "schemaChars": 264,
+              "schemaHash": "e40695f92ef72d913ee5eb13ef738a15d6f33ae3af3ec609975c45991ef99a78",
+              "propertiesCount": 3
+            },
+            {
+              "name": "transcripts",
+              "summaryChars": 112,
+              "summaryHash": "77b3b93af0d12a84fa84e3f745a86e5730bacf60a66f683a8d9fdf708197d443",
+              "schemaChars": 999,
+              "schemaHash": "153465a071b65ff76e15f327e027e1e3b976bdd87fc2612e51a27e29a877a8d7",
+              "propertiesCount": 12
+            },
+            {
+              "name": "image_generate",
+              "summaryChars": 375,
+              "summaryHash": "02e1424e4a119f3cd75f2b6776fce1ee0ddf69a3c467010247561772f28029f2",
+              "schemaChars": 2344,
+              "schemaHash": "649161faa67127a43e0eb84e54bf1d9229569db18313e0700d32d126b112baf7",
+              "propertiesCount": 16
+            },
+            {
+              "name": "video_generate",
+              "summaryChars": 366,
+              "summaryHash": "efade4e8921d7957eae43b0b8e923b37ebe4db60681aea8538b8a1e0f58eafc8",
+              "schemaChars": 2014,
+              "schemaHash": "f2d73b731aa7ba1339ff5e0bf30c68a9ade9a41cad8891179fc8ec4950fda2b7",
+              "propertiesCount": 18
+            },
+            {
+              "name": "gateway",
+              "summaryChars": 172,
+              "summaryHash": "37523c5d9a9072bc525a0c58f193198e1337a3caa78cca6da4e624027a3a2dcf",
+              "schemaChars": 441,
+              "schemaHash": "50d83bbf3e75f780ef892bc2e2f5df5aa1485867d6557cf8cda24ff971f93ffb",
+              "propertiesCount": 6
+            },
+            {
+              "name": "plugins",
+              "summaryChars": 520,
+              "summaryHash": "659a769028cc0f864891da70265c4a8272fbc1ead01db8b762221db07a5049d5",
+              "schemaChars": 666,
+              "schemaHash": "ba6e3c1d726f50b09207908b1fe1750698b4c05417ad1b3bd36c3a073c18f343",
+              "propertiesCount": 8
+            },
+            {
+              "name": "openclaw",
+              "summaryChars": 350,
+              "summaryHash": "696c508d4eb6281d0454e09f27d5c728cf969829606beba510b6b50e580f7de4",
+              "schemaChars": 196,
+              "schemaHash": "9956b2b6fde1ca6ca3d035b66217a09c717a6503aa4e59a2ce184dbf67849bd3",
+              "propertiesCount": 2
+            },
+            {
+              "name": "agents_list",
+              "summaryChars": 116,
+              "summaryHash": "a86dafe00675913d8f07e9bac4c134435539c31e80cac7c431f879cc0285ab16",
+              "schemaChars": 33,
+              "schemaHash": "8243f0af367f188a376f2c17b5eabe872a2f7a979813e0d4e2be6d594c2aa259",
+              "propertiesCount": 0
+            },
+            {
+              "name": "get_goal",
+              "summaryChars": 101,
+              "summaryHash": "cb629fcdf8051a05b88fa535b74d7b4f9814ba14e79b027bfcc5bb2f3c3a2fea",
+              "schemaChars": 33,
+              "schemaHash": "8243f0af367f188a376f2c17b5eabe872a2f7a979813e0d4e2be6d594c2aa259",
+              "propertiesCount": 0
+            },
+            {
+              "name": "create_goal",
+              "summaryChars": 264,
+              "summaryHash": "4f431787069f93890b977aed5233531481f3e5b4618decbf53e72c197a7779c6",
+              "schemaChars": 306,
+              "schemaHash": "0e17e2116eb1b011e8798ec6272458493f9272ee578118cf2af05c3e372d7945",
+              "propertiesCount": 2
+            },
+            {
+              "name": "update_goal",
+              "summaryChars": 543,
+              "summaryHash": "8fcdb0dfdde868b2bd4b26828cc91d452d6d841293daee394ed9309ee6da74db",
+              "schemaChars": 207,
+              "schemaHash": "063df78da73d06b7cf4a20d6d98b15e29e1c76f2128b7a4edb22e859ca5e2ca1",
+              "propertiesCount": 2
+            },
+            {
+              "name": "skill_workshop",
+              "summaryChars": 1990,
+              "summaryHash": "9814193ae683cd11f9c7b47f9cbf727ce2df08678293293ec8ecaef7dbb200ca",
+              "schemaChars": 4448,
+              "schemaHash": "ae78d7447d83ddb35e490c680d4c9a3ffc052359611d766f48528cf3da83cdc2",
+              "propertiesCount": 18
+            },
+            {
+              "name": "progress_card",
+              "summaryChars": 1741,
+              "summaryHash": "4a8d34f1acc1d1938e5ee87272f1426d1233827d519e2f9f8f96fa2de5f39ea8",
+              "schemaChars": 401,
+              "schemaHash": "17936a8909b680a54f70957a8468dec2db700c94ee3fd327ddcad13e4e11c32f",
+              "propertiesCount": 2
+            },
+            {
+              "name": "ask_user",
+              "summaryChars": 857,
+              "summaryHash": "e903258acafe070ab656997ab2d4f0a52f52b557fa592724d97c9dca08938857",
+              "schemaChars": 1248,
+              "schemaHash": "99b9c16de8381e41182cfd488ebae1bf8a84629e52f416709d7d00fcebf319d5",
+              "propertiesCount": 2
+            },
+            {
+              "name": "secrets",
+              "summaryChars": 798,
+              "summaryHash": "f7f4d365c0632c02381d35f7bc8c984e3d637ac421376ac2b32aa6070e7e46c2",
+              "schemaChars": 1211,
+              "schemaHash": "49b033ce8c2a0755641cb69dda2f3c27e42284029e637ac1b3ff51046d7ccd1e",
+              "propertiesCount": 6
+            },
+            {
+              "name": "sessions_list",
+              "summaryChars": 880,
+              "summaryHash": "8bdca38def2db23dbd73e4fd9dc7b425f49fdfb34fba25250fd1ed2ea2f4d6af",
+              "schemaChars": 1110,
+              "schemaHash": "ca4086d7bf7765be675436071ea039ab6176daa4bf3526af86e0d914610d1bce",
+              "propertiesCount": 20
+            },
+            {
+              "name": "sessions_history",
+              "summaryChars": 511,
+              "summaryHash": "67a4c4ff9e919455c8a115421913208b3d5a4ffd71720d1205833d6b4f850408",
+              "schemaChars": 676,
+              "schemaHash": "30176d4736170047664ed526ab328f407233bd586e580ada2619a0a55f9280a5",
+              "propertiesCount": 7
+            },
+            {
+              "name": "sessions_search",
+              "summaryChars": 177,
+              "summaryHash": "334f96a1cafd9325d695608fe065a4a00888f6b55279d396590575b39e62728a",
+              "schemaChars": 179,
+              "schemaHash": "6545acec45e540d9c7d7d76b79084ce439ba35f4cd626fa4f8ec406230f0913d",
+              "propertiesCount": 3
+            },
+            {
+              "name": "conversations_list",
+              "summaryChars": 159,
+              "summaryHash": "527335ff7cc669a406a88dbb1ea150631cea16155fa517fc76c8be38f8285190",
+              "schemaChars": 182,
+              "schemaHash": "49892a498ef1d6c253ce4a1bb1e97592906a526314ef999c31aa2319fd38e9b8",
+              "propertiesCount": 3
+            },
+            {
+              "name": "conversations_send",
+              "summaryChars": 152,
+              "summaryHash": "7031570c2ea879e8ebb39548c931374a864db8bfeb4d634de7d234a7f43fbbe3",
+              "schemaChars": 212,
+              "schemaHash": "28933715e5a7d6829a616ec68154d5da0a47072f6c1f333d0b4ba49f90692889",
+              "propertiesCount": 2
+            },
+            {
+              "name": "conversations_turn",
+              "summaryChars": 190,
+              "summaryHash": "67bb15e899769e37e6d2ff596dba9c33ac6c828e12ef2903fc40fbf5df56aeb3",
+              "schemaChars": 274,
+              "schemaHash": "3cc19168dc1491f82c30f2f38ad9a08c55314777fb7d99602e06d7a35ebbc58b",
+              "propertiesCount": 3
+            },
+            {
+              "name": "sessions_send",
+              "summaryChars": 1399,
+              "summaryHash": "2d56e8dd70f6a33f1d88c35b7ec83e5bdc635bfbe2637e2b2992ec9d35f44745",
+              "schemaChars": 462,
+              "schemaHash": "c0425d6f0a2a89d682214c1bc8ce48680063816a26968d92b31922406c7b742a",
+              "propertiesCount": 7
+            },
+            {
+              "name": "sessions_spawn",
+              "summaryChars": 2782,
+              "summaryHash": "78c1f44388739edcf4be1f1b9128e3f7a1c2e565fdaa325f4b24ae5afe0a0576",
+              "schemaChars": 5196,
+              "schemaHash": "20aeebf4f75bf35441862cbfa35fcba479846ec844d8b84888c6085ac60d2303",
+              "propertiesCount": 30
+            },
+            {
+              "name": "agents_wait",
+              "summaryChars": 202,
+              "summaryHash": "eedf035982c7c4b9b386ed87e932630b03bc6f07fcdf94709b287665c77c168d",
+              "schemaChars": 190,
+              "schemaHash": "4fe95f5cd3a87b6a6fbc6905d57bc44949c99c72edea5125b3f113dabcc20164",
+              "propertiesCount": 2
+            },
+            {
+              "name": "sessions_yield",
+              "summaryChars": 337,
+              "summaryHash": "1dddf4158ea2c44cf79c93b483fd18bc48c6e32fe32fafca3fe83b5309310ce8",
+              "schemaChars": 457,
+              "schemaHash": "6f3649fb583d30499a48925363f0158ecff856d7bc44e9531dd9cbd8c23c6428",
+              "propertiesCount": 3
+            },
+            {
+              "name": "subagents",
+              "summaryChars": 194,
+              "summaryHash": "bc8a534adccc0b4a3f2e76710f98cea56111561e3dbed520bf1c7f7b7eeee7c9",
+              "schemaChars": 344,
+              "schemaHash": "9ce987456e121342e43f019460d31c7f32c4dff7792841d47289649469527a73",
+              "propertiesCount": 5
+            },
+            {
+              "name": "session_status",
+              "summaryChars": 192,
+              "summaryHash": "23343479c1bf552695627bd580795ca22cdc1020232f6984bf0cad5557f74dbd",
+              "schemaChars": 135,
+              "schemaHash": "528432b98ffdb5d86d4f09f43cb85eb3647387388109b84fc01183040a2406bd",
+              "propertiesCount": 3
+            },
+            {
+              "name": "web_search",
+              "summaryChars": 164,
+              "summaryHash": "4ec65764bf8e853aae0c06e334f54cd879efd9fb5d71c610e9c23bf7b285cb02",
+              "schemaChars": 991,
+              "schemaHash": "3879e368875d824b14e0e683f81408824e9a2a5850fa2f8514a68caebda54d18",
+              "propertiesCount": 12
+            },
+            {
+              "name": "web_fetch",
+              "summaryChars": 78,
+              "summaryHash": "616ac805dfdeaeadbb5e03504e84d52b01ecaa88c7e7100fa4c06eca8eb6195f",
+              "schemaChars": 317,
+              "schemaHash": "eca30c487911c9e897ba27b4650770cf23137fc6ed8d77756ea3952fa496ea61",
+              "propertiesCount": 3
+            },
+            {
+              "name": "view_image",
+              "summaryChars": 251,
+              "summaryHash": "e2376193be463d237e7adf38be13783d31bd56422917718b2dd6f3fd6ed216f2",
+              "schemaChars": 360,
+              "schemaHash": "d8118d854eb7c2cb3e6ce3b36dc55f653a1a868c02c411f95ace140807ab81a3",
+              "propertiesCount": 5
+            },
+            {
+              "name": "pdf",
+              "summaryChars": 234,
+              "summaryHash": "1b50e3a5a4341c59ce7d09e6fd8876b32597f85830ac8a26c4f405a7a0eea9e3",
+              "schemaChars": 448,
+              "schemaHash": "9e8e5acf6d543d3bf39ef65c5cad5326013243efbc32a78aeff5a86edc3947ed",
+              "propertiesCount": 7
+            },
+            {
+              "name": "browser",
+              "summaryChars": 4446,
+              "summaryHash": "fa3b99287f197a5f98951651f466128693f748db5c503d62a5dd4a4daf632ee4",
+              "schemaChars": 4933,
+              "schemaHash": "af9fe9594f8aec951a0522b0598bcb27eecb5c36a721c77d420542e78ea522f5",
+              "propertiesCount": 68
+            },
+            {
+              "name": "canvas",
+              "summaryChars": 67,
+              "summaryHash": "1f9f9d063d5eeb9a4ccc1b0709fd2420b08092e771a18d1b5914f5db0b37e1cc",
+              "schemaChars": 398,
+              "schemaHash": "6b3bfd0b0e58d89f23bc1e373d5c428b06415cbd1bf1f9bf104a3d696863a722",
+              "propertiesCount": 11
+            },
+            {
+              "name": "file_fetch",
+              "summaryChars": 642,
+              "summaryHash": "34d7b58f39d044fb09b6e6df42d57d510369ad0e94abd554bec83108525344b2",
+              "schemaChars": 609,
+              "schemaHash": "fafb2d121a41160e5ca3b42b286a199ec3be500877e673a51181d1a98854887f",
+              "propertiesCount": 6
+            },
+            {
+              "name": "dir_list",
+              "summaryChars": 795,
+              "summaryHash": "3d27dd93b528870a7036069538faad8b45f4d831cd7582f25e9fdf1afea81c3d",
+              "schemaChars": 724,
+              "schemaHash": "5a7ce71df247e0dfa197e040d34f95c6c2db1abeb76b37db6c85ff61123a7b97",
+              "propertiesCount": 7
+            },
+            {
+              "name": "dir_fetch",
+              "summaryChars": 796,
+              "summaryHash": "001fc4287f508af50c98c05bb35adaf8ee9ad09ee748e088aa819e22935b6947",
+              "schemaChars": 639,
+              "schemaHash": "da010ebc28d84f7ee723ecc6d8981a0a7c570521e170346636b6d149a3a97f42",
+              "propertiesCount": 6
+            },
+            {
+              "name": "file_write",
+              "summaryChars": 603,
+              "summaryHash": "91a18020223fa2bf59bb3f43640d80be81c17d40640d97f315653f890debd80b",
+              "schemaChars": 1028,
+              "schemaHash": "b5d971bb6d9a4340a7b0a27e49962d4166531af5091f9535f8eaa2af40017e51",
+              "propertiesCount": 7
+            },
+            {
+              "name": "intent",
+              "summaryChars": 266,
+              "summaryHash": "ff1256d0b5c53d9ec8dfd5e5ce9dc3cdc802359835a8e25a562cd3e952e2020a",
+              "schemaChars": 641,
+              "schemaHash": "0f0381dfd179cf5c563a3f84ab574b47e67377ceed2650fe02041a6c78a7fc69",
+              "propertiesCount": 10
+            },
+            {
+              "name": "node_inference",
+              "summaryChars": 206,
+              "summaryHash": "49c5e7e56c65dee8e708065c58240d64d8067dc07d9d13597890ecb5388ac88d",
+              "schemaChars": 646,
+              "schemaHash": "be130f0c61252e22f4d55745a82bc04926efb36ec1c8204bcfb49a7cda0aab20",
+              "propertiesCount": 8
+            },
+            {
+              "name": "talk_voice",
+              "summaryChars": 423,
+              "summaryHash": "1ef5de0b72ff39c136cb78b74795a69c7048a23f7e7b3f86323fbf780f926c67",
+              "schemaChars": 212,
+              "schemaHash": "a650995cb775a6b7dedaedc34b290488afaefa8c22e14408c4a4c98875fea349",
+              "propertiesCount": 2
+            },
+            {
+              "name": "codex_plugins",
+              "summaryChars": 189,
+              "summaryHash": "1745d513a81a391a456663b74c47e01bb777c53c59d2dcd93b7df82171ecd51f",
+              "schemaChars": 216,
+              "schemaHash": "3e8e7d456ba0002333f6c030441387159f1f2e47320354063f0265eb4de1c17e",
+              "propertiesCount": 3
+            }
+          ]
+        }
+      },
+      "executionTrace": {
+        "winnerProvider": "claude-cli",
+        "winnerModel": "claude-opus-5-5",
+        "attempts": [
+          {
+            "provider": "claude-cli",
+            "model": "claude-opus-5-5",
+            "result": "success"
+          }
+        ],
+        "fallbackUsed": false,
+        "runner": "cli"
+      },
+      "requestShaping": {
+        "thinking": "high"
+      },
+      "completion": {
+        "finishReason": "stop",
+        "stopReason": "completed",
+        "refusal": false
+      },
+      "toolSummary": {
+        "calls": 0,
+        "tools": [],
+        "failures": 0
+      },
+      "agentMeta": {
+        "sessionId": "28c56591-48ac-4a21-a3e8-4e484d15b64f",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "contextTokens": 1000000,
+        "contextTokensSource": "resolved",
+        "usage": {
+          "input": 2,
+          "output": 8,
+          "cacheWrite": 92045
+        },
+        "lastCallUsage": {
+          "input": 2,
+          "output": 8,
+          "cacheWrite": 92045
+        },
+        "diagnosticUsage": {
+          "input": 2,
+          "output": 6501,
+          "cacheWrite": 92045
+        },
+        "cliSessionBinding": {
+          "sessionId": "28c56591-48ac-4a21-a3e8-4e484d15b64f",
+          "resumeCheckpointId": "36d00ddb-aacd-4d07-8857-b71e37d40f9d",
+          "authEpochVersion": 7,
+          "messageToolPolicyHash": "92a8de91722cbb4fe1a7fd6892245e359c339d96cafe8db3a08738ffda913d71",
+          "promptToolNamesHash": "0f5f4e4602c4ebb0c728cc1770a87fa5f130690bce9b99aeff32f19ee6ffab5a",
+          "cwdHash": "287529f003a67d8dbd5008696a17975da073d9215aa0953289fae711fb1dbe81",
+          "mcpConfigHash": "71425c8fbaa8f501465acd71d3f889e22c11c43e0afcf969cb5f9973ea0bd290",
+          "mcpResumeHash": "410ef86a7b41ee36c7814a650b5096ac6767d27487970f37030eb49f93cc5d11"
+        }
+      }
+    }
+  }
+}

@@ -1074,9 +1074,10 @@ def layer_multi_leg(ctx: Ctx) -> LayerResult:
     for d in days:
         start, end = ny_day_bounds_utc(d)
         rows: Dict[str, Dict[str, Any]] = {}
-        for off in (0, PAGE):
-            batch = rows_of(ctx.get(f"multi_leg_{d}_o{off}", "/api/option-trades/multi-leg", {
-                "ticker_symbol": ctx.T, "newer_than": start, "older_than": end, "limit": PAGE, "offset": off,
+        # `offset` is a page index here (0, 1, 2 ...), not a row offset; UW caps the target at 5,000 rows
+        for page in range(5000 // PAGE):
+            batch = rows_of(ctx.get(f"multi_leg_{d}_o{page}", "/api/option-trades/multi-leg", {
+                "ticker_symbol": ctx.T, "newer_than": start, "older_than": end, "limit": PAGE, "offset": page,
                 "min_size": ctx.cfg.multileg_min_size}, cache_date=d))
             for r in batch:
                 rows[r.get("id") or json.dumps(r, sort_keys=True)] = r
