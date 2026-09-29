@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Pre-open confirmation (SHORT_ENGINE §6 / §8.1): the 17:00 scan can never see the next-day OI for that day's
-flow, so every 👀 / ✅ name from the last scan is re-read once today's OI is published, with the pre-market tape
-and the latest borrow. Inputs go to analysis_data/<D>_premarket/<T>.json, replies to logs/<D>_premarket/.
+flow, so every name from the last scan (whatever its tier) is re-read once today's OI is published, with the
+pre-market tape and the latest borrow. Inputs go to analysis_data/<D>_premarket/<T>.json, replies to logs/<D>_premarket/.
 
 usage: confirm.py [--scan-date L] [--date D] [--tickers A,B] [--asof HH:MM] [--wait-minutes 30] [--dry-run]
-  --scan-date  scan whose 👀 / ✅ names are confirmed (default: the latest logs/<date> before D)
+  --scan-date  scan whose names are confirmed (default: the latest logs/<date> before D)
+  --tickers    only these names (default: every name in the scan)
   --date       confirmation day (default: today, New York)
   --asof       cutoff for pre-market bars / borrow (default: now); for replays such as --date 2026-09-28 --asof 09:00
 """
@@ -26,7 +27,6 @@ import analyze  # noqa: E402
 from uwsf import layers as L  # noqa: E402
 from uwsf.client import UWClient, load_token  # noqa: E402
 
-KEEP_TIERS = ("👀", "✅")
 TOP_N = 30
 
 
@@ -45,9 +45,7 @@ def scan_names(L_date, only):
         if only and t not in only:
             continue
         r = json.load(open(os.path.join(log, f)))
-        v = verdict(r.get("result"))
-        if only or v.startswith(KEEP_TIERS):
-            out.append((t, v, r.get("result")))
+        out.append((t, verdict(r.get("result")), r.get("result")))
     return out
 
 
@@ -174,7 +172,7 @@ def main(argv=None):
     only = {t for t in a.tickers.split(",") if t}
     names = scan_names(L_date, only)
     if not names:
-        print(f"NO_REPLY no 👀/✅ names in the {L_date} scan")
+        print(f"NO_REPLY no names in the {L_date} scan")
         return 0
     cutoff = datetime.combine(date.fromisoformat(D), dtime(*map(int, a.asof.split(":"))), L.NY) if a.asof else now
 
@@ -233,7 +231,7 @@ def main(argv=None):
     for T, v, r in results:
         new = verdict(r.get("result")) if not r.get("is_error") else f"昨晚 {v[:12]} → ❌ 确认失败"
         lines.append(f"{T}：{new[:60]}")
-    header = (f"**盘前确认 · {D}**（{L_date} 收盘扫描的 👀 / ✅ 名单，用今早公布的次日 OI 补齐 §6）\n" + "\n".join(lines))
+    header = (f"**盘前确认 · {D}**（{L_date} 收盘扫描的 {len(results)} 只，用今早公布的次日 OI 补齐 §6）\n" + "\n".join(lines))
     print(header)
     if not a.dry_run:
         problems += post(header)

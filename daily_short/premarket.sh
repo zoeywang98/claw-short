@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pre-open confirmation (06:50 ET, Mon-Fri): re-read the last scan's 👀 / ✅ names once today's OI is published
+# Pre-open confirmation (06:50 ET, Mon-Fri): re-read every name from the last scan once today's OI is published
 # (UW rolls OI out contract by contract from ~06:30 ET, complete ~06:45 ET).
 # usage: premarket.sh [--dry-run] [--scan-date D] [--date D] [--tickers A,B] [--asof HH:MM]
 set -uo pipefail
