@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 183461,
+ "stop_reason": "end_turn",
+ "session_id": "166a3307-6ce7-4feb-b030-b85fb0513989",
+ "total_cost_usd": 3.3089649999999997,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 368465,
+  "cache_read_input_tokens": 29085,
+  "output_tokens": 17771,
+  "output_tokens_details": {
+   "thinking_tokens": 13964
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 368465,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 17771,
+    "cache_read_input_tokens": 29085,
+    "cache_creation_input_tokens": 368465,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 368465
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 17771,
+   "cacheReadInputTokens": 29085,
+   "cacheCreationInputTokens": 368465,
+   "webSearchRequests": 0,
+   "costUSD": 3.3089649999999997,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 13964,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**MDB** · 软件/企服 · Technology · 数据日 2026-09-29 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20260928）· ⚠ short-interest = FINRA（asof 20260915，滞后 14 天）→ 两层结论降为观察\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- **SI**：float 3.57%（as-of 09-15，滞后 14 天）[已验证·滞后]，低于 10%。\n- **SVR**：09-28 54.2%、09-25 41.7%、09-24 50.8%、09-23 49.5% [已验证·T-1]，近几日没有连续 ≥55%。\n- **条件 1**（SI ≥10% 或 SVR 连日 ≥55%）：✗。\n- **DTC**：1.13，满足 ≤2 ✓；近三期 1.67 → 2.29 → 1.13，不是逐期上升。\n- **|spot − flip|**：spot 332.34（DP NBBO 中点）。对 vol flip 337.30 是 1.49%，对 oi flip 332.04 是 0.09%，都 ≤3% ✓ [已验证 09-29]。\n- **相位闸**：SVR 09-25→09-28 为 +12.5pt，SI −0.08pt，都不是 −10pt 的回补尾段签名。\n- **借券**：费率 0.3648%（09-29，前值 0.4081%），可借 1.5M（09-28 为 1.7M）[已验证]，借券宽松。\n- → **非 🧨**（条件 1 不成立）\n\n② 熔断：\n- 名单负 gamma 5/23（COHR / GLW / VRT / IBM / CRVS），>4，贴线未触发。\n- MDB 本票 net gamma +12,247.6（09-28 为 +5,321.1）[已验证 09-29]。\n- → **未熔断**\n\n③ 量级：\n- 1D 暗池成交 2,372,530 股，是 1M 均值的 1.72×；DP% 69.2%；相对成交量 1.71 [已验证 09-29]。\n- 大单参与度 15.1%（按 premium 规则），按 size 规则只有 0.21%（全天仅 1 笔 1 万股）。15.1% 落在 16–21%（机构）和 3–4%（噪音）两档之间，未明确落档。\n- → **足够**（量不薄）\n\n④ 方向（灰色重心迁移）：\n\n```\n窗口   centroid_top8   poc   dark_vwap_all\n1M     349.11          382   367.22\n1W     329.82          328   341.26\n2D     329.82          328   —\n1D     327.47          328   （参考）\n```\n\n- **Long → Medium**：下移 −19.3。\n- **Medium → Short**：横移。1W 的 top8 全部来自 9/28–29 两天，与 2D 完全重合；1D 只低 2.4。\n- **高位失守**：9/22–25 的逐日重心 421 → 431 → 420 → 415 已先行下迁；9/28 跳空低开 311，打穿 410–436 的旧库存。这是跳空完成的，不是逐级 failed acceptance 路径。\n- **Price**：spot 高于 2D 重心 +0.76%、高于 1D 重心 +1.5%，价格站在新库存上方，不是在它下方。\n- **Retest**：9/29 开盘 335.11，首根 5m 探到 321（跌穿 324–325 core 下沿），13:50 收回 329，15:00 再探 323.52 守住，17:35 到 332.41。DP core 被 defend（带下影）[已验证 5m K 线]。\n- **GEX/DEX 交叉**：net gamma 5.3k → 12.2k 重建；net delta 2.10M → 3.37M 上升；oi flip 312.52 → 332.04 上移到 spot。衍生品结构不确认派发。\n- → **不明**（Medium→Short 横移，不满足\"逐级下移\"的字面条件）\n\n⑤ 动机：\n- **候选指纹**：Gamma hedge（只报状态，未定性）。**派发：未命中**。\n- **OI vs 成交量**：\n  - 9/28 的 flow 在 9/29 OI 上确认：call +47,588、put +30,977，属于新建仓 [已验证]。集中在 10/02 周度 350/360/380/400C、Jan27 370C/490C、Nov 280/290/220P、Jan27 270P。\n  - 当日 flow 的次日 OI [缺失]。\n- **Flow 结构**（≥5 万美元 tape，as-of 17:36Z）：\n  - call bid 12.54M > call ask 10.32M，净 −2.22M；put bid 3.96M > ask 3.30M，净 −0.66M。全日 net call −8.39M / net put +2.66M。\n  - 多腿占主导：\n    - 2029 500/630C 看涨价差反复成交（vol 419/421 > OI 164/143）。\n    - 14:41 六腿 1,000 张（Dec 390C 买 / 410C·440C 卖 / 460C 买 + 260P），属于调仓。\n    - Dec27 240/650C 双卖（net delta −15,940）。\n    - Nov 370/400C 双卖 225 张（net delta −14,026）。\n    - 10/02 卖 310P/360C 宽跨 875 张（floor）。\n    - 10/02 400P 卖 / 355P 买 205 张。\n  - 单腿方向性只有 Oct16 310P 在 ask 分批买 709 张（vol 1,013 > OI 360）和 290P ask 286 张。\n  - sweep 仅 1 笔（225C bid 5 张）。\n- **flow-IV**（today_complete=false [假设]）：\n  - call_ask 0.690，对比 09-28 0.727、09-25 0.688，下降。\n  - put_ask 0.778，对比 0.755、0.644，上抬。\n- **IV×RV**：IV30 0.630（前两日 0.612、0.604）；RV21 1.003、HV20 1.023，RV > IV。但 RV 是被 9/28 单日 −18% 跳空拉高的；IV rank 44、1 年分位 43.6，不在高位，缓升而非拐头，也没有 IV 下拐 / RV 上穿的交叉。不匹配 §5.3 任何形态。\n- **借券**：宽松（见 ①）。\n- **gamma 位置**：1D DP core 324–331（poc 328）夹在 put wall 330 和 oi flip 332.04 之间；9/29 开盘穿过 330 时 5m 爆量 492k。\n- **Fund rebalance**（季末前 1 日）：不成立。\n  - 不是篮子：软件/企服组只有 MDB 的 dp_1d/1m 为 1.72×，其余 0.28–0.60。\n  - 期权 OI 不平。\n- **派发对照**：\n  - 符合：DP% 高、价位下移、call 写在 bid、put OI↑。\n  - 不符：IV 没有压缩，大宗成交后价格没有续跌（10:02–11:33 的大宗之后在 324 企稳、回到 332），call OI 同步扩张。\n- 因果腿未全部验证（当日次日 OI 缺失、flow-IV 当日未完、SVR 为 T-1），只报状态，不下结论。\n\n⑥ Dealer：\n- **结构**（gex-levels）[已验证 09-29]：\n\n```\n          call wall     put wall      gamma flip          magnet\nvol       360 → 350     310 → 330     333.78 → 337.30     360 → 350\noi        450 → 360     225 → 330     312.52 → 332.04     450 → 360\n```\n\n  strike 表交叉一致（360 / 330 / 360）。Dealer Pivot [缺失]。\n- **Flow 与次日 OI**：\n  - 9/28 的 360C 10/02：bid 3,021 vs ask 746，OI 20 → 2,553。\n  - 9/28 的 350C 10/02：bid 1,986 vs ask 1,501，OI 13 → 1,344。\n  - 两者都是 Wall↓ + Bid + OI↑，不在四种情形里。\n  - 9/29 在 350/360 两档也是 bid 主导（2,142 vs 1,262；1,446 vs 603），次日 OI [缺失]。\n- **价格**：收复 put wall 330。\n- → 决策表**无命中**，dealer 买/卖股票无法推断。\n\n**挤压反噬**：SVR 54.2%（09-28，T-1）≥50%，标\"挤压反噬风险\"。板块层面：软件/企服当日 2 涨 4 跌、均值 −0.53%，不在轧空相位，veto 无。\n\n**财报**：12-07\n\n**仓位 / 意图 / 不对称性**：\n- 9/28 一根 −18% 的跳空，把 9/17–25 在 410–436 建起的库存整体打穿。两日约 1,116 万股暗池在 324–343 重建了新价值区。\n- 9/29 首次回踩 321–325 被接住，价格回到 oi flip 332。dealer 重回正 gamma：put wall 抬到 330，call wall 压到 350/360。当下是事件后在新 core 上的 pin，不是派发梯。\n- 在这里做空，等于卖在新库存和 put wall 上，同时面对正 gamma 的高抛低吸和 54% SVR 燃料，不对称性对空头不利。1M poc 382 上方的旧套牢区，只有日后反抽进去并失败时才值得重评。\n\n**失效位**：本票无空头 thesis，只给判决线。\n- 下方：收盘失守 321（9/29 低点）/ 324–325 DP core 下沿，且回抽不收复，才重新评估派发。\n- 上方：站稳 337.30（vol flip）/ 342–343（9/28 top8 上沿），则一切空头读数作废。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-29 rows=55 days=22/22\n✅ RAN darkpool as-of 2026-09-29T17:36:16Z rows=441 blocks=441 spot=332.34\n✅ RAN option-trades as-of 2026-09-29T17:36:09.765000Z rows=185 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-29 2026-09-29T17:36:24.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-29 rows=251 net_gamma=12247.5563\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=14d\n✅ RAN short-volume as-of 2026-09-28 rows=500 ratio=0.542\n✅ RAN short-data as-of 2026-09-29T13:20:12Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-15（滞后 14 天）",
+ "ttft_ms": 152665,
+ "type": "result",
+ "duration_ms": 183643,
+ "uuid": "9deef49f-4088-4960-8485-cd0d7e9a0b9c",
+ "ttft_stream_ms": 4790,
+ "time_to_request_ms": 58,
+ "first_content_frame_ms": 4790,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
