@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 250568,
+ "stop_reason": "end_turn",
+ "session_id": "adc2f908-c471-4356-9f5e-599ce94ecf40",
+ "total_cost_usd": 2.7786039999999996,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 286135,
+  "cache_read_input_tokens": 29080,
+  "output_tokens": 24185,
+  "output_tokens_details": {
+   "thinking_tokens": 19749
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 286135,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 24185,
+    "cache_read_input_tokens": 29080,
+    "cache_creation_input_tokens": 286135,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 286135
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 24185,
+   "cacheReadInputTokens": 29080,
+   "cacheCreationInputTokens": 286135,
+   "webSearchRequests": 0,
+   "costUSD": 2.7786039999999996,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 19749,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**NOW** · 软件/企服 · Technology · 数据日 2026-09-29 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20260928）· ⚠ short-interest = FINRA 2026-09-15（滞后 14 天，只能等披露）· option-trades ≥$50k 档末笔 14:18 ET\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- **SI**：2.78% float（as-of 2026-09-15，滞后 14 天）[已验证]。\n- **SVR**：近几日 9/28 32.9%、9/25 51.2%、9/24 42.1%、9/23 50.8%、9/22 44.5%（as-of 09-28，T-1）[已验证]。\n  - 20 日窗口内 9/15–9/17 曾连 3 日 ≥55%，但 9/18–9/28 连续 7 日 <55%。\n  - \"连日\"按当前状态读，条件 1 不成立。\n- **DTC**：1.99。近三期 8/14 1.59 → 8/31 1.61 → 9/15 1.99，逐期上升；≤2 与逐期上升两项都满足，条件 2 成立 [已验证]。\n- **|spot − flip|**：spot 129.34（DP NBBO 中点）。\n  - 对 vol flip 129.69：0.35，即 0.27%，成立。\n  - 对 OI flip 134.47：5.13，即 3.97%，不成立。\n  - [已验证，gex-levels as-of 09-29 19:59Z]\n- **相位闸**：SI 2.93% → 2.78%（−0.15pt）；SVR 9/25 → 9/28 单日 −18.3pt，幅度达到阈值。本票非 🧨，不做\"已点火偏晚\"降级。含义是 9/28 跳空日场外做空占比创 20 日新低，空头没有在跳空中加码。\n- **借券**：费率 0.2781 → 0.3247（as-of 09-29 15:25Z）；可借 10,000,000 股持平。费率在升，不是燃料退潮的同向确认 [已验证]。\n- → **非 🧨**（条件 1 不成立）\n\n② 熔断：\n- 名单负 gamma 5/23（COHR/GLW/VRT/IBM/CRVS），> 4 → **未熔断**。只比门槛多 1 只；18/23 为正 gamma。\n- 本票 net gamma +42,245.9（9/28 +33,018.7，9/25 +177,541）[已验证，greek-exposure max(date)=09-29]。本票仍是正 gamma，但比 9/25 收缩约 76%，dealer 仍在高抛低吸。\n\n③ 量级：\n- 1D dark 4,375,260 股，为 1M 日均 6,519,850 的 0.67×；DP% 80.7%。\n- 1W 日均 5.14M，同样低于 1M 日均；relative_volume 0.71；个股量分位 6.7。\n- 大单参与度：either 口径 10.16%，未到 16–21% 机构档；by_size 口径 3.02%，落在散户噪音档 [已验证，darkpool as-of 20:54Z]。\n- → **薄**，不强行给方向。\n- 若按绝对量视为足够，⑤ 仍不命中派发，最终结论不变。\n\n④ 方向（灰色重心迁移）：\n- **Long 1M**：poc 137，centroid 137.73，dark_vwap 138.50。价值区 131–145，主库存在 135–140。\n- **Medium 1W**：poc 140（9/23 单日 3.81M 在 140），centroid 135.35，比 1M 下移 2.4。poc 上、重心下，二者分歧。\n- **Short 2D**：poc 131，centroid 129.86；1D poc 129、centroid 129.79，继续下移。\n- 快照：8/28 143.33 → 9/22 136.39 → 9/29 129.79。重心 L > M > S 逐级下移，发生在 3 个月 +29% 之后。\n- **Price**：收盘 129.94 / 中点 129.34，正压在最新重心上，没有跑在 inventory 前面；135–140 高位库存全部失守（9/28 跳空直接越过）。\n- **Retest**：\n  - 9/28 跳空后在 131 重建 core（当日 dark 2.42M），收 131.45。\n  - 9/29 10:30 ET 冲到 132.44，没站住。12:20 ET 失 131，13:35 ET 下探 128.12（低于 vol flip / put wall），收 129.94。\n  - 新 core 第一次回踩未守住；9/28 低点 126.75 未破。\n- **GEX/DEX**：\n  - vol flip 逐日下移：140.84 → 138.73 → 135.27 → 132.04 → 129.69。\n  - net_delta 16.41M → 8.85M → 10.79M。\n  - OI put wall 从 102 变为 null。\n  - 衍生品结构随 DP 重心同步下移 [已验证]。\n- → **不明**。量级闸未过，不裁决；形态上已满足派发确认的迁移与失守条件。\n\n⑤ 动机：**Gamma hedge（最近似，定性未完成）**；派发未命中。\n- **OI vs 量**（oi-change 09-28 → 09-29）[已验证]：\n  - 整体 put +12,200，call +2,921。\n  - 最大增：10/02 125P +2,567（前日 bid 3,018 vs ask 426）、10/16 125P +1,731（bid 1,773）。这是写 put 开仓，put OI↑ 来自卖方。\n  - 最大减：Nov 185C −4,024、155C −3,329、125P −2,791。这是 9/16、9/18 在约 140 建的\"155/185 call 价差 + 卖 125P\"多头包，在 9/28 整包平仓（3,000 张包 net_delta −164,167）。这是多头认输离场，不是新空头。\n  - 今日 Nov 150C 量 2,672 < OI 7,755；只有 0–3DTE 的 130–134C 量 > OI，属于短线新仓。\n- **flow 结构**（§7.3，≥$50k，截至 14:18 ET）[已验证]：\n  - call 意图净额 −$0.81M（bid 2.65M vs ask 1.84M）；全日 net call premium −$3.02M。\n  - call 主体：Nov 150C/140C/135C 单腿在 bid 端重复成交（非 sweep）；尾盘 10/16 140/150 call 垂直价差 881 张 bid 卖出（多腿，属于盖子）；Jan 148C 672 张 bid。\n  - put 侧：10/23 117/122 put 垂直价差 1,000 张 bid 卖出；10/30 118/123 500 张 bid 卖出（all_opening）。这是在下方收权利金。\n  - 反向成交：Nov 130P/135P ask 买入 936 张（约 $1.03M，重复击中）；2028 100C 与 100/125 call 价差 ask 买入（长期看多）。\n  - 2028 145P 12.74M 为 cross_trade，无方向，剔除。\n  - 合计是两侧同时卖 vol，不是单边派发。\n- **flow-IV** [已验证，历史仅 2 日]：call_ask 0.572（9/28 0.588、9/25 0.576）；put_ask 0.563（0.610、0.574）。两侧都在降，没人加价，属机械流。\n- **IV×RV**：\n  - 9/2–9/25：RV（0.58–0.67）> IV（0.50–0.57），且 IV 上行、价跌，属于空头行情段。\n  - 9/28 IV 0.585 翻上 RV 0.530；9/29 IV 0.583 vs RV 0.502 / HV20 0.505。按规则这是 **bounce 相位，不是新趋势**。\n  - 交叉部分是 8/27 的 +10% 日滑出窗口造成的，属于机械因素，需再看 1–2 日确认。\n  - IV30 1M rank 97.6，非压缩，派发要求的\"IV 平/压缩\"不成立。\n- **gamma 位置** [已验证]：1D POC 129 = vol put wall 129 = magnet 129；1D 重心 129.79 ≈ vol flip 129.69；日内 128.12–132.44 双向穿越 flip。价位对齐是 tell。\n- **与 Gamma hedge 的冲突**：该指纹要求\"DP% 无持续迁移\"，与 1M → 2D 的下迁不符。\n- **DP 时点**：16:00 后约 12.7 万股按收盘价 129.94 成交（prior_reference_price），占 1.3%。季末前一日，但本票无大 DP，软件组无篮子冒尖（MSFT 0.89×、IBM 0.63×、DDOG 0.81×），Fund rebalance 未命中。\n- **状态**：9/29 flow 的次日 OI 缺失，因果腿未全部验证，只报状态、不下结论。\n\n⑥ Dealer：\n- **结构**（gex-levels 09-29）：\n  - vol 口径：call wall 140（−15）、put wall 129（+4）、flip 129.69（−2.35）、magnet 129。\n  - OI 口径：call wall 150（0）、put wall null（前值 102）、flip 134.47（−1.33）。\n  - Dealer Pivot：缺失。\n- **flow 意图**：call 净写、put 净写（见 ⑤）。\n- **次日 OI**：9/29 的 flow 缺失 [缺失]。\n- **决策表命中**（9/28 flow + 9/29 OI）：155 strike（9/28 的 vol call wall）→ 情形「Wall↓（155→140）+ Bid（9/28 155C bid 5,196）+ OI↓（−3,329）」。\n  - 客户 Sell to Close，dealer Buy to Close → dealer **卖**股票（对冲移除）。\n  - 9/29 价格 −1.15%，四点一致。\n  - 这只是三腿包中的一腿：185C 腿（ask 4,657 + OI −4,024，情形 4 = 买股票）部分对冲。\n- 今日 140/150 写单：无命中（缺次日 OI）。\n\n**挤压反噬**：无。\n- SVR 最新 32.9%（9/28，T-1），低于 50%，不挂；20 日内曾 ≥50%，若回到 ≥50% 需补挂。\n- 软件/企服组 1D 2 涨 4 跌、均值 +0.40%，非轧空相位。\n\n**财报**：11-04（er_time 未知，36 天后）\n\n**仓位 / 意图 / 不对称性**：\n- 一个月的库存从 137–138 下迁到 130，9/16–18 在 140 附近建的看涨包已于 9/28 整包平仓，多头在撤。\n- 接盘的是在 117–125 写 put、在 140–150 写 call 的高 IV 双侧卖 vol 资金。本票正 gamma，把价格钉在 129–131（flip 129.69 / put wall 129）。\n- 下方 126.75 与写 put 带近，IV 已翻上 RV（bounce 相位），此处追空的不对称性差。\n\n**失效位**：\n- 下迁读数失效：收盘重新接受 131 以上并守住，且上破 132.44；站上 134.47（OI flip）则结构转正。\n- 升级为候选需同时满足：\n  - 跌破 128 后反抽 129 失败；\n  - 1D DP 量回到 1M 均值以上；\n  - IV 不再上行；\n  - 次日 OI 证实 140/150 call 写单为新开仓；\n  - 名单仍未熔断。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-29 rows=10 days=22/22\n✅ RAN darkpool as-of 2026-09-29T20:54:47Z rows=232 blocks=232 spot=129.34\n✅ RAN option-trades as-of 2026-09-29T18:18:31.723000Z rows=61 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-29 2026-09-29T19:59:54.212000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-29 rows=251 net_gamma=42245.9243\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=14d\n✅ RAN short-volume as-of 2026-09-28 rows=500 ratio=0.329\n✅ RAN short-data as-of 2026-09-29T15:25:28Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-15（滞后 14 天）",
+ "ttft_ms": 213717,
+ "type": "result",
+ "duration_ms": 250618,
+ "uuid": "b1b66691-27b4-4072-84e4-c96157da2f12",
+ "ttft_stream_ms": 4155,
+ "time_to_request_ms": 36,
+ "first_content_frame_ms": 4155,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
