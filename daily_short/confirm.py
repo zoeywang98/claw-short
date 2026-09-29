@@ -203,6 +203,9 @@ def main(argv=None):
     def one(item):
         T, v, reply = item
         res = probe if T == names[0][0] else fetch_confirmation(client, cal, T, D, cutoff, raw_root)
+        while not oi_ready(res, D) and time.time() < deadline:  # OI is rolled out contract by contract, not all at once
+            time.sleep(60)
+            res = fetch_confirmation(client, cal, T, D, cutoff, raw_root)
         brief_p = os.path.join(WS, "analysis_data", L_date, f"{T}.json")
         brief = json.load(open(brief_p)) if os.path.exists(brief_p) else {}
         prev_close = ((brief.get("price") or {}).get("derived") or {}).get("close")
