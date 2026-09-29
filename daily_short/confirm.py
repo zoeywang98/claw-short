@@ -228,8 +228,8 @@ def main(argv=None):
 
     lines, problems = [], []
     for T, v, r in results:
-        new = verdict(r.get("result")) if not r.get("is_error") else "❌ 分析失败"
-        lines.append(f"{T}：{v[:24]} → {new[:40]}")
+        new = verdict(r.get("result")) if not r.get("is_error") else f"昨晚 {v[:12]} → ❌ 确认失败"
+        lines.append(f"{T}：{new[:60]}")
     header = (f"**盘前确认 · {D}**（{L_date} 收盘扫描的 👀 / ✅ 名单，用今早公布的次日 OI 补齐 §6）\n" + "\n".join(lines))
     print(header)
     if not a.dry_run:

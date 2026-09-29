@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 104928,
+ "stop_reason": "end_turn",
+ "session_id": "7fb79a9c-9f90-462e-ade6-4012d8996f23",
+ "total_cost_usd": 0.971848,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 95280,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 10480,
+  "output_tokens_details": {
+   "thinking_tokens": 7940
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 95280,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 10480,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 95280,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 95280
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 10480,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 95280,
+   "webSearchRequests": 0,
+   "costUSD": 0.971848,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7940,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**NBIS 盘前确认** · 扫描日 2026-09-24 · 确认日 2026-09-25 盘前\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n**次日 OI**（as-of 2026-09-25，反映 09-24 的交易）\n\n全链合计：call OI +25,600，put OI +11,785。\n\n```\n合约                 ΔOI     昨 ask / bid     multi-leg  读法\n09-25 250C（OI墙）   −1,600  10,546 / 8,585   1,751      今天到期；成交 21,112，churn\n09-25 245C（vol墙）  +346    4,348 / 4,722    580        ask/bid 接近五五开\n09-25 240P（OI墙）   +1,400  4,375 / 3,738    498        今天到期\n10/16 300C（旧OI墙） +3,791  3,922 / 2,055    592        Ask+OI↑ = Buy to Open\n10/02 300C           +897    1,193 / 627      119        Buy to Open\n10/30 290C           +1,110  1,154 / 205      37         Buy to Open\n10/16 270C           +855    1,127 / 570      222        Buy to Open\n10/16 310C           +612    1,260 / 491      2,037      多腿为主\n2027-06-17 390C      +1,103  2 / 1,104        0          Sell to Open（写 call）\n2028-01-21 420C      +907    17 / 912         4          Sell to Open（写 call）\n10/02 210C           −638    857 / 2          832        diagonal：买平近月腿\n10/09 212.5C         +830    0 / 830          830        diagonal：卖开远月腿（1 笔）\n```\n\n决策表对照：\n- **OI 口径墙（300 → 250，Wall↓）**\n  - 旧墙 300 的 OI 不降反升（10/16 +3,791，10/02 +897），且都是 ask 主导。这是 Ask + OI↑，对不上 Wall↓ 的任何一行。\n  - 新墙 250（09-25 到期）形式上符合\"Wall↓ + Ask + OI↓\"：客户 Buy to Close，dealer 买股票。\n- **vol 口径墙（235 → 245，Wall↑）**\n  - 245C 形式上符合\"Wall↑ + Bid + OI↑\"：客户 Sell to Open，dealer 卖股票。\n  - 但 bid 只比 ask 多 374 张，OI 变动仅占成交的 3%。\n- **两个命中的问题**：两种口径给出相反的 dealer 方向；两个命中合约都今天到期；OI 变动都远小于成交量。→ **[冲突]**，dealer 买/卖股票不下结论。\n- **put wall（202.5 → 240）**：240P 是 Ask + OI↑。§6.2 决策表以 Call Wall 为例，套用到 put wall 时股票方向原文未明确，不套表。\n- **非墙位的 flow**：昨晚\"10/16 OTM call 的 ask 重复成交\"经次日 OI 确认为新开仓 [已验证]。远月深 OTM call 的 bid 写单确认为新开空仓（盖子）[已验证]。830 张 diagonal 确认是滚仓（买平 10/02 210C、卖开 10/09 212.5C），不是新方向 [已验证]。\n- **§6 第三点**：昨天的交易变成了新持仓 [已验证]；dealer 对冲方向 [冲突]。\n\n**四点对照**\n- **结构**：vol 口径墙上移、OI 口径墙下移，结构本身两口径不一致。Dealer Pivot 缺失。\n- **flow**：昨晚 call 净买（净 call premium +$14.36M）。次日 OI 显示 OTM call 买开，两者一致。\n- **次日 OI**：新仓成立，与 flow 一致；dealer 方向冲突。\n- **价格（盘前）**：跳空向上。last 247.41，比昨收 243.48 高 1.6%；盘前区间 245.0–249.0，全程站在昨晚 2D/1D DP core（239–243，1D centroid 243.10）上方，属盘前接受，未失守。盘前量 380,884 股，量小，只作参考。\n- **整体**：与昨晚吸筹读数一致；对做空方向，这四点均不支持。\n\n**其他变化**\n- **借券**：费率 0.4796%，可借 790 万股（昨晚为 0.48%、780 万），as-of 09-25T12:17Z。平稳，① 不变。\n- **今天的 gamma**（09-25，按开盘 OI）：\n  - net_gamma 144,265（昨 106,937），正 gamma 更厚。\n  - net_delta 30.80M（昨 27.39M）。\n  - 这改了 ④ 的 Cross-check：昨晚写的\"DEX 走平、衍生品侧未对这根加码\"不再成立，DEX 已跟随扩张。这一改动强化吸筹读数，不改变 ④ 的结论。\n- **⑤ 动机**：OI vs 成交量这条腿升为 [已验证]（call OI +25,600，OTM call 新开仓）。派发要求的\"call OI 平/降\"不成立。put OI 也 +11,785，但增量集中在今天到期的 240/230/237.5/245P。flow-IV 仍缺失，按 §8.1 仍只报状态：候选指纹为吸货。\n- **不变项**：\n  - ① 仍非 🧨（DTC 3.6 > 2）。\n  - ② 名单熔断以昨晚 6/23 为准，今天全名单 gamma 未明确。\n  - 财报仍未查，THIN 仍未判。\n\n**仓位 / 意图 / 不对称性**\n- **仓位与意图**：昨天的 OTM call 买盘已经落成新仓（10/16–10/30 的 270–310）。远月 390/420 有人写 call 做盖子，但近中月是净买。dealer 正 gamma 加厚、delta 扩张。\n- **不对称性**：做空等于逆着已确认的新多头和正 gamma 毯，赔率仍是负的。唯一的不对称仍在 238–249 旧失败区：盘前 245–249 正处在这个区里，开盘后第一次回踩才是裁决。\n\n**失效位 / 判决线**\n- 吸筹读数失效条件：收盘失守 239–241（2D/1D DP core），且次日不能 reclaim 243。之后改走 Trap 裁决。\n- 再破 232–237（1W core）→ 按 confirmed trap / 派发重走流水线，届时仍须过 ①②。\n- 盘中先看 243（1D centroid 243.10 / 昨收 243.48）能否守住。\n\n**运行日志**\n- ✅ oi-change as-of 2026-09-25 rows=1930 pages=5\n- ✅ 盘前 5m as-of 2026-09-25T12:40:00Z rows=813 days=5/5\n- ✅ short-data as-of 2026-09-25T12:17:25Z rows=981\n- ✅ greek-exposure as-of 2026-09-25 rows=249 net_gamma=144264.6552\n- 未明确：gex-levels 今日未拉，结构位沿用 09-24；option-trades 仍为昨晚 FAIL；flow-IV 缺失。",
+ "ttft_ms": 82804,
+ "type": "result",
+ "duration_ms": 105009,
+ "uuid": "93a72cd1-9321-49b9-a04e-dfdf69236548",
+ "ttft_stream_ms": 1702,
+ "time_to_request_ms": 32,
+ "first_content_frame_ms": 1703,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

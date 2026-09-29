@@ -20,7 +20,7 @@
 **<TICKER>** · <分组> · <sector> · 数据日 <D> · 核心覆盖 <N>/8
 **结论**：🧨 禁止做空（squeeze-watch）/ ⛔ 熔断，只出决策线 / ⚪ 不构成 setup / 👀 观察 / ✅ 做空候选（置信度：低 / 中 / 高）
 
-① 🧨 挤仓否决：SI% float（as-of，滞后 X 天）· SVR 近几日 · DTC · |spot − flip| · 相位闸（SI/SVR 单日变动）· 借券费率 / 可借量 → 🧨 / 非 🧨
+① 🧨 挤仓否决：SI% float（as-of，滞后 X 天）· SVR 近几日 · DTC 及近三期趋势（short_interest.series）· |spot − flip| · 相位闸（SI/SVR 单日变动）· 借券费率 / 可借量 → 🧨 / 非 🧨
 ② 熔断：名单负 gamma X/23（≤4 只触发）· 本票 net gamma → 熔断 / 未熔断
 ③ 量级：1D DP 绝对量 · 大单参与度 → 足够 / 薄
 ④ 方向（灰色重心迁移）：1M → 1W → 2D 重心与 poc · spot 相对最新重心 · retest 是否守住 DP core · GEX/DEX 交叉 → 吸筹确认 / 派发确认 / Trap warning / confirmed trap / 不明

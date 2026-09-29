@@ -1,0 +1,302 @@
+{
+ "target_date": "2026-09-24",
+ "asof_cutoff": null,
+ "latest_trading_day": "2026-09-28",
+ "generated_at": "2026-09-28T22:07:29-04:00",
+ "usage": {
+  "x-uw-daily-req-count": "401",
+  "x-uw-req-per-minute-remaining": "1000000",
+  "x-uw-req-per-minute-reset": "60000",
+  "x-uw-token-req-limit": "40000"
+ },
+ "requests": 46,
+ "cache_hits": 41,
+ "tickers": {
+  "NVT": {
+   "coverage": {
+    "core": "7/8",
+    "supplemental": "19/22"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24",
+     "rows": 16,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": []
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24T21:53:17Z",
+     "rows": 22,
+     "extra": "blocks=22 spot=161.655",
+     "reason": null,
+     "notes": [
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "FAIL",
+     "core": true,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "option-trades only serves the latest trading day (2026-09-28); see flow-alerts / flow-per-strike / net-prem-ticks for 2026-09-24",
+     "notes": []
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24 2026-09-24T19:59:33.444000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": []
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24",
+     "rows": 248,
+     "extra": "net_gamma=6785.4720",
+     "reason": null,
+     "notes": []
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-15",
+     "rows": 127,
+     "extra": "lag=9d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 9 calendar days behind 2026-09-24"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24",
+     "rows": 500,
+     "extra": "ratio=0.550",
+     "reason": null,
+     "notes": []
+    },
+    "short-data": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-09-24T15:23:49Z",
+     "rows": 1000,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24T19:59:52Z",
+     "rows": 0,
+     "extra": "blocks=0",
+     "reason": null,
+     "notes": [
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 249,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24T20:10:00Z",
+     "rows": 416,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": []
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 610,
+     "extra": "pages=2",
+     "reason": null,
+     "notes": []
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot only (latest trading day 2026-09-28)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 53,
+     "extra": "prev=2026-09-23",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 28,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "iv-rv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 64,
+     "extra": "iv30=0.516 rv21_last=['2026-09-24', 0.536232]",
+     "reason": null,
+     "notes": []
+    },
+    "option-sentiment": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload",
+     "notes": []
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date parameter; only the latest day (2026-09-28)",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24 1620",
+     "rows": 40,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 1,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": []
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 15,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": []
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 33,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 53,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 5270,
+     "extra": "bins=34",
+     "reason": null,
+     "notes": []
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 0,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": [
+      "no flow alerts on D"
+     ]
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24T19:59:33.444000Z",
+     "rows": 369,
+     "extra": "gamma_oi=1978796.88",
+     "reason": null,
+     "notes": []
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 196,
+     "extra": "contracts=7/7",
+     "reason": null,
+     "notes": []
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 55,
+     "extra": "expiry=2026-10-16 delta=25",
+     "reason": null,
+     "notes": []
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-09-24",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  }
+ }
+}

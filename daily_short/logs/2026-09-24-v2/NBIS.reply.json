@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 134856,
+ "stop_reason": "end_turn",
+ "session_id": "b9c0012f-5a32-4c85-a9d5-057e303f07e2",
+ "total_cost_usd": 2.942036,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 334511,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 13297,
+  "output_tokens_details": {
+   "thinking_tokens": 9782
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 334511,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 13297,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 334511,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 334511
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 13297,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 334511,
+   "webSearchRequests": 0,
+   "costUSD": 2.942036,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 9782,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**NBIS** · AI基建/电力 · Communication Services · 数据日 2026-09-24 · 核心覆盖 7/8 · **⚠ option-trades 层缺失（FAIL：该端点只提供 2026-09-28 的数据）；flow 腿降为观察，改用 flow-alerts / flow-per-strike 替代（as-of 09-24）**\n\n**结论**：🧨 禁止做空（squeeze-watch）\n\n① 🧨 挤仓否决：\n- **SI**：21.3% float，as-of 2026-09-15，滞后 9 天 [已验证]。满足 ≥10%。\n- **SVR 近几日**：9/21 59.6%、9/22 53.7%、9/23 47.9%、9/24 38.6% [已验证 as-of 09-24]。不是连日 ≥55%，但第一条已由 SI 满足。\n- **DTC 近三期**：8/14 2.02 → 8/31 2.31 → 9/15 3.6，逐期上升 [已验证]。满足第二条，与规则原例完全一致。\n- **|spot − flip|**：spot 242.48（DP NBBO 中点），flip 244.61（gex_levels.latest，source=vol），差 2.13，即 0.87%，满足 ≤3% [已验证 as-of 09-24 19:59Z]。\n  - 口径歧义：OI 口径 flip 为 225.44，差 7.03%，不满足。规则未指定口径，按主记录 latest 判定，歧义已标注。\n- **相位闸**：SVR 单日 −9.3pt（47.9→38.6），接近 −10pt 阈值但未触发。SI 期间 +0.7pt。\n- **借券**：费率 0.483%、可借 7.8M（9/23 为 8.2M），20 日内费率稳定在 0.43–0.56%，无骤降 [已验证 as-of 09-24 15:23Z]。\n- **判定**：🧨。SI 高位在此读作燃料，不是卖压。\n- **flip 收复触发位**：站回 244.61。\n- **彩票纪律**：flip 上方一档 = 245 call（到期未明确）；风险 ≤0.25%；价格穿 flip 超过 1 ATR（ATR14 16.20，即 260.81 以上）不追。\n\n② 熔断：名单负 gamma 6/23（≤4 只才触发）；本票 net gamma +106,937（as-of 09-24）→ 未熔断。\n\n③ 量级：\n- 1D 暗池量 12.30M，是 1M 均值 7.61M 的 1.62×；DP% 62.0%。\n- 大单参与度 16.2%（either 口径，落在 16–21% 机构区间；按 size 口径仅 4.9%）。\n- 最大一笔 232,000 股 @241.55（12:15 ET）。\n- → 足够 [已验证 as-of 09-24]。\n\n④ 方向（灰色重心迁移）：\n- **Long**：1M 重心 216.20 / poc 215。\n- **Medium**：1W 重心 234.18 / poc 236。\n- **Short**：2D 重心 240.62 / poc 241（1D 为 243.10 / 241）。三档逐级上移。\n- **Price**：spot 242.48 高于 2D 重心，处在新的高位 DP 区 239–247 内。\n- **Retest**：\n  - 9/22 冲高 246.61 未站稳，9/23 收 226.61，失守 1W core 234–236。\n  - 9/24 盘中冲到 243.27 后回踩 233.60，守住 1W core 下沿并收复，高点 249.19。\n  - 尾盘回落至 243.15，未破 2D poc 241；盘后低点 241.75。\n  - 上方有 9/8–9/9 的高价旧库存（重心 244.13 / 242.82，高点 254.74 后跌至 207）。\n- **GEX/DEX 交叉**：\n  - net_gamma 从 36.4k（9/17）升至 106.9k，net_delta 从 22.8M 升至 27.4M。\n  - OI put wall 从 202.5 上移到 240，与 DP 库存上迁同向。\n- → **吸筹确认**（9/24 之后的首次 retest 尚未发生）[已验证：DP + 5 分钟 K 线 + greek_exposure]。按 §9，吸筹本身就不是做空候选。\n\n⑤ 动机（🧨 已触发，只列事实）：\n- **OI vs 成交量**：\n  - 9/24 call 成交 187,108、put 105,648，30 日均值分别为 121,032 / 92,283。\n  - OI 9/23→9/24（反映 9/23 的成交）：call +12,661、put +11,384。\n  - 10/02 235C 的 OI 从 937 升到 4,449；9/23 该合约成交 4,617 > OI，属新建仓。\n- **flow 结构**（option-trades FAIL，改用 flow-alerts）：\n  - call ask 9.15M vs bid 4.60M；put ask 2.40M vs bid 2.82M；sweep 127 笔。\n  - 10/16 300C 多笔重复 ask 扫单。\n  - 12/18 300C 500 张 ask 1.265M sweep。\n  - 3/19/27 250C floor 单 1.43M ask。\n  - 11/20 250P bid 418k（卖 put）。\n  - 最大一笔多腿：210/212.5 call diagonal，bid 830 张，6.57M，净权利金 0，属 roll，是调仓不是方向押注。\n- **flow-IV**：缺失（today 为空，history 为空）。\n- **IV×RV**：\n  - IV30 0.801 vs RV21 0.662 / HV20 0.662。\n  - 7–8 月 RV（1.4–1.9）高于 IV（1.0–1.6）且处高位，价格从 277 跌到 199.5。\n  - 约 9/15 起 IV 翻上 RV（0.797 vs 0.733），对应 §5.3「空头行情之后 IV 翻上 RV = bounce 相位」。\n  - IV rank 6.5，IV30 从 0.759 抬到 0.801。\n- **借券**：费率 1.09%（8/14）降至 0.46%（9/15），可借 4.2M 升至 7.4M，偏宽松。\n- **gamma 位置**：spot 在 vol flip 下方 2.13、在 OI flip 上方；夹在 OI put wall 240 与 call wall 250 之间。\n- → 倾向「吸货」，但 flow-IV 缺失、option-trades FAIL、9/24 成交的次日 OI 缺失，按 §8.1 只报状态、不定性。\n\n⑥ Dealer：\n- **vol 口径**：call wall 235→245，put wall 210→212.5，flip 223.54→244.61，magnet 235→250。\n- **OI 口径**：call wall 300→250，put wall 202.5→240，flip 225.64→225.44，magnet 300→250，与 strike 表交叉一致。\n- **Dealer Pivot**：缺失。\n- **flow 意图净额**：net call premium +14.36M，net put premium −2.61M；call 成交 ask 95,425 > bid 75,908；put 成交 ask 45,109 < bid 50,678。\n- **次日 OI**：9/24 成交对应的 9/25 oi-change 缺失，四点缺第③点 → 无命中。\n\n**挤压反噬**：无。\n- SI 21.3%、SVR 38.6%（9/24）均低于 50%，不标风险（9/21、9/22 曾 ≥50%）。\n- 同组 AI基建/电力 当日 3 涨 2 跌，均值 +0.73%；光模块 4/5 下跌；XLK −0.33%。无板块普涨或逼空迹象。\n\n**财报**：未查（screener 的 next_earnings_date 为空；THIN 无法判定，chain_depth 缺失）\n\n**仓位 / 意图 / 不对称性**：空头持仓 21.3% float，DTC 三期 2.02→2.31→3.6，越来越挤。这批空头压在一段重心 216→234→241 逐级上移的 DP 库存之下，是燃料不是卖压。上方第一道阻力是 OI call wall / magnet 250，以及 9/8–9/9 的 238–249 旧库存；但在这里做空的不对称性是负的。唯一允许的表达是站回 flip 244.61 后，买 flip 上方一档（245）call 的定额彩票。\n\n**失效位**：\n- **🧨 读数失效**：spot 离开 flip ±3%（低于 237.27 或高于 251.95）；或下一期 FINRA DTC 不高于 3.6；或 SI/SVR 单日跌 ≥10pt（相位闸降级为\"已点火偏晚\"）。\n- **彩票纪律**：未站回 244.61 不开；260.81 以上不追。\n- **DP 侧**：跌破 2D poc 241 并失守 1W core 234–236，视为 acceptance 失败，需重走完整流水线。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-24 rows=55 days=22/22\n✅ RAN darkpool as-of 2026-09-24T23:59:06Z rows=1427 blocks=1427 spot=242.48\n❌ FAIL option-trades reason: option-trades only serves the latest trading day (2026-09-28); see flow-alerts / flow-per-strike / net-prem-ticks for 2026-09-24\n✅ RAN gex-levels as-of 2026-09-24 2026-09-24T19:59:58.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-24 rows=248 net_gamma=106937.4334\n✅ RAN short-interest as-of 2026-09-15 rows=46 lag=9d\n✅ RAN short-volume as-of 2026-09-24 rows=485 ratio=0.386\n✅ RAN short-data as-of 2026-09-24T15:23:49Z rows=1000\ncoverage 7/8 · SI as-of 2026-09-15（滞后 9 天）",
+ "ttft_ms": 106362,
+ "type": "result",
+ "duration_ms": 134942,
+ "uuid": "46e20021-2fce-46b1-9a8b-ead1d96eda83",
+ "ttft_stream_ms": 4741,
+ "time_to_request_ms": 47,
+ "first_content_frame_ms": 4742,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

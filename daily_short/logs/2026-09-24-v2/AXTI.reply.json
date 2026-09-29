@@ -1,0 +1,97 @@
+{
+ "duration_api_ms": 174182,
+ "stop_reason": "end_turn",
+ "session_id": "f27d11c7-b505-4762-92ec-eb086979c5b7",
+ "total_cost_usd": 1.4011742,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 130976,
+  "cache_read_input_tokens": 29091,
+  "output_tokens": 17377,
+  "output_tokens_details": {
+   "thinking_tokens": 12990
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 130976,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 17377,
+    "cache_read_input_tokens": 29091,
+    "cache_creation_input_tokens": 130976,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 130976
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 17377,
+   "cacheReadInputTokens": 29091,
+   "cacheCreationInputTokens": 130976,
+   "webSearchRequests": 0,
+   "costUSD": 1.4011742,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 12990,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**AXTI** · 未分组（不在 watchlist） · Technology · 数据日 2026-09-24 · 核心覆盖 7/8 · ⚠ option-trades = 缺失（FAIL：端点只服务 2026-09-28）。flow 改用 flow-alerts / flow-per-strike / options-volume 补充层（as-of 09-24），该层结论降为观察。\n**结论**：🧨 禁止做空（squeeze-watch）。相位闸命中，机械降级为\"已点火偏晚\"，禁追高。\n\n① 🧨 挤仓否决（三条同时成立 → 🧨）：\n- **条件 1，SI% float**：13.44%（as-of 2026-09-15，滞后 9 天）[已验证]，≥10%，成立。\n  - SI 序列在回落：06-30 17.2% → 07-15 16.8% → 07-31 15.3% → 08-14 16.4% → 08-31 14.0% → 09-15 13.4%。\n  - SVR 近几日（T+1，as-of 09-24）[已验证]：09-18 52.9% · 09-21 51.3% · 09-22 55.6% · 09-23 44.1% · 09-24 42.5%。≥55% 只有 09-22 一天，不构成\"连日\"。\n- **条件 2，DTC**：1.09，≤2，成立。近三期 08-14 1.00 → 08-31 1.00 → 09-15 1.09，不是逐期上升，但 DTC≤2 已满足。\n- **条件 3，|spot − flip|**：spot 75.95（DP NBBO 中点，20:59Z）[已验证]。\n  - vol 口径 flip 75.42，差 0.53，约 0.7%。\n  - OI 口径 flip 74.59，差 1.36，约 1.8%。\n  - 两个口径都 ≤3%（gex-levels as-of 09-24 19:59Z）[已验证]，成立。\n- **相位闸**：SVR 09-22 55.6% → 09-23 44.1%，单日 −11.5pt，≥10pt，命中回补 climax 尾段签名 → 降级\"已点火偏晚\"，禁追高。数据日本身 09-23→09-24 为 −1.6pt。\n- **借券**（short-data as-of 09-24 15:23Z）[已验证]：\n  - 费率 0.4135（09-23 0.4397 · 09-22 0.4073；09-16 前约 0.28）。\n  - 可借量 3.5M（09-23 3.7M · 09-22 3.9M）。\n  - 两者都是缓降，不是骤降，不构成燃料退潮的同向确认。\n- **判定**：🧨。\n  - flip 收复触发位：守住 / 收在 **75.42**（OI 口径 74.59）上方。\n  - call 彩票纪律：flip 上方一档 = **76 行权价 call**（到期未明确），风险 ≤0.25%。穿 flip >1 ATR 不追：75.42 + ATR14 6.35 ≈ 81.77。\n  - 相位闸已命中，当前禁追高。\n\n② 熔断：名单负 gamma 6/23（LITE/COHR/AAOI/GLW/VRT/DELL），>4，未熔断。本票 net gamma +37,892（greek-exposure as-of 09-24）[已验证]，为正。→ 未熔断。因 ① 已 🧨，以下各步只列关键事实。\n\n③ 量级（darkpool-levels / darkpool as-of 09-24）[已验证]：\n- 1D DP 绝对量 3,215,210 股，DP% 52.3%，与 1M 日均（69.71M/21 日，约 3.32M）相当。\n- 大单参与度 either 5.9%（dark 4.6% / lit 1.3%），by_size 仅 1.6%。远低于 16–21% 的机构区间，贴近噪音档。\n- → 量级一般、机构参与**薄**，不强行给方向。\n\n④ 方向（灰色重心迁移）：\n- **Long（1M）**：centroid_top8 65.23，poc 61。灰色库存均匀铺在 56–70。\n- **Medium（1W）**：centroid 74.67，明显上移。poc 70 为 09-18 opex 收盘的 lit 量（dp_pct 11%），不是暗池库存。\n- **Short（2D）**：centroid 75.02，poc 75。相对 1W 仅 +0.35，近乎停滞。\n- **逐日重心**：09-21 78.57 → 09-22 76.25 → 09-23 74.64 → 09-24 75.02，冲高后最新库存在低位重新成交。\n- **Price**：spot 75.95 比最新重心 75.02 高约 1.2%，没有显著跑在 inventory 前面。\n  - 09-21 在 79–81 堆了高位库存（79 档 dark 1.64M，dp 64%），价格冲到 81.50 后未能站稳。\n  - 现价在该区下方，高位 inventory 未获接受。\n- **Retest**（5 分钟线）：\n  - 09-23 尾盘跌破 73–77 共同 core，收 72.98。\n  - 09-24 低开 70.78，下探到 69.60（1W 低位节点 70），随后当日 reclaim 75、77，高点 78.70，回落收 75.9。\n  - 最大块 29,010 股 @77.01 贴 ask 成交（15:28 ET）。\n  - 有吸收和 reclaim，不构成 confirmed trap；但尚未\"再向上离开\"77–78，健康 acceptance 也未完成。\n- **Cross-check**：\n  - net gamma 55,847 → 47,119 → 37,892（−19.6%），net delta 5.11M → 4.89M → 3.74M，衍生品敞口在收缩，没有 DEX 扩张去确认。\n  - flip 上移 72.87 → 75.42（vol）/ 72.98 → 74.59（OI）。\n- → **不明**：L<M<S 偏多偏置，但 1W→2D 停滞，高位未被接受，73–77 core 待下一次 retest 裁决。缺 1H 线。\n\n⑤ 动机（腿未全部验证，只报状态、不下结论）：\n- **OI vs 成交量**（oi-change 09-23→09-24）[已验证]：\n  - call OI +3,891，put OI +4,560，两侧都增。\n  - 最大新增是 72C 10/30：897 → 3,741（+2,844）。09-23 成交 2,857 > OI，属新建仓；当日 bid 1,830 > ask 1,026，方向偏写方。\n  - 09-24 该合约 ask 1,236 / bid 832，另有 14:29Z 两笔 RepeatedHits（ask premium 500k + 273k，1 笔 sweep）。其次日 OI 未出 [缺失]。\n  - 270115P30 +1,291（09-23 ask 1,425，买入远 OTM 尾部 put）。\n  - 261218C200 +449（ask 535，买入彩票 call）。\n- **flow 结构**（09-24）[假设：替代层]：\n  - 12 笔多腿中 10 笔是深度 ITM call vertical（41.5/42、44/44.5、46/46.5、47.5/48），1–8 DTE。单笔总额 0.28M–1.1M，但净权利金仅 2k–9k，净 delta ≈ 8–25。属机械调仓，不是方向押注，而且会虚胀 call premium 总额。\n  - 意图净额：call ask 6,406 vs bid 5,419；put ask 2,093 vs bid 3,212。flow-alerts 显示 call ask premium 888k vs bid 269k。\n- **flow-IV**：derived.flow_iv today = null，history 为空 [缺失]。\n- **IV×RV**（iv-rv as-of 09-24）[已验证]：\n  - iv30 1.083（09-18 低点 0.983 回升），rv21 1.171，HV20 1.19，RV > IV。\n  - IV rank 8.2，1y 百分位 6.8%，IV 处于低位。\n  - 按 §5.3 属\"RV>IV 且 IV 低位 / IV 低位向上\"的多头 regime，本身即不做空。\n- **Fund rebalance**：距季末 4 个交易日，已查指纹，不成立。本票不在篮子内，DP 有多窗迁移，期权账本两侧都在动。\n- **其它**：25d RR −0.074（put 偏贵），option_sentiment bearish −22.5。\n- → **未命中派发**。证据偏向吸货 / 库存转移（中性偏多），但 flow-IV 缺失、09-24 flow 次日 OI 未出，不定性。\n\n⑥ Dealer（gex-levels as-of 09-24）[已验证]：\n- 结构及日间变化：\n\n```\n          09-23→09-24(vol)   09-23→09-24(OI)\ncall wall  75 → 80 (+5)      100 → 100 (0)\nput wall   72 → 70 (−2)       55 → 72 (+17)\nflip    72.87 → 75.42      72.98 → 74.59\nmagnet     68 → 77           100 → 100\nDealer Pivot: 缺失（UW 无此字段）\n```\n\n- 09-23 组合：vol 口径 call wall ↓（80 → 75）+ call flow 偏 bid（5,045 > 3,917）+ call OI ↑（+3,891），不在决策表内。\n- 09-24 组合：vol 口径 call wall ↑ + call flow 偏 ask，但次日 OI [缺失]。\n- → **决策表无命中**，不推断 dealer 买 / 卖股票。\n\n**挤压反噬**：\n- SVR 近 6 日中 4 日 ≥50%（09-17 50.2 / 09-18 52.9 / 09-21 51.3 / 09-22 55.6），数据日 42.5% → 标\"**挤压反噬风险**\"。\n- 板块：光模块组当日 1 涨 4 跌、均值 −0.87%，XLK −0.3%，未见普涨 / 逼空 → veto：无。\n\n**财报**：10-29（screener，er_time 未知），距数据日 35 天。THIN：chain_depth = null，nstrk 未算 [缺失]。\n\n**仓位 / 意图 / 不对称性**：\n- 空头约 13% float、DTC 约 1，价格正骑在 flip 上方的正 gamma 区，这一组合正是燃料而非卖压。\n- 09-21 在 79–81 进场的高位持仓被套在头顶，是真实供给；下方 73–77 共同 core 刚被 reclaim，72 是 OI 口径 put wall。\n- 期权账本新增的是 72C 10/30 与远 OTM 尾部 put，IV 在低位 regime 里抬头。\n- 做空端不对称性为负：squeeze 燃料 + 多头 IV regime，上方到 79–81 有空间，下方 72/70 有 put wall 与 retest 低点托底。\n- 只保留 flip 收复位，不写任何做空方案。\n\n**失效位**：\n- 彩票 / 触发作废：收盘跌回 flip 75.42 下方（OI 口径 74.59），且失守 72 put wall。\n- 追价上限：约 81.77（flip + 1 ATR）。\n- 🧨 重评：满足任一条件即重跑 §9。\n  - |spot − flip| >3%（按 75.42，即 <73.16 或 >77.68）。\n  - 下一期 FINRA SI <10%，且 SVR 未连日 ≥55%。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-24 rows=20 days=22/22\n✅ RAN darkpool as-of 2026-09-24T20:59:21Z rows=64 blocks=64 spot=75.95\n❌ FAIL option-trades reason: option-trades only serves the latest trading day (2026-09-28); see flow-alerts / flow-per-strike / net-prem-ticks for 2026-09-24\n✅ RAN gex-levels as-of 2026-09-24 2026-09-24T19:59:58.989000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-24 rows=248 net_gamma=37892.1729\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=9d\n✅ RAN short-volume as-of 2026-09-24 rows=500 ratio=0.425\n✅ RAN short-data as-of 2026-09-24T15:23:49Z rows=1000\ncoverage 7/8 · SI as-of 2026-09-15（滞后 9 天）",
+ "ttft_ms": 135438,
+ "type": "result",
+ "duration_ms": 174293,
+ "uuid": "e3d28496-1b4d-48c8-ace3-09da20c8b3ca",
+ "ttft_stream_ms": 2446,
+ "time_to_request_ms": 48,
+ "first_content_frame_ms": 2447,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
