@@ -3,6 +3,7 @@
 #   1. market layer once (all tickers, greek-exposure only -> watchlist breaker board, calendar, correlations)
 #   2. fetch full data for every ticker, then add the whole-watchlist cross-section to the market brief
 #   3. per ticker: brief -> bare `claude -p` analysis (analyze.py) -> post to Discord as claw-short
+#      exactly what the model reads is kept in analysis_data/<D>/ (market_brief.json + <T>.json)
 #   4. one summary post over all tickers (summarize.py)
 #
 # usage: run.sh [--dry-run] [--tickers LITE,COHR] [--date YYYY-MM-DD]
@@ -68,6 +69,8 @@ fi
 python3 brief.py --date "$DATE" --tickers "$TICKERS" --cross-section "$MARKET" > "$LOG/_cross_section.out" 2>&1 \
   && echo "cross-section · $(tail -1 "$LOG/_cross_section.out")" \
   || echo "⚠ cross-section failed (see logs/$DATE/_cross_section.out)"
+AN=$WS/analysis_data/$DATE; mkdir -p "$AN"
+cp "$MARKET" "$AN/market_brief.json"
 for T in ${TICKERS//,/ }; do
   if [ -f "$RUNS/tickers/$T/$DATE/$T/snapshot.json" ]; then
     SRC=$RUNS/tickers/$T
@@ -77,8 +80,9 @@ for T in ${TICKERS//,/ }; do
   if ! python3 brief.py --date "$DATE" --data "$SRC" --tickers "$T" --no-market > "$LOG/$T.brief.out" 2>&1; then
     fail=$((fail+1)); FAILED="$FAILED,$T"; echo "❌ $T brief (see logs/$DATE/$T.brief.out)"; continue
   fi
-  if python3 "$HERE/analyze.py" --date "$DATE" --ticker "$T" --brief "$SRC/$DATE/$T/brief.json" \
-       --market-brief "$MARKET" $( [ $DRY -eq 1 ] && echo --dry-run ) 2> "$LOG/$T.err"; then
+  cp "$SRC/$DATE/$T/brief.json" "$AN/$T.json"
+  if python3 "$HERE/analyze.py" --date "$DATE" --ticker "$T" --brief "$AN/$T.json" \
+       --market-brief "$AN/market_brief.json" $( [ $DRY -eq 1 ] && echo --dry-run ) 2> "$LOG/$T.err"; then
     ok=$((ok+1)); echo "✅ $T"
   else
     fail=$((fail+1)); FAILED="$FAILED,$T"; echo "❌ $T (see logs/$DATE/$T.err)"
