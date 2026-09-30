@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 113685,
+ "stop_reason": "end_turn",
+ "session_id": "e32f575a-b0d8-48ea-aee3-3bbb42cdf84c",
+ "total_cost_usd": 0.6180424,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 49325,
+  "cache_read_input_tokens": 29072,
+  "output_tokens": 10881,
+  "output_tokens_details": {
+   "thinking_tokens": 7945
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 49325,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 10881,
+    "cache_read_input_tokens": 29072,
+    "cache_creation_input_tokens": 49325,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 49325
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 10881,
+   "cacheReadInputTokens": 29072,
+   "cacheCreationInputTokens": 49325,
+   "webSearchRequests": 0,
+   "costUSD": 0.6180424,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7945,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**CRVS** · 医药 · Healthcare · 数据日 2026-09-30 · 核心覆盖 7/8\n⚠ short-volume = T-1（asof 20260929）· ⚠ short-interest = FINRA 2026-09-15（滞后 15 天）· ❌ darkpool FAIL（空 payload）· ⚠ 盘中未收：K 线只到 16:45Z，1D DP 也是部分会话\n**结论**：⛔ 熔断，只出决策线。跌破 11.02（OI 口径 gamma flip，贴着 DP 11.0 档 core）之前不算 setup。THIN 链（nstrk 4），熔断解除后最高也只能是 👀。\n\n① 🧨 挤仓否决：非 🧨\n- **SI**：20.42% float，as-of 09-15，滞后 15 天 [已验证]。满足条件 1。\n- **SVR**：09-23 70.4% → 09-24 61.3% → 09-25 63.0% → 09-28 65.9% → 09-29 50.6%。连续 ≥55% 在 09-29 断了。as-of 09-29 [已验证·T-1]\n- **DTC**：18.16，不 ≤2。近三期是 08-14 22.53 → 08-31 29.64 → 09-15 18.16，不是逐期上升。条件 2 不成立 [已验证]。\n- **|spot − flip|**：spot 11.74（取 K 线 last，DP NBBO 中点缺失 [假设]）。\n  - 对 vol-flip 13.0：偏离 10.7%。\n  - 对 OI-flip 11.02：偏离 6.1%。\n  - 两个口径都大于 3%，条件 3 不成立。\n- **相位闸**：SVR 单日 −15.3pt（09-28 → 09-29）；SI 单期 −2.2pt（22.61 → 20.42）。本票不是 🧨，所以不触发\"偏晚\"降级；但记为相位可疑 caveat。\n- **借券**：09-30 fee 0.2621，可借 400k（09-29 为 700k，日降 300k），as-of 09-30T12:18Z [已验证]。\n\n② 熔断：已熔断\n- 名单负 gamma 3/23（COHR / VRT / IBM），≤4 只，触发 [已验证 09-30]。\n- 本票 net gamma +41,581.7（前一日 −65,283，近 10 日正负来回翻）。\n\n③ 量级（只列事实）：薄\n- 1D dark 129,288，是 1M 日均 387,039 的 0.33 倍（部分会话）。1D dp_pct 0.65。\n- 大单参与度：null，darkpool FAIL [缺失]。\n- relative volume 0.25；stock_vol_pctile 0.0。\n\n④ 方向（只列事实，as-of 09-30 [已验证]）：形态上是派发确认，但因熔断只作状态，不作入场依据\n- **Long**：1M 重心 12.36，poc 12.0。12.0 档含 09-18 四巫日的 1.03M dark。\n- **Medium**：1W 重心 11.11，poc 11.0。\n- **Short**：2D 重心 11.06，poc 11.0。1W → 2D 只下移 0.05，同在 11.0 档，基本是停滞。\n- **快照路径**：重心 13.63（08-31）→ 12.04（09-23）→ 11.00（09-30）。\n- **Price**：DP 价位分档很粗（11.0 / 11.9 / 12.0 / 13.0），而 K 线实际成交区在 11.25–12.1。spot 相对重心的偏移没法读。\n- **Retest**：\n  - 12.0 两次收复失败：09-28 冲到 12.11 后收 11.88；09-29 开 12.39（盘前高 12.5）后回落收 11.76。09-30 最高只到 11.995。\n  - 下方 11 档仍在守：日低依次为 11.25（09-28）、11.72、11.67。\n- **GEX/DEX 交叉**：net_delta 从 792k（09-01）降到 532k（09-30），与 DP 下移同向；net gamma 正负翻转、没有方向。\n\n⑤ 动机（只列事实）：无法定性。§5.1 的判别关节缺 DP 时点、大单%、flow-IV 三条腿。形态最接近派发，反证是 call OI 在涨。\n- **OI vs 成交量**：今日所有合约 vol < OI，成交 29 张（30 日均约 347 C / 114 P），没有信念 [已验证]。\n- **OI 总量**：call OI 24,339 → 25,092，在涨，主要是远期 LEAPS；put OI 9,255 → 9,190。\n- **flow**：\n  - ≥$50k 的 prints 为 0，sweep 0，多腿 0。\n  - 今日 call bid 24 / ask 2，净 call premium −1,901，量极小。\n  - flow-IV：today 与 history 全是 null [缺失]。\n- **IV×RV**：IV30 0.578，RV21 0.552，HV20 0.555。IV 处在低位（1y 百分位 4%，iv_rank 7.6）。RV 从 0.397（09-21）抬到 0.55。\n  - 不命中 §5.3 的空头形态（那个要求 IV 在高位）。\n  - 两线相差 2.6pt，已经很贴近；若相交，按原文读作价格回归信号。\n- **月末/季末指纹**：今日 DP 只有月均的 0.33 倍；医药组 3 涨 3 跌，不是篮子。Fund rebalance 指纹不命中。\n\n⑥ Dealer（as-of 09-30 [已验证]）：决策表无命中\n- **结构**：\n  - OI 口径：call wall 13（±0）、put wall 10（±0）、flip 11.02（+0.21）。\n  - vol 口径：call wall 12（−1）、flip 13.0、put wall null。\n  - Dealer Pivot [缺失]。\n- **flow**：今日 bid 主导，但量太小。\n- **次日 OI**（反映 09-29 的成交）：\n  - 13C 1120：bid 16 → OI +16，客户 Sell to Open。\n  - 25C 2028：bid 13 / ask 2 → OI +15。\n  - OI 口径的墙没动，因此决策表无命中。\n\n**挤压反噬**：SVR 50.6%（09-29）≥ 50%，标\"挤压反噬风险\"。板块轧空相位：无（医药组 3 涨 3 跌，平均 +0.50%；XLV 09-29 收 170.73，前一日 171.26）。\n**财报**：11-03（er_time unknown）\n**仓位 / 意图 / 不对称性**：\n- 9 月的换手重心一路下移：14 → 13 → 12 → 11。12.0 一带是被套库存形成的供给盖子，已经两次收复失败。\n- 但 11 档在接货。空头端 SI 20% float、DTC 18 天、17.18M 股空单是燃料，而空头成交占比单日掉了 15pt。\n- 正 gamma 毯加上几乎空转的 THIN 期权链，会让 dealer 把 11–12 区间碾平。下行到 put wall 10 约 −15%，但对应的是一整仓回补燃料，不对称性不在空头这边。\n\n**失效位**：收复并站稳 12.0（1M poc），派发读数失效；再上看 13.0（vol-flip / OI call wall）。\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-30 rows=4 days=22/22\n❌ FAIL darkpool reason: empty payload: no dark pool prints on 2026-09-30\n✅ RAN option-trades as-of 2026-09-30 rows=0 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-30 2026-09-30T16:47:20.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-30 rows=251 net_gamma=41581.7236\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=15d\n✅ RAN short-volume as-of 2026-09-29 rows=500 ratio=0.506\n✅ RAN short-data as-of 2026-09-30T12:18:12Z rows=1000\ncoverage 7/8 · SI as-of 2026-09-15（滞后 15 天）",
+ "ttft_ms": 87968,
+ "type": "result",
+ "duration_ms": 113776,
+ "uuid": "330d5388-405e-45d8-a0d4-d5036d26b79b",
+ "ttft_stream_ms": 1030,
+ "time_to_request_ms": 88,
+ "first_content_frame_ms": 1031,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

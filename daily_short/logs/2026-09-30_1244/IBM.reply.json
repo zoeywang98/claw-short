@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 149218,
+ "stop_reason": "end_turn",
+ "session_id": "3f4021ce-0b44-48b6-867a-4b610dc8ab5a",
+ "total_cost_usd": 1.7220184,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 178022,
+  "cache_read_input_tokens": 29072,
+  "output_tokens": 14601,
+  "output_tokens_details": {
+   "thinking_tokens": 10223
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 178022,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 14601,
+    "cache_read_input_tokens": 29072,
+    "cache_creation_input_tokens": 178022,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 178022
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 14601,
+   "cacheReadInputTokens": 29072,
+   "cacheCreationInputTokens": 178022,
+   "webSearchRequests": 0,
+   "costUSD": 1.7220184,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 10223,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**IBM** · 软件/企服 · Technology · 数据日 2026-09-30 · 核心覆盖 8/8\n⚠ short-volume = T-1（asof 20260929）· ⚠ short-interest asof 20260915（FINRA 结算，滞后 15 天）· ⚠ 盘中快照未收盘：darkpool 截至 12:44 ET，option-trades 截至 12:27 ET，flow-IV today_complete=false。以上各层的结论一律降为观察。\n**结论**：⛔ 熔断，只出决策线\n\n① 🧨 挤仓否决：\n- **SI**：2.38% float（as-of 09-15，滞后 15 天）[已验证]，<10%。\n- **SVR**（as-of 09-29 T-1）[已验证]：09-25 41.7% → 09-28 53.3% → 09-29 44.1%，没有连日 ≥55%。最近一次连日 ≥55% 是 09-14 67.5% / 09-15 57.1%，已经过去两周。条件 1 **不成立**。\n- **DTC**：08-14 3.82 → 08-31 4.51 → 09-15 4.56，逐期上升 [已验证]。条件 2 成立。\n- **|spot − flip|**：spot 220.61（DP NBBO 中点）。\n    - 距 vol flip 222.33 为 0.78%；\n    - 距 OI flip 223.65 为 1.38% [已验证]。\n    - 条件 3 成立。\n- **相位闸**：SVR 09-28→09-29 为 −9.2pt，未到 −10pt；SI 2.34%→2.38%。\n- **借券**：费率 0.4119%→0.2559%，可借 6.8M→6.9M（short-data 09-30）[已验证]。借券宽松。\n- 三条中条件 1 不成立 → **非 🧨**\n\n② 熔断：\n- 名单负 gamma **3/23**（COHR / VRT / IBM），≤4 只，触发。\n- 本票 net gamma −32,254.5（greek-exposure 09-30）[已验证]。\n- → **熔断**。一切派发读数只挂判决线，不给确认空头入场位。\n\n③ 量级（darkpool-levels / darkpool 09-30，盘中）[已验证·未收盘]：\n- 1D dark 753,496 股，只有 1M 日均 2,436,690 的 0.31×。DP% 88.0%，relative volume 0.27。\n- 大单参与度 13.5%（either 口径）/ 6.6%（按股数口径），落在 16–21% 与 3–4% 两档之间，原文对这个区间没有对应解读。\n- 主要 block：\n    - 10:08 69,400 股 @220.80（贴 NBBO 中点 220.82）；\n    - 09:49 30,000 股 @221.39；\n    - 盘后 block 0。\n- → 盘中口径偏薄，未收盘，不作量级定论。\n\n④ 方向（灰色重心迁移）：\n- **Long 1M**：poc 231，centroid_top8 233.13，dark_vwap 234.11。value area 229–240。\n- **Medium 1W**：poc 220，centroid 223.14。top8 分成两簇：225–228 和 219.75–221。\n- **Short 2D**：poc 220，centroid 220.52。1D 为 220.38。\n- 三窗口重心 233.1 > 223.1 > 220.5，逐级下迁。下迁发生在 09-09→09-15 冲到 251.82 之后：09-14/15 的单日重心 247.4 / 248.6，最新库存越来越集中在低价区成交。\n- **高位失守**：\n    - 09-18（季度四巫日，13.4M 股）收 229.55，跌破 1M poc 231；\n    - 09-21→09-23 回抽进入旧 1M core，09-23 高点 237.86、DP 重心 234.17；\n    - 09-24 转头下跌，重心 227.60，之后 09-25 226.23、09-28 220.34。\n    - 回踩旧 core 没有被吸收、没有 reclaim，属于 failed acceptance。\n- **Price**：spot 220.61 基本等于最新 DP 重心 220.38–220.52，价格没有跑在库存前面。09-28 到 09-30 三个交易日在 219.23–223.14 区间横盘，新节点在 220–221。低点 219.23 / 219.91 / 219.785 暂时守住，2D→1D 重心的迁移已经停滞。\n- **GEX/DEX 交叉**：\n    - net_gamma 从 09-15 的 +117,648 降到 09-24 的 +29,459，09-25 翻负（−8,423），09-30 为 −32,254；\n    - net_delta 从 +5.90M 降到 −3.25M；\n    - OI flip 从 09-23/24 的 231.48 / 231.79 一路降到 223.65。\n    - 衍生品结构跟着库存一起下移 [已验证]。\n- 5 分钟线只覆盖 09-24 之后，09-21→23 那次 retest 靠日线加逐日 DP 判断。\n- → **派发确认**（方向读数）。熔断下不转为入场。\n\n⑤ 动机（只列事实，不定性）：\n- **OI vs 成交量**（oi-change 09-29→09-30）[已验证]：\n    - 看涨期权 OI +4,424，看跌期权 OI +2,807。\n    - 10/23 280C +749，前一日成交 bid 863 / ask 7，属于写 call 开仓。\n    - 12/18 265C +322，前一日 bid 323。\n    - 10/2 232.5C +822，来自 09-29 在 ask 侧成交的 232.5/240 call vertical，共 840 张。\n    - 10/2 240C −575，平仓。\n- **今日 flow 结构**（≥$50k，按 §7.3 拆开）：\n    - 最大一笔是 2028-12 多腿：卖 140C、买 400C、卖 400P，98 张，总权利金 $2.84M，净 delta −1,594，三条腿成交量都小于 OI。属于多腿调仓，非方向押注，不计入方向。\n    - Feb-27 225C bid 450 张，成交量 > OI 66，floor 标记：新写 call。\n    - Jun-28 185P bid 400 张，成交量 > OI 12，floor 标记：新写 put。\n    - Jan-27 230 跨式在 ask 侧买入 140 张，$504k，成交量 268 < OI 4,387。\n    - 10/2 220P 在 ask 侧成交 1,522 张，成交量 > OI 955，有重复成交和 sweep：短期 put 需求。\n    - 今日 tape 内 sweep 0 笔；flow-alerts 记录 3 笔。\n    - 今日这些成交要等 10/1 的 oi-change 才能确认 [缺失]。\n- **flow-IV**（history 只有 3 天）[已验证·今日未完]：\n    - call_ask：0.406 → 0.372 → 0.365 → 今日 0.354，连降；\n    - put_ask：0.427 → 今日 0.401；\n    - 结论：没有人愿意付更高溢价加注。\n- **IV×RV**：\n    - IV30 从 09-02 的 0.300 扩到 09-23 峰值 0.473，现在 0.438；\n    - RV21 为 0.329，HV20 为 0.337；\n    - IV > RV，且 IV 在高位（1y 百分位 78.4）。按 §5.3 这属于\"vol 终将回归，别按趋势读\"。\n    - 期限结构：14d 0.305，30d 0.438。10/21 财报落在 IV30 窗口内。\n- **借券**：宽松，费率 0.26%。\n- **gamma 位置**：spot 在 flip 下方，处于负 gamma 区，magnet 220。\n- **Fund rebalance 指纹**（09-30 是月末 + 季末）：盘中截面上 DP 没有篮子型放量（名单 dp_1d_vs_1m_avg 大多 <0.8），MOC 尚未发生 [缺失]。\n- **指纹判断**：候选是\"派发\"。成立的部分：DP% 高、价位下迁、梯子在更低位重建、call 写在 bid、put OI 上升。不成立的部分：IV 并非平/压缩，9 月是扩张的，且含财报。另外今日 flow 的次日 OI 未确认。\n- → 因果腿未全部验证，状态记为**未定性**。\n\n⑥ Dealer：\n- **结构**（gex-levels 09-30）[已验证]：\n    - vol 口径：call wall 240→222.5（−17.5），put wall 217.5→185（−32.5），flip 219.03→222.33（+3.3），magnet 227.5→220。\n    - OI 口径：call wall 260 不变，put wall null [缺失]，flip 224.39→223.65（−0.74），magnet 220。\n    - Dealer Pivot [缺失]。\n- **flow 意图净额**：call −$2.09M（bid 2.43M vs ask 0.34M）；put −$2.97M（bid 3.55M vs ask 0.58M，主要来自 2028 那笔多腿里的 400P）。\n- **次日 OI**：10/1 [缺失]。\n- **候选决策表情形**：情形 3（Wall↓ + Bid + OI↓）。\n    - 依据：vol call wall 从 240 降到 222.5；09-29 240C 成交以 bid 为主（bid 1,433 vs ask 557）；240C OI −536。\n    - 对应 dealer 买回平仓 → dealer **卖**股票（对冲移除）。\n    - 不确定因素：240C 的 bid 成交里混有价差的空头腿；墙位是 vol 口径；价格没有确认（09-30 +0.28%）。\n    - 四点不齐 → 低置信。\n- OI 口径墙位不变 → 无命中。\n\n**挤压反噬**：\n- 本票未触发：SVR 最新 44.1%，SI 2.38%，都 <50%（09-28 曾到 53.3%）。\n- 板块：软件/企服当日 5/6 上涨，均值 +2.24%（MDB +5.3%，NOW +3.3%，DDOG +3.2%，MSFT +1.8%，截面 12:44）。属于普涨迹象，按 §2 记为板块 veto 条件存在。已在熔断之下，不另出入场。\n\n**财报**：10-21（盘后，距今 21 天）\n\n**仓位 / 意图 / 不对称性**：\n- 1M 库存（229–240，poc 231）被 09-18 和 09-24 两次失守套在上方。mid-Sept 冲到 251 的那段已经全部回吐。新 value 正在 220–221 由 DP 承接，价格没有跑在库存前面。\n- dealer 在 flip 222–224 下方是净空 gamma，局部波动会放大。但全场正 gamma 覆盖，派发梯会被高抛低吸碾平。期权端的主导是长期限双向卖权和短期限 put 买入，没有新的方向性加注；IV 由 10/21 财报托底。\n- 这是一个等判决线的名字，不是入场位。\n\n**失效位**：\n- 空头判决线：跌破 219.23（20 日低，也是 2D DP core 219.75–221 的下沿），并在其下接受之前，不是 setup。\n- 派发读数失效：收复 vol flip 222.33 / OI flip 223.65，并站上 1W 重心 223.14。\n- 熔断解除条件：名单负 gamma 超过 4 只。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-09-30 rows=10 days=22/22\n✅ RAN darkpool as-of 2026-09-30T16:44:41Z rows=47 blocks=47 spot=220.61\n✅ RAN option-trades as-of 2026-09-30T16:27:10.273000Z rows=28 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-09-30 2026-09-30T16:47:12.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-09-30 rows=251 net_gamma=-32254.5227\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=15d\n✅ RAN short-volume as-of 2026-09-29 rows=500 ratio=0.441\n✅ RAN short-data as-of 2026-09-30T12:18:12Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-15（滞后 15 天）",
+ "ttft_ms": 109648,
+ "type": "result",
+ "duration_ms": 149253,
+ "uuid": "edeb5e73-abda-4e19-a717-bc87f19af82a",
+ "ttft_stream_ms": 2578,
+ "time_to_request_ms": 29,
+ "first_content_frame_ms": 2578,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
