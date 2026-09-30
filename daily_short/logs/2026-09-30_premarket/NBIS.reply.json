@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 90029,
+ "stop_reason": "end_turn",
+ "session_id": "66786773-90e4-44be-8aa3-0f9caf655161",
+ "total_cost_usd": 0.7608908,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 72878,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 8759,
+  "output_tokens_details": {
+   "thinking_tokens": 6359
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 72878,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 8759,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 72878,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 72878
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 8759,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 72878,
+   "webSearchRequests": 0,
+   "costUSD": 0.7608908,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 6359,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**NBIS 盘前确认** · 扫描日 2026-09-29 · 确认日 2026-09-30 盘前\n**结论**：昨晚 🧨 禁止做空（squeeze-watch）→ 今早 🧨 禁止做空（squeeze-watch），不变\n\n**次日 OI（as-of 2026-09-30）**：§6 第三点由\"缺失\"改为 [已验证]。决策表只有一处命中，其余无命中。\n\n- **命中：vol 源 call wall 250 → 280（Wall↑）**\n  - 261002C280：OI 1,747 → 3,126（+1,379）。昨天 ask 466 / bid 1,546 / mid 142 / 多腿 234。成交 2,154，大于昨日 OI 1,747，属于新建仓。\n  - 261009C280 同向：OI +193，ask 117 / bid 254。\n  - 对应情形 **Wall↑ + Bid + OI↑**：客户 Sell to Open，dealer Buy to Open，**dealer 卖股票**。\n  - 限定：主合约 10/02 到期，dte 仅 2 天，距盘前价约 +15%。\n- **无命中：旧墙 250**\n  - 261016C250：OI −654，ask 1,430 / bid 1,208，多腿 465，side 接近平衡。\n  - 261002C250：OI +769，ask 2,814 / bid 2,198。\n  - 250 各到期合计 OI 净增，不构成 Wall↓ 情形。\n- **无命中：OI 源 put wall 212.5 → 235**\n  - 261002P235：OI +465，ask 961 / bid 877，接近平衡，多腿 289。side 不明，无命中。\n- **不属于决策表（墙位没有移动）**\n  - OI 源 call wall 300（变化 0）：10/02 C300 OI +344（ask 714 / bid 138），10/09 C300 OI +558（ask 377 / bid 117 / mid 308，多腿 340）。\n  - vol 源 put wall 230（变化 0）：10/02 P230 +175（bid 734 > ask 484），10/16 P230 −247（bid 391，多腿 321），12/18 P230 +190（bid 208）。\n- **昨天的主要 flow 合约去向**\n  - 271217C50：OI −105；271217C100：OI −131。两腿同降，昨天的成对多腿是**平仓**，不是新仓。\n  - 281215C180：OI −109，bid 275 / ask 110，股票联动多腿 220，平仓为主。\n  - 270115P200：OI −139，bid 434，股票联动 400，平仓。\n  - 270319P160：OI +498，bid 502 / ask 0，**新写 put**。\n  - 261016C232.5：OI +324，bid 408，新写 call。\n  - 270319C300：OI +39，成交 375，大部分不是新仓。\n  - 280616P200：OI +33，成交 180，同上。\n  - 270319P100：OI +884，ask 979，股票联动多腿 975，是股票加 put 的新组合。\n  - 11/20P230 的 calendar 移仓：本数据没有该合约行，未明确。\n- **全链合计**：call OI +14,844 / put OI +6,310。\n\n**四点对照**\n- ① 结构（vol call wall 250 → 280↑）与命中情形要求的 Wall↑ 一致。\n- ② flow（call 净卖 −2.69M，bid 主导）与命中合约的 bid 主导一致。\n- ③ 次日 OI：280 墙 OI↑，已验证，结论是 dealer 卖股票。\n- ④ 价格（盘前）：跳空向上 +2.25%，与\"dealer 卖股票\"**冲突**。\n\n①②③ 一致，④ 冲突。四点没有全部一致，置信度不到最高档。\n\n**其他变化**\n- **盘前价格**\n  - last 242.69，较昨收 237.355 高 +2.25%。区间 239.01–244.02，最低点也没有回到昨晚 DP core 237，盘前在 core 上方被接受，没有 retest。\n  - 盘前量 163,102 股，偏小（昨日 1D dark 7.09M），只作参考。\n  - 盘前价距 vol flip 236.63 为 +2.56%，仍在 3% 以内。①条件 3 仍按 DP NBBO 口径的 spot 判定，不因盘前价改变。\n  - gex-levels 今天没有刷新，flip 仍是 09-29 的值。\n- **今天的 gamma（09-30，按开盘 OI）**：net_gamma 93,864 → **116,620**，net_delta 27.46M → 29.35M。这改写了昨晚④的 GEX/DEX 交叉：\"都在回落\"改为\"今日回升\"；也改写了仓位描述：\"正 gamma 正在衰减\"改为\"正 gamma 回补\"。④ 的方向判定仍为不明。\n- **熔断**：今天名单级的负 gamma 只数未明确，沿用 09-29 的 5/23。🧨 已禁止做空，这一项不影响结论。\n- **借券**：时间戳仍是 2026-09-29T15:25:28Z，未更新（fee 35.2%，可借 6.8M），相位闸读数不变。SI / SVR 也没有新数据，① 原样沿用。\n\n**仓位 / 意图 / 不对称性**\n- 期权账本在两侧同时供给波动率：280 周度 call 在 bid 被写成新仓，dealer 按表卖股票；远端 P160 新写；长期 call 价差和股票联动合约则在平仓。现货却在盘前跳空站上 flip 和 core，今天 gamma 也在回补。\n- 21% float 的空头、DTC 连续三期变挤，这些仍是燃料，不是卖压。不对称性照旧偏向挤仓侧，不存在做空入场。\n- 挤压反噬风险、财报未查两项照挂，无论如何不能给 ✅。\n\n**失效位 / 判决线**\n- 🧨 彩票：站稳 vol flip 236.63 为触发。盘前 242.69，距 flip +6.06，约 0.39 ATR，未超过 1 ATR。\n- 收盘失守 236.63，彩票失效；更深一档是 OI flip 228.8。\n- 价格 > 251.97（1 ATR）不追。\n- 若开盘后回踩 DP core 237 失守，重新评估 ④。\n\n**运行日志**：\n- oi-change as-of 2026-09-30 rows=1651\n- 盘前 5m as-of 2026-09-30T10:45:00Z（rows=780 days=5/5）\n- short-data as-of 2026-09-29T15:25:28Z（未更新，⚠ T-1）\n- greek-exposure as-of 2026-09-30 net_gamma=116,619.7\n- gex-levels 今日未跑，沿用 2026-09-29\n- SI as-of 2026-09-15（滞后 15 天）",
+ "ttft_ms": 67110,
+ "type": "result",
+ "duration_ms": 90087,
+ "uuid": "646431cf-3f18-45ae-97ed-f944839c62ac",
+ "ttft_stream_ms": 1180,
+ "time_to_request_ms": 46,
+ "first_content_frame_ms": 1181,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
