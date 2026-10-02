@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 51369,
+ "stop_reason": "end_turn",
+ "session_id": "dd451de1-c486-4b35-a1dd-0cf2be44a14e",
+ "total_cost_usd": 0.3461068,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30275,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 5061,
+  "output_tokens_details": {
+   "thinking_tokens": 3245
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30275,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 5061,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 30275,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30275
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 5061,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 30275,
+   "webSearchRequests": 0,
+   "costUSD": 0.3461068,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 3245,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-01 · 确认日 2026-10-02 盘前\n**结论**：昨晚 ⛔ 熔断，只出决策线 → 今早 ⛔ 熔断，只出决策线。另有 ⚠THIN（nstrk 39 < 45），按 §8.2 物理不入确认表。财报 11-03，不在 7 天内。\n\n次日 OI（as-of 2026-10-02）：[已验证] → 决策表**无命中**，dealer 买 / 卖股票：未明确\n- 全链净变化：call OI +341，put OI +154，量级很小。\n- **call wall 40**：\n  - Oct09 40C：372→420（+48），昨天 ask 48 / bid 0。\n  - Oct30 40C：137→167（+30），ask 30。\n  - 两笔都是 Ask + OI↑。但 OI 口径 call wall 没动（Δ0），vol 口径还从 44 降到 40，不满足\"Wall↑\"。\n  - Dec 40C：17,945→17,935（−10），bid 10，属于 Bid + OI↓。但 OI 口径 wall Δ0，不满足\"Wall↓\"。−10 / 17,945 可忽略。\n  - Oct02 40C：+9，bid 50，其中 multi-leg 40。\n- **put wall 39 / 38.5**：\n  - Oct16 38.5P：24→60（+36），ask 38，属于 Ask + OI↑。vol 口径 put wall 从 39 降到 38.5，但表中\"Wall↓\"行要求 OI↓，不匹配。\n  - Oct09 39P：+13，ask 15，但其中 multi-leg 12。\n- **最大增量** Mar27 36P：+75，ask 75，全部是 multi-leg。按 §7.3 读作对冲 / 调仓，不读方向，且不在墙位。\n- 昨天没有 premium ≥50k 的主力合约。09-30 那笔 41.5C 今早的 OI 未明确。\n- 小结：OI 没有显示能推出 dealer 对冲方向的持仓迁移。按 §6.2，OI 单独不能判断方向。\n\n四点对照（以做空方向为基准）：\n- **结构**：冲突。OI 口径墙 39/40 不变，正 gamma 钉住，oi flip 37.75 在下方。\n- **flow**：不支持。昨天 call ask 701 / bid 699，sweep 0，没有方向。\n- **次日 OI**：冲突。call OI 净增 +341，派发指纹要求\"call OI 平 / 降\"；墙位新增以 ask 侧小额开仓为主。\n- **价格（盘前）**：未裁决。盘前 39.00，正好落在 39 DP core / OI put wall 上，既没有失守也没有离开；成交仅 274 股，参考价值极低。\n\n其他变化：\n- **借券**：short-data 仍是 2026-10-01T15:25:38Z 那条（费率 0.4081%，可借 8.0M），今早没有更新，与昨晚相同。\n- **盘前价格**：39.00，较前收 39.31 跌 0.79%，小幅低开。已低于 vol flip 39.17，仍在 DP core 39 上。量小（274 股），不作判断。\n- **今天的 gamma**（greek-exposure 10-02）：\n  - 本票 net_gamma 从 630,610 升到 689,383，正 gamma 加厚；net_delta 从 9,169,140 降到 9,005,740。\n  - 这强化了昨晚的正 gamma pin 读数，① 和 ③–⑤ 不变。\n  - 名单今天的负 gamma 只数未明确，② 熔断沿用昨晚的 3/23。\n\n**仓位 / 意图 / 不对称性**：持仓方在 39 成本区防守（昨天 1.035M ISO @39.16），盘前回到 39 原位。dealer 正 gamma 加厚，继续在 39–40 高抛低吸。次日 OI 没有显示新的空头持仓，call 端仍在小额增加，区间内做空的不对称性不利。\n\n**失效位 / 判决线**：\n- **判决线**：以下两条同时满足前，不是 setup：\n  - 名单负 gamma 回升到 >4 只（熔断解除）；\n  - 收盘失守 39 DP core / put wall 且不能收复，并跌破 oi flip 37.75。\n- **THIN 上限**：即使上述成立，上限仍是观察。\n- **反向**：放量站稳 40（call wall）并收复 40.79（20 日高），空头读数作废。\n- **今天的即时裁判**：RTH 开盘后 39 能否守住（盘前未验证）。\n\n**运行日志**：\n- ✅ oi-change as-of 2026-10-02 rows=694 pages=2\n- ✅ 盘前 ohlc-5m as-of 2026-10-02T10:35:00Z rows=377 days=5/5（盘前仅 1 根 bar，274 股）\n- ⚠ short-data as-of 2026-10-01T15:25:38Z rows=1000（T-1，未更新）\n- ✅ greek-exposure as-of 2026-10-02 rows=251 net_gamma=689382.6551",
+ "ttft_ms": 35258,
+ "type": "result",
+ "duration_ms": 51403,
+ "uuid": "992c1e01-4d2c-40ac-8d31-767a6306d8ad",
+ "ttft_stream_ms": 995,
+ "time_to_request_ms": 29,
+ "first_content_frame_ms": 996,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
