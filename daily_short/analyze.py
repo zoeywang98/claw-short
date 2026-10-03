@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Analyse one ticker's brief with a bare `claude -p` call, then post the reply to Discord as claw-short.
+"""Analyse one ticker's brief with a bare `claude -p` call, then post to Discord as claw-short: first the §4.2 DP
+centroid-migration chart drawn from the same brief (dp_chart.py; a chart failure is logged and skipped), then the reply.
 
 Calls Claude Code directly instead of `openclaw agent`, whose CLI backend runs the full Claude Code harness
 (default system prompt, built-in tools, user plugins/MCP). Here the model sees only INSTRUCTIONS.md + SHORT_ENGINE.md + market brief (system prompt, identical for every
@@ -24,6 +25,8 @@ TIMEOUT_S = 1200
 CHANNEL = "channel:1553568018200657973"
 ACCOUNT = "default"   # openclaw Discord account id bound to the claw-short agent (there is no "claw-short" account)
 DISCORD_CHUNK = 1900
+PY_CHART = "/usr/bin/python3"   # has matplotlib; the homebrew python3 that run.sh's PATH puts first does not
+CHART_DIR = os.path.join(WS, "media", "dp_charts")   # media/ is gitignored, so daily PNGs stay out of the pushed repo
 
 
 def system_prompt(market_brief):
@@ -63,6 +66,34 @@ def post(text):
                        stdout=subprocess.DEVNULL, timeout=120)
 
 
+def render_chart(date, ticker, brief):
+    """Draw the DP migration chart from the brief the model read. Returns the PNG path, or None after logging why."""
+    out = os.path.join(CHART_DIR, date, f"{ticker}.png")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    if os.path.exists(out):
+        os.remove(out)   # never post a stale chart left by an earlier run
+    try:
+        p = subprocess.run([PY_CHART, os.path.join(HERE, "dp_chart.py"), "--brief", brief, "--out", out],
+                           capture_output=True, text=True, timeout=180)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(f"⚠ {ticker} DP chart: {e}", file=sys.stderr)
+        return None
+    if p.returncode != 0 or not os.path.exists(out):
+        print(f"⚠ {ticker} DP chart: {(p.stderr or p.stdout).strip()[-500:]}", file=sys.stderr)
+        return None
+    return out
+
+
+def post_chart(png, caption):
+    """Best effort: a failed or hung chart post never blocks the analysis text."""
+    try:
+        subprocess.run(["openclaw", "message", "send", "--channel", "discord", "--account", ACCOUNT,
+                        "--target", CHANNEL, "--media", png, "--message", caption], check=True,
+                       stdout=subprocess.DEVNULL, timeout=120)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+        print(f"⚠ DP chart post: {e}", file=sys.stderr)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="analyze.py")
     ap.add_argument("--date", required=True)
@@ -99,7 +130,10 @@ def main(argv=None):
     if p.returncode != 0 or r.get("is_error") or not r.get("result"):
         print(f"❌ {a.ticker}: {str(r.get('result'))[:500]}", file=sys.stderr)
         return 1
+    png = render_chart(a.date, a.ticker, a.brief)   # dry runs draw it too, for a look before posting
     if not a.dry_run:
+        if png:
+            post_chart(png, f"**{a.ticker}** 暗池灰色重心迁移（1M / 1W / 2D）· 截至 {a.date} 收盘")
         post(r["result"])
     return 0
 
