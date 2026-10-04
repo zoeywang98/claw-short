@@ -154,7 +154,8 @@ def draw(path, out):
 
     tstep = nice(y1 - y0, MAX_TICKS, TICK_STEPS)
     ticks = [t * tstep for t in range(math.ceil(y0 / tstep - 1e-9), math.floor(y1 / tstep + 1e-9) + 1)]
-    tick_fmt = "{:.2f}" if tstep < 0.5 else "{:.1f}" if tstep < 1 else "{:.0f}"
+    dec = next(d for d in range(3) if abs(tstep * 10 ** d - round(tstep * 10 ** d)) < 1e-9)   # 2.5 -> "32.5", not "32"
+    tick_fmt = f"{{:.{dec}f}}"
     axes_mid = None
     for i, p in enumerate(panels):
         x0, w = LM + i * (CW + GAP), p["w"]
@@ -216,10 +217,11 @@ def draw(path, out):
         bg.text(xa + GAP / 2, axes_mid - 0.25, bottom, fontproperties=REG, fontsize=9.5, color=MUTED,
                 ha="center", va="center")
 
+    pct = "<0.001%" if 100 * outside < 0.0005 else f"{100 * outside:.3f}%"   # never print "0.000%" for a nonzero share
     foot = [f"数据：UW darkpool price-levels（场外成交量按价位全天汇总，含盘前盘后）。UW 每档约 $1 宽、价位标在区间下沿，"
             f"图上每 ${step:g} 合并一格；深色柱 = 含本窗口 dark 量前 8 档的价位。",
             "每个窗口的柱长按本窗口最大一格归一，窗口之间只比位置和形状。"
-            + (f"价格区间外的零星成交未画（最多占窗口的 {100 * outside:.3f}%）。" if outside > 0 else "")]
+            + (f"价格区间外的零星成交未画（最多占窗口的 {pct}）。" if outside > 0 else "")]
     for k, s in enumerate(foot):
         bg.text(LM, 0.46 - k * 0.22, s, fontproperties=REG, fontsize=7.8, color=MUTED, va="center", parse_math=False)
 
