@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 49607,
+ "stop_reason": "end_turn",
+ "session_id": "5292a3ae-ff13-40b4-9b1a-2bd02aa7f547",
+ "total_cost_usd": 0.3116548,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 26356,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 4906,
+  "output_tokens_details": {
+   "thinking_tokens": 2831
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26356,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 4906,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 26356,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 26356
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 4906,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 26356,
+   "webSearchRequests": 0,
+   "costUSD": 0.3116548,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 2831,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-02 · 确认日 2026-10-05 盘前\n**结论**：昨晚 ⛔ 熔断，只出判决线 → 今早 ⛔ 熔断，只出判决线（另有 ⚠THIN nstrk 34 < 45，上限为观察行；SVR 75.6% 挂\"挤压反噬风险\"）\n\n**次日 OI（as-of 2026-10-05）**\n- **11/20 40C（昨天的主要 flow 合约，正在 call wall 40 上）**\n  - OI 91 → 691（+600）；昨天成交 602 张：ask 122 / bid 480 / multi-leg 2。\n  - OI 增量约等于成交量，单腿为主，说明昨天这笔已变成新持仓 [已验证]。净额偏 bid，与昨晚\"call 写在 bid＝盖子\"的读法一致。\n  - 决策表：vol 和 OI 两个口径的 call wall 都是 40.0，日变 0。四种情形都要求 Wall↑ 或 Wall↓ → **无命中**。按 §6.2，OI＋side 单独不能判断 dealer 买还是卖股票 → dealer 对股票方向**未明确**。\n- **10/09 40C**\n  - OI 420 → 683（+263）；ask 241 / bid 21 / mid 52；multi-leg 304/314。\n  - 多腿属调仓（§7.3），且墙未移 → 无命中，不读方向。\n- **10/16 41.5C**\n  - OI 2,595 → 2,415（−180）；昨天 mid 180 / ask 10。\n  - 41.5 不是墙位，side 在 mid → 无命中。\n- **2029-01 45P**\n  - OI 0 → 100；ask 60 / bid 10 / mid 30；金额 $100,000。\n  - 新建仓 [已验证]，但量小，不是墙位。\n- **10/09 39.5P**\n  - OI 28 → 94（+66）；成交 84 张全部是 multi-leg → 调仓。\n- **put wall 39.0 一带**\n  - 10/09 39P：+34（mid 29）。\n  - 10/16 39P、10/23 39P：各 −1。\n  - put wall 未移 → 无命中。\n- **全链合计**：call OI +692，put OI +289。相对昨晚的总 OI 192,515 / 104,556 仍可忽略，⑤ 的\"OI 无信念\"维持。\n\n**四点对照**\n- **结构**：一致（pin）。gex-levels 墙位未移，call wall 40 / OI put wall 39 / vol put wall 38.5；Dealer Pivot 缺失。\n- **flow**：一致。40C 净 bid 写出。\n- **次日 OI**：一致。40C 写出已落为新仓 [已验证]，但决策表无命中，dealer 买 / 卖股票为未明确。\n- **价格（盘前）**：一致（区间内，无方向）。盘前 39.54，昨收 39.53，+0.03%，无跳空；站在 39 DP core 之上、40 call wall 之下。盘前量仅 1,658 股、1 根 5m bar，量极小，不构成 acceptance / 失守证据。\n- **合计**：四点都指向 39–40 盒子里的机械 pin 加 40 上方的新增盖子，没有一项给出 dealer 卖股票的派发确认。\n\n**其他变化**\n- **借券**：无新数据。仍是 as-of 2026-10-02T15:27Z 那条（fee 0.4135%，可借 7.9M），⚠ short-data = T-1，该层维持观察。\n- **盘前价格**：见上，不改变 ④。\n- **今天的 gamma**（greek-exposure 2026-10-05）：net_gamma 574,710（昨 708,224），仍为正；net_delta 8,985,550（昨 9,249,860），DEX 没有扩张。\n  - ② 熔断维持：本票正 gamma；名单级的今日负 gamma 计数未明确，沿用昨晚 0/23。\n  - ④ 的 GEX/DEX 交叉读数不变。\n- **⑤**：次日 OI 腿已补齐，ask-side flow-IV 仍缺失 → 指纹仍倾向 Gamma hedge，只报状态。\n- **①**：非 🧨，不变。\n\n**仓位 / 意图 / 不对称性**\n- 昨天 40C 的 bid 侧写出今早确认落为 691 张新 OI，40 call wall 上的供给盖子从 flow 变成了账本上的持仓。\n- 但墙位未移，决策表无命中，dealer 对冲方向无法判定。在全场正 gamma 熔断下，这仍是 39–40 的机械 pin，不是借强出货。\n- 空头没有燃料（借券便宜、SI 2.70%），反而带 SVR 75.6% 的挤压反噬风险，不对称性不支持做空。\n\n**失效位 / 判决线**\n- **判决线**：日线收盘失守 39.0 DP core、次日不能收复，并跌穿 38.5（vol put wall）/ 38.30 之前，不是 setup。\n- **失效位**：日线收盘站稳 40.0 并收复 40.5（OI flip），或上破 40.79 → 停滞 / 派发偏置作废，按吸筹重读。\n- **财报**：11-03，距确认日 29 天，不在 7 天内。\n\n**运行日志**\n- ✅ oi-change as-of 2026-10-05 rows=620 pages=2\n- ✅ 盘前 5m（ohlc-5m）as-of 2026-10-05T09:40:00Z rows=367 days=5/5\n- ⚠ short-data as-of 2026-10-02T15:27:00Z rows=1000（未更新，T-1）\n- ✅ greek-exposure as-of 2026-10-05 rows=251 net_gamma=574709.9102\n- gex-levels 今日：未明确（本次未提供）",
+ "ttft_ms": 30561,
+ "type": "result",
+ "duration_ms": 49639,
+ "uuid": "2112d5df-ccc8-41b9-81d9-c7a737729edf",
+ "ttft_stream_ms": 1671,
+ "time_to_request_ms": 26,
+ "first_content_frame_ms": 1672,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

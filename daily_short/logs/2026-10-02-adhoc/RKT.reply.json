@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 154503,
+ "stop_reason": "end_turn",
+ "session_id": "0299739f-d772-4997-bf20-d60dc85daafa",
+ "total_cost_usd": 1.4694034,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 143676,
+  "cache_read_input_tokens": 29037,
+  "output_tokens": 15709,
+  "output_tokens_details": {
+   "thinking_tokens": 11703
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 143676,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 15709,
+    "cache_read_input_tokens": 29037,
+    "cache_creation_input_tokens": 143676,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 143676
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 15709,
+   "cacheReadInputTokens": 29037,
+   "cacheCreationInputTokens": 143676,
+   "webSearchRequests": 0,
+   "costUSD": 1.4694034,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 11703,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**RKT** · 未列入 watchlist（group=null） · Financial Services / Mortgage Finance · 数据日 2026-10-02 · 核心覆盖 8/8\n**结论**：⛔ 熔断，只出决策线（另挂 ⚠THIN nstrk=42、挤压反噬风险；即使熔断解除，上限也只是 👀 观察）\n\n① 🧨 挤仓否决：\n- ⓪ 新鲜度：7 层 as-of 都是 2026-10-02。short-interest 只能等 FINRA 披露，as-of 09-15、滞后 17 天，照用并标注。未触发 ⚠。\n- 条件 1 成立：\n  - SI% float 6.41%（as-of 09-15，滞后 17 天）[已验证]，低于 10%。\n  - SVR 09/29 41.8% → 09/30 58.2% → 10/01 63.7% → 10/02 58.6%，连续 3 日 ≥55% [已验证 as-of 10-02]。\n- 条件 2 不成立：\n  - DTC 5.12，大于 2。\n  - 近三期 DTC 为 08/14 3.49 → 08/31 5.13 → 09/15 5.12，末期回落，不是逐期上升 [已验证]。\n- 条件 3：|spot − flip| 两个口径结论不同。\n  - spot 11.755 对 OI flip 11.79，差 0.3%，满足 ≤3%。\n  - 对 vol flip 12.2，差 3.8%，不满足 [已验证 as-of 10-02]。\n  - 条件 2 已不成立，不影响结论。\n- 相位闸未触发：\n  - SVR 单日 10/01→10/02 为 −5.1pt，不到 −10pt。\n  - SI 08/31→09/15 为 +0.67pt。\n- 借券：\n  - fee_rate 0.4135，自 09/08 起持平（09/04 为 0.286）。\n  - 可借量 6.3M（09/29）→ 3.4M（10/01）→ 2.3M（10/02），持续收缩 [已验证 as-of 10-02]。\n\n→ **非 🧨**\n\n② 熔断：\n- 名单负 gamma 0/23，≤4 只，触发 [已验证 as-of 10-02]。\n- 本票 net gamma +5,750,500，由 10/01 的 2,053,050 回升，为正 gamma [已验证]。\n\n→ **熔断**\n\n③ 量级：\n- 1D DP dark 18.79M，DP% 84.8%。\n- 1W dark 112.24M；1M dark 367.93M（21 日）。\n- 当日成交 39.11M，relative volume 1.05。\n- 大单参与度（either 口径）12.8%：dark 12.4%、lit 0.37%；by_premium 口径 9.0% [已验证 as-of 10-02]。\n\n→ **量级足够（非薄）**。但 12.8% 落在原文 16–21% 与 3–4% 两档之间，机构性：未明确。\n\n④ 方向（灰色重心迁移）：\n- **Long（1M）**：centroid 12.08，poc 12.0（126.6M）。\n  - 次峰 11.0（112.8M）、13.0（87.1M）。\n  - 逐日重心：09/02–09/16 约 12.8–13.9 → 09/17–09/23 为 12.0 → 09/24 起 11.0–11.9。\n- **Medium（1W）**：centroid 11.12，poc 11.0，相对长期下移。\n- **Short（2D）**：centroid 11.25，poc 11.0，较 1W 略回升，没有延续下迁。1D 为 11.47，12.0 档 7.85M 重新出现。\n- 注：价位档很粗，主要就是 11/12/13 三档。\n- **Price**：spot 11.755 高于 2D 重心 11.25 和 1D 重心 11.47，低于 1M 重心 12.08 / poc 12.0。\n- **Retest（5m K 线）**：\n  - 10/01 下探 11.25（20 日低 = 52 周低）后收 11.97，11 档 core 守住。\n  - 10/02 跳空开 12.66 冲 12 档：上午 12.2–12.6 有成串 1.0–1.2 万股切片 block；之后回落至 11.665，收 11.70，低于前收 11.97。\n  - 结论：12 档 failed acceptance，但 11 档 core 未失守。\n- **GEX/DEX**：\n  - net gamma 1.74M（09/28）→ 5.75M（10/02）。\n  - net delta 2.83M → 14.50M。\n  - 衍生品侧在重建，与 DP 下迁不同向。\n\n→ **不明**：1M→1W 下迁给出偏空偏置，但 2D/1D 没有接力，下方 core 也没有破。\n\n⑤ 动机：\n- **OI vs 成交量**（oi-change as-of 10-02，反映 10/01 成交）[已验证]：\n  - 全链 call OI +15,518，put OI +8,661。\n  - 11/20 14C OI 从 3,412（09/21）升到 14,415，连续 ask 侧建仓（09/30 ask 5,519）。\n  - 10/09 10.5P OI +5,462，来自 10/01 的 put diagonal 10.5/11，5,000 张 ask 侧 long。\n  - 12/18 9P OI 从 117 升到 8,314。\n  - 今日 2029-01 10C（Δ≈0.78）vol 4,446 < OI 4,877，bid 3,217 对 ask 1,229，以 bid 侧为主。开仓还是平仓要看次日 OI [缺失]。\n- **flow 结构**（≥$50k tape）：\n  - sweep 0。\n  - 10/09 12P / 12.5P 在 bid 侧，属 put_ladder 2,000 张；0DTE 12.5P / 13P 在 bid 侧，属 put_ratio_spread 2,000 张。都是多腿卖 put，偏调仓，不是方向押注。\n  - 10/16 14C 7,142 张 ask 为 floor print，已排出 flow-IV。\n  - 2027-03 12C 同时有 ask 500 和 bid repeated hits，疑似 roll。\n- **意图净额**：\n  - ≥$50k tape：call 净 −710,729（call 被卖），put 净 −284,913（put 被卖），两者方向相抵。\n  - 全日：net call −1,307,440，net put −127,832 [已验证]。\n- **flow-IV**：今日 call_ask 0.640，put_ask 0.744（仅 1 笔）。history 为空 [缺失]，按 §5.1 不能定性。\n- **IV×RV**（as-of 10-02）[已验证]：\n  - IV30 0.477（08/31）→ 0.648。\n  - RV21 0.550 → 0.412；HV20 0.523 → 0.370。\n  - IV > RV，且 IV 上、RV 下；IV rank 55.4，1y 百分位 63.6。\n  - 不是 RV>IV 的空头形态。IV30 窗口覆盖 10/29 财报 [假设]。\n- **借券**：费率持平，可借量收缩（见 ①）。\n- **gamma 位置**：spot 贴 OI flip 11.79，低于 vol flip 12.2，正 gamma。\n- **DP 时点**：\n  - 盘后 20 笔、46 万股（1.18%），价 11.70。\n  - 季末 09/30 DP% 0.917 为 1M 单日最高，但 11 档集中从 09/24 起延续多日，不是单窗口冒尖。\n  - 名单里没有同板块票可比，篮子型指纹未明确。\n\n→ **指纹未定**（flow-IV 历史和次日 OI 两条腿缺失，按 §8.1 只报状态）。\n- 现有证据与\"派发\"冲突：call OI 在升、IV 在扩张，而派发要求 IV 平/压缩、call OI 平/降。\n- 期权账本两侧同时扩张（OTM call 建仓 + 下方 put 保护），但 IV 没闷，不符合对冲定义。\n- 盘后没有大额 DP，库存转移也不成立。\n\n⑥ Dealer：\n- **gex_levels，vol 口径**：call wall 12.0→12.5（+0.5），put wall 11.0→9.0（−2.0），gamma flip 12.2（不变），magnet 12→14。\n- **gex_levels，OI 口径**：call wall 15.0（不变），put wall 9.2→3.0（−6.2），flip 11.94→11.79（−0.15），magnet 15→10。\n- Dealer Pivot：缺失。\n- **flow**：12.5 call 当日 ask 1,777 对 bid 4,110，bid 侧为主。\n- **次日 OI**：10/05 oi-change 缺失。\n- **价格**：收 11.70，在 vol call wall 下方。\n\n→ Wall↑ + Bid + OI 未确认 → **无命中**（次日 OI 缺失）。正 gamma 下 dealer 高抛低吸，围绕 11.79–12.2 pin。\n\n**挤压反噬**：SVR 58.6% ≥50%，标\"挤压反噬风险\"。Mortgage Finance 板块是否处于轧空相位：未明确，市场数据里的 cross-section 和 ETF flows 都没有金融板块。\n**财报**：10-29（距数据日 27 天，er_time 未明确）\n**仓位 / 意图 / 不对称性**：\n- 月内 DP 库存从 13 档一路下迁到 11 档。10/02 跳空 12.66 想回 12 档（1M POC），被上午切片大单压回 11.70。上方 12 是套牢供给，下方 11 档 core 仍有人接，52 周低 11.25 守住。\n- 期权账本两侧扩张，IV30 拉到 0.648、RV 回落到 0.41，更像财报前的 vol 需求，不是干净的派发。\n- 正 gamma（net gamma 5.75M，spot 贴 OI flip）叠加全场熔断，dealer 会碾平单边，此刻的不对称性不在空头一侧。\n- 决策线：失守 11.25 且 11 档 DP core 无法 reclaim 之前，不是 setup。\n\n**失效位**：偏空读数失效 = 收复并站稳 12.2（vol flip）/ 12.0 档（1M POC）上方。空头决策线 = 11.25 失守（ATR14 0.624）。\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-02 rows=3 days=22/22\n✅ RAN darkpool as-of 2026-10-02T23:01:51Z rows=196 blocks=196 spot=11.755\n✅ RAN option-trades as-of 2026-10-02T19:56:20.663000Z rows=28 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-02 2026-10-02T20:15:00.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-02 rows=250 net_gamma=5750498.6415\n✅ RAN short-interest as-of 2026-09-15 rows=127 lag=17d\n✅ RAN short-volume as-of 2026-10-02 rows=500 ratio=0.586\n✅ RAN short-data as-of 2026-10-02T15:27:00Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-15（滞后 17 天）",
+ "ttft_ms": 122291,
+ "type": "result",
+ "duration_ms": 154554,
+ "uuid": "27406bde-61e1-4c14-97c0-c7866002e9f6",
+ "ttft_stream_ms": 1324,
+ "time_to_request_ms": 37,
+ "first_content_frame_ms": 1325,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
