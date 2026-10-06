@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 77918,
+ "stop_reason": "end_turn",
+ "session_id": "64e9255f-38e3-4765-a962-84b222a5a296",
+ "total_cost_usd": 0.5177828,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 45112,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 7710,
+  "output_tokens_details": {
+   "thinking_tokens": 5654
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 45112,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 7710,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 45112,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 45112
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 7710,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 45112,
+   "webSearchRequests": 0,
+   "costUSD": 0.5177828,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 5654,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**DDOG 盘前确认** · 扫描日 2026-10-05 · 确认日 2026-10-06 盘前\n**结论**：昨晚 ⛔ 熔断，只出决策线 → 今早 ⛔ 熔断，只出决策线（零确认空头；即使不熔断，④ 也是吸筹确认，不是做空候选）\n\n次日 OI（as-of 2026-10-06）：\n- **290 区（昨晚缺失的腿）**：10-05 合计 bid 189 / ask 约 105，次日 OI 净 −111。\n  - 主力是 10/16 290C：OI 1,737 → 1,590（−147），昨天 bid 158 / ask 63，多腿仅 10 → 客户 Sell to Close。\n  - 其余为小量：10/9 290C +20（bid 25 / ask 16）、11/20 290C +8（ask 15 / bid 0）。\n  - 决策表：昨晚推断的 \"Wall↑ + Bid + OI↑\" **没有**在 290 区兑现，改标 [冲突]。\n  - \"Bid + OI↓\" 只对上第 3 行的后两项；但 Wall 列昨晚是↑（OI 口径 280→290、vol 口径 282.5→290），今天 gex-levels 未重拉 → 整行无命中，dealer 买 / 卖股票未明确。\n- **10/9 310C**：OI −26（bid 60 / ask 6）。昨晚扣分的那条多腿 310C 开始被平。\n- **近月上方 call，ask + OI↑**：\n  - 10/9 295C +35（ask 42 / bid 2，多腿 14）、10/9 282.5C +21（ask 21）、11/20 290C +8。\n  - 10/16 280C +29（ask 99 / bid 58，但多腿 54，按 §7.3 降权）。\n  - 以上命中第 1 行 \"Wall↑ + Ask + OI↑\" → Buy to Open → dealer **买**股票。量都小。\n- **put 侧**：\n  - 10/9 275P +97（bid 84）、272.5P +85（bid 88）、270P +83（bid 86）。\n  - 2027-01 170P +239（bid 278）、2027-09 330P +22（bid 22）。\n  - 均为 Sell to Open put，已验证。put wall 是↓（OI 275→260，vol 275→272.5），\"Wall↓ + Bid + OI↑\" 不在表内 → 无命中。决策表按 call wall 写，put 侧的股票方向未明确。\n- **昨晚 ⑤ 的待验证项**：\n  - 11/20 210C OI −28（ask 72）= Buy to Close，不是股票替代型新多。\n  - 12/18 130C / 135C、2028 140C 各 −5（bid）= Sell to Close。\n  - 12/18 240C −17 / 2027-03 270C +12 = roll。\n  - 2027-03 300P −20（ask 20）= Buy to Close。\n  - 指纹仍是\"最接近吸货，派发未命中\"。\n- **全链**：put OI +1,622 / call OI +334。\n\n四点对照：\n- **结构**：call wall 上移到 290、put wall 下移，as-of 10-05 [已验证]；10-06 未重拉 [缺失]。\n- **flow**：290 区 bid 主导，与\"上方写 call 盖子\"一致。\n- **次日 OI**：290 区净减、主力合约是平仓，与 flow 推断的新开盖子 [冲突]；近月 280–295C 小量买开指向 dealer 买股票，与昨晚\"dealer 卖股票\"[冲突]。\n- **价格（盘前）**：[缺失]，ohlc-5m 空 payload，无法判断跳空方向，也无法判断是否接受 / 失守 1W DP core 273.5–276。参考昨收 276.415 位于该区上沿。\n- → 四点不一致，§6 不升级置信度。\n\n其他变化：\n- **借券**：无新读数。⚠ short-data = T-1（asof 20261005）。费率 0.25%、可借 4.5M 沿用昨晚。\n- **盘前价格**：缺失。\n- **今天的 gamma**（as-of 10-06，开盘 OI）：本票 net gamma +19,025（昨 +18,318），net delta 6.21M（昨 6.20M）。正 gamma 毯维持，② 读数不变。名单级负 gamma 计数今天未重跑，沿用 10-05 的 2/23；按 §3\"当日无 GEX 数据 → 默认熔断\"，熔断照旧。\n\n**仓位 / 意图 / 不对称性**：昨晚当成\"盖子\"的 290 call 头寸，次日 OI 显示是平仓而不是新写。新增仓位集中在 spot 下方卖 put（10/9 270–275P、2027-01 170P）和近月上方小量买 call。期权账本在下方垫底、上方盖子在部分撤离，与吸筹 / pin 读数同向；空头不对称性没有改善，只是略变差。\n\n**失效位 / 判决线**：\n- 273.5 收盘失守且次一交易日不收复（同时破 vol put wall 272.5，也是 10/9 新卖 put 集中的 270–275 区）→ 吸筹读数失效，重跑 ④。\n- 268 失守 → 派发评估才成立。\n- 有效站上 282 → 吸筹延续。\n- 熔断解除前不给空头入场位。\n\n**运行日志**：oi-change as-of 2026-10-06 rows=1504 pages=4 ✅ · 盘前 5m ❌ FAIL empty payload for 2026-10-06 before cutoff 06:50 ET · short-data as-of 2026-10-05T15:24:42Z（T-1）✅ · greek-exposure as-of 2026-10-06 rows=251 net_gamma=19025.05 ✅ · gex-levels 今日未重拉（沿用 10-05）",
+ "ttft_ms": 59551,
+ "type": "result",
+ "duration_ms": 77970,
+ "uuid": "10b69715-344e-4784-a11b-00f12d080c67",
+ "ttft_stream_ms": 939,
+ "time_to_request_ms": 40,
+ "first_content_frame_ms": 940,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

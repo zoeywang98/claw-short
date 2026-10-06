@@ -1,0 +1,98 @@
+{
+ "duration_api_ms": 55911,
+ "stop_reason": "end_turn",
+ "session_id": "6377a60c-a46e-43f9-b0ee-f21a74cf6abd",
+ "total_cost_usd": 0.3649108,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 31523,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 5502,
+  "output_tokens_details": {
+   "thinking_tokens": 3398
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31523,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 5502,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 31523,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 31523
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 5502,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 31523,
+   "webSearchRequests": 0,
+   "costUSD": 0.3649108,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 3398,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-05 · 确认日 2026-10-06 盘前\n**结论**：昨晚 ⛔ → 今早 ⛔（熔断仍成立，只出判决线；THIN 链 nstrk 37 < 45，熔断解除后上限也只到 👀）\n\n**次日 OI（as-of 2026-10-06）**：\n- **决策表命中：44 档，vol 口径 call wall 40 → 44（Wall↑）**\n  - 11/20 44C：OI 462 → 614（+152），昨天 bid 155 / ask 0，多腿 0，12 笔，权利金 11,057。\n  - 10/30 44C：OI 8 → 81（+73），bid 73 / ask 0，多腿 0。\n  - 10/09 44C：OI 310 → 356（+46），bid 57 / ask 0，其中多腿 15。\n  - 同向的还有 10/30 45C（+52，bid 53）、11/13 45C（+30，bid 30）、10/09 43C（+81，bid 81）。\n  - 情形：Wall↑ + Bid + OI↑ → 客户 Sell to Open（备兑 / 熊市 call 价差），dealer Buy to Open → **dealer 卖股票**。\n  - 昨晚这条腿标的是\"可能对应、待 10-06 OI 确认\"，现改为 **[已验证]**。\n  - 量级是几百张，44C 主合约权利金约 1.1 万美元，属于小号。\n- **OI 口径 call wall 40（未移动）**：\n  - 10/16 40C：OI 2,036 → 2,066（+30），ask 62 / bid 90 / mid 7，成交 159 张只增 30，开平混杂。\n  - 10/09 40C：+16，ask 16。\n  - 墙没动，不满足决策表的 Wall 条件 → 无命中。\n- **put 侧**：\n  - 36P（vol 口径 put wall 36）10/16：OI −15，bid 100，单笔。成交 100 张只减 15，开平混杂，不构成干净命中。\n  - 10/16 37P：−100，ask 100，单笔，属于平仓，不在墙位。\n  - 38–38.5 附近有小额 ask 侧开仓：10/16 38.5P +30（ask 31）、10/23 37P +32（ask 24，多腿 8）、10/23 38P +15（ask 15）。不在已移动的墙位，不进决策表。\n- **全链**：call OI +738，put OI +26。\n\n**四点对照**：\n- 结构（vol 口径 call wall 40 → 44 上移）：一致。\n- flow（昨晚 44 档 bid 侧 call：11/20 155、10/30 73、10/09 57）：一致。\n- 次日 OI（44C OI↑，与 bid 同向）：一致，[已验证]。\n- 价格（盘前）：**缺失**。盘前 payload 为空，无法判断跳空方向，也无法判断是否接受或失守 39.0 DP core。\n- → 前三点一致，第四点缺失，达不到 §6.2 的\"四点全部一致\"。\n- ⑤ 动机的 flow-IV 仍为 [缺失]。按 §8.1 因果腿没有全部验证，动机仍不定性，维持\"形态最接近 Gamma hedge、未定性\"。\n\n**其他变化**：\n- **今天的 gamma**：greek-exposure 10-06 本票 net gamma +580,516，比 10-05 的 604,753 低约 4.0%，仍为正。call gamma 881,428，put gamma −300,912，net delta 9,151,030（10-05 为 9,311,620）。\n  - 只有本票数据，没有名单级当日 gamma 面。沿用 10-05 的 2/23 只负 gamma，熔断不变。\n- **借券**：无更新，仍是 10-05T15:24:42Z 的读数：费率 0.4085%，可借 790 万股，偏松。今早未刷新，① 的读数不变。\n- **盘前价格**：无（ohlc-5m 空 payload）。\n- ①–④ 原样沿用：非 🧨；熔断；量薄；方向不明（横移 / 停滞）。财报 11-03，距今 28 天，不在 7 天窗内。\n\n**仓位 / 意图 / 不对称性**：\n- 昨天有人在 vol 口径 call wall 44 一线（含 43 / 45）以 bid 卖开 call，几乎全是单腿。次日 OI 确认成了新持仓，按决策表 dealer 买入这些 call，对冲上卖股票。这等于在 44 上方加了一层小号的写 call 供给，但量级只有几百张，撼不动 39–40 之间由正 gamma 和 39.0 DP core 钉住的结构。\n- 在这里做空，仍然同时对抗正 gamma 的低吸高抛和一个刚被守住的 DP core。熔断加 THIN，不给入场位。\n\n**失效位 / 判决线**：\n- 空头判决线（沿用）：日收跌破 39.0（DP 共同 core / OI put wall），没有吸收、没有收复，同时站在 vol 口径 flip 38.91 下方。在那之前不是 setup；即使破位，THIN 也只能到 👀。\n- 反向失效：日收站稳 40.79（20 日高）上方并守住，任何派发读数作废。\n- 今天开盘若直接跳空跌破 39.0，需盘中重拉 5m 看是否失守 DP core 后没有 reclaim。盘前数据缺失，这一项未明确。\n\n**运行日志**：\n- ✅ RAN oi-change as-of 2026-10-06 rows=644 pages=2\n- ❌ FAIL ohlc-5m（盘前）reason: empty payload for 2026-10-06 before the cutoff\n- ✅ RAN short-data as-of 2026-10-05T15:24:42Z rows=1000（未刷新，T-1）\n- ✅ RAN greek-exposure as-of 2026-10-06 rows=251 net_gamma=580516.1156",
+ "ttft_ms": 37504,
+ "type": "result",
+ "duration_ms": 55949,
+ "uuid": "45e42a7c-8f2d-4166-88fe-fd6cf7202a29",
+ "ttft_stream_ms": 1104,
+ "time_to_request_ms": 35,
+ "first_content_frame_ms": 1105,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
