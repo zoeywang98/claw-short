@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 90028,
+ "stop_reason": "end_turn",
+ "session_id": "509ae2a4-b892-4046-829f-14b34da9c85f",
+ "total_cost_usd": 0.5536068000000001,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 46835,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 8812,
+  "output_tokens_details": {
+   "thinking_tokens": 6856
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46835,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 8812,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 46835,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 46835
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 8812,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 46835,
+   "webSearchRequests": 0,
+   "costUSD": 0.5536068000000001,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 6856,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**DDOG 盘前确认** · 扫描日 2026-10-06 · 确认日 2026-10-07 盘前\n**结论**：昨晚 ⛔ 熔断，只出决策线 → 今早 ⛔ 熔断，只出决策线\n\n次日 OI（as-of 2026-10-07）：\n- **主力 flow 合约：昨天的写 call 变成了新开空头 call** [已验证]\n  - 11/20 280C：458 → 504（+46），昨天 bid 304 / ask 31。这一档正是新的 vol call wall 280。\n  - 11/20 270C：490 → 614（+124），bid 152 / ask 11。\n  - 12/18 300C：609 → 760（+151），bid 264 / ask 9。\n  - 三笔都是 Bid + OI↑。\n- **昨晚的 roll [假设] 已验证，方向是远月平空、近月开空**\n  - 1/15/27 300C：609 → 531（−78），ask 87 / bid 0，是 Ask + OI↓。\n  - 与 12/18 300C 的 +151 合起来看：写 call 的一方把 Jan 300C 平掉，换到 Dec 300C 继续写。Dec 多出的约 73 张是额外新开。\n- **决策表对照**\n  - 同期结构：vol call wall 290 → 280（↓），oi call wall 290 不变。\n  - Bid + OI↑ 只出现在表中第 2 行，而第 2 行要求 Wall↑ → 主力组合字面**无命中**。\n  - 新墙 280 的近月两腿字面命中，但规模小、方向相反：\n    - 10/9 280C：OI −41，bid 96 / ask 17 → 第 3 行，dealer 卖股票；\n    - 10/16 280C：OI −43，ask 31 / bid 18 → 第 4 行，dealer 买股票；\n    - 两者互相抵消。\n  - 旧墙 290：10/16 290C 只 +1，10/9 290C +102（mid 75 / bid 50 / ask 29），没有 OI↓。\n- → **dealer 买 / 卖股票：未明确**。按 §6.2，OI 单独不能定方向。\n- **对昨晚 ⑤ 的修正 [冲突]**：昨晚按\"成交 < OI\"把 11/20 280C、12/18 300C 读作平仓 / 移仓。次日 OI 显示这两只都净增（+46 / +151），实际是写 call 新开，与昨晚读法冲突。\n- **其他新开仓**\n  - 10/16 282.5C：+112，ask 102，买入开仓（小额）。\n  - 10/16 277.5P：+46，ask 46，买 put。\n  - 11/20 280P：+46，bid 56，写 put。\n  - 12/18 360C：+78，ask 85；12/18 370C：+50，bid 50。疑似 360/370 call spread [假设]。\n  - 全链：call OI +852，put OI +595。\n\n四点对照：\n- **结构**（vol call wall ↓ 至 280，put wall ↓ 至 270；oi 口径不变）与 **flow**（call bid 主导，净 −$789,875）：互相不构成决策表组合 → **冲突**。\n- **flow** 与 **次日 OI**：写 call 确实落成了新仓 → **一致**。\n- **次日 OI** 与 **结构**：Bid + OI↑ 配 Wall↓ 不在表内 → **冲突**。\n- **价格（盘前）**：279.55，较昨收 278.24 +0.47%，在 DP core 276–278 与 flip 277.63 / 278.08 上方、280 下方。但全段只有 1 根 5m bar（985 股），量太小，不能算接受或失守 → **未明确**。\n\n其他变化：\n- **借券**：仍是 10-06T15:25:04Z 的读数（0.25% / 3.9M），今早没有刷新，⚠ short-data = T-1。① 的读数不变。\n- **今天的 gamma**（2026-10-07）：net_gamma 20,585.6（昨 20,898.4），net_delta 6.31M（昨 6.55M），仍是正 gamma，② 不变。名单 23 只今天的负 gamma 计数未明确，熔断照旧。\n- **盘前**：小幅高开 +0.47%，量极小，④ 不变（仍是吸筹确认）。\n\n**仓位 / 意图 / 不对称性**：\n- 昨天的大额 call premium 是写 call 新开：270 / 280 Nov，以及从 Jan 换到 Dec 的 300。这是有人在 280–300 上方铺供给（盖子），不是派发。\n- 叠加 dealer 正 gamma 和 1M 重心上迁到 276–279，结构是 280 下方的 pin，空头没有不对称优势。\n\n**失效位 / 判决线**：\n- **判决线**：收盘失守 276，且站不回 gamma flip 277.6 之前，不是 setup。\n- **二级线**：273。失守后又不能 reclaim，才进入重新评估。\n- **作废条件**：站稳 285.68 → 空头读数全部作废。\n- 盘前 279.55 在判决线上方。\n\n**运行日志**：oi-change as-of 2026-10-07 rows=1549 pages=4 · 盘前 5m as-of 2026-10-07T09:10:00Z rows=367 days=5/5（盘前仅 1 根 bar，985 股）· short-data as-of 2026-10-06T15:25:04Z rows=1000（⚠ 未刷新，T-1）· greek-exposure as-of 2026-10-07 rows=251 net_gamma=20585.5893",
+ "ttft_ms": 72087,
+ "type": "result",
+ "duration_ms": 90079,
+ "uuid": "c57e7909-aced-4976-ac28-7e5d5848ceab",
+ "ttft_stream_ms": 1353,
+ "time_to_request_ms": 38,
+ "first_content_frame_ms": 1354,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
