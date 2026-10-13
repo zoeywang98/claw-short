@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 63199,
+ "stop_reason": "end_turn",
+ "session_id": "4f215ea9-5f37-49d7-a8b6-78407dd0b12f",
+ "total_cost_usd": 0.4144508,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 36133,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 6135,
+  "output_tokens_details": {
+   "thinking_tokens": 4202
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36133,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 6135,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 36133,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 36133
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 6135,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 36133,
+   "webSearchRequests": 0,
+   "costUSD": 0.4144508,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4202,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-12 · 确认日 2026-10-13 盘前 · **⚠ short-data = T-1（asof 2026-10-12T15:25:13Z，今早未更新）· ⚠THIN（nstrk 37）**\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n**次日 OI**（as-of 2026-10-13）\n\n主力 flow 合约是 10/16 41.5C，正好落在 vol call wall 41.5 上：\n- OI 2,450 → 1,319（−1,131）。\n- 昨天成交 2,433 张，其中 bid 2,415、ask 15，multi-leg 2。\n- 昨晚的\"次日 OI 缺失\"改为 **[已验证]**：至少 1,131 张是 Sell to Close。规模接近 9/30 ask 端开的 2,416 张，和昨晚\"近月获利了结\"的读法一致，不冲突。\n- 成交 2,433 中，OI 没有体现出来的约 1,302 张是换手还是新开，未明确。\n\n套用决策表：\n- Bid + OI↓ 两腿与情形 3 一致。\n- Wall 腿不满足：vol call wall 41.5 Δ0，不构成 Wall↓。oi 口径的 call wall 45 → 42 昨晚已判为 10/09 持仓的变化。\n- 按字面，**没有整行命中**。dealer 方向记为未明确。若取情形 3，则是 dealer Buy to Close、卖股，也就是对冲移除 [假设]。\n\n其他合约：\n- **11/20 42C**：OI +145，bid 152 / ask 10，单腿。这是在 oi call wall 42 上写 call，属于情形 2 的 side/OI 两腿，但 Wall 不是 ↑，没有命中。权利金只有 31,029，盖子分量轻。\n- **长期多腿合约**：2027-03 的 45C（+197）、40P（+143）、38P（+120），以及 2028 的 50C（+95）、45P（+65）、42P（+12），新仓都已确认。但这些都是 multi-leg，按 §7.3 不读方向。2028 的 42P/45P/50C 就是昨晚那组 ask 多腿。\n- **深度 ITM 机械流**：10/16 33C/33.5C（+132/+125）为 multi-leg，属机械流。\n- **合计**：call OI −115，put OI +912。put 增量以多腿和 bid 端写 put 为主，例如 11/20 35P +59（bid 62）、12/18 41P +39（bid 32）。这不构成派发要求的\"put OI↑\"信念。\n\n**四点对照**（10/12 一段）\n- **结构**：vol call wall 41.5 Δ0、oi call wall 42（Δ−3）。vol 口径不构成 Wall↓，**不一致**。\n- **flow**：41.5C 卖方主导（bid 2,415），与平仓一致，**一致**。\n- **次日 OI**：−1,131 [已验证]，**一致**（确认平仓）。\n- **价格（盘前）**：40.97，较前收 41.17 跌 0.49%，区间 40.91–41.21。\n  - 略低于 41.0 poc，但在 2D 重心 40.71、1D 重心 40.75 和 40.0 DP 带之上，没有失守 DP core。\n  - 盘前量只有 25,547 股，很薄。\n  - 与对冲移除的小幅回落**弱一致**，不具裁决力。\n- 小结：这四点确认的是短期 call 获利了结，不是派发签名。④ 吸筹确认、⑤ 吸货倾向不变。今日 flow-IV 仍缺失，⑤ 照 §8.1 只报状态。\n\n**其他变化**\n- **借券**：未更新，仍是 10-12T15:25Z 的费率 0.4081%、可借 10M，标 T-1。\n- **盘前价格**：同上，没有跳空失守 40.71 / 40.0。\n- **今天的 gamma**：net_gamma 745,564 → 808,307，仍为正 gamma 且略增；net_delta 11.47M → 11.34M。\n- **② 熔断**：昨晚名单负 gamma 5/23，未熔断；今天全名单的只数未明确。\n- **财报**：11-03，距今 21 天。\n\n**仓位 / 意图 / 不对称性**：\n- 10/09 的 ask 端 call 开仓仍在，只有 9/30 那批近月 41.5C 了结了约一半。dealer 最多是在对冲移除边际卖股。\n- DP 主库存已搬到 41，正 gamma 还在加厚，做空没有赔率。\n- THIN 链本身就封顶 👀，不进确认表。\n\n**失效位 / 判决线**：\n- 收盘失守 40.0 DP 带，且次日收不回 41.0 poc → 吸筹读数作废，改走 confirmed trap 路径重跑 ④。\n- 即便如此，仍需重新过熔断（今日全名单 gamma 待补）和 THIN；上限仍是 👀。\n- 盘前参考位：40.71（2D 重心）。\n\n**运行日志**：\n- oi-change as-of 2026-10-13 rows=648\n- 盘前 5m as-of 2026-10-13T10:35:00Z rows=426\n- short-data as-of 2026-10-12T15:25:13Z rows=1000（T-1）\n- greek-exposure as-of 2026-10-13 rows=251 net_gamma=808306.8119",
+ "ttft_ms": 44814,
+ "type": "result",
+ "duration_ms": 63244,
+ "uuid": "791e2bac-b4a0-426e-8fe7-f25aaf36edf3",
+ "ttft_stream_ms": 1834,
+ "time_to_request_ms": 35,
+ "first_content_frame_ms": 1835,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

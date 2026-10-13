@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 102416,
+ "stop_reason": "end_turn",
+ "session_id": "55b0313d-3da2-4757-a313-7190b294b627",
+ "total_cost_usd": 1.1854668000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 122825,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 10009,
+  "output_tokens_details": {
+   "thinking_tokens": 7196
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 122825,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 10009,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 122825,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 122825
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 10009,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 122825,
+   "webSearchRequests": 0,
+   "costUSD": 1.1854668000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7196,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**META 盘前确认** · 扫描日 2026-10-12 · 确认日 2026-10-13 盘前 · ⚠ short-data = T-1（asof 20261012T15:25Z，今早未更新）\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n次日 OI（as-of 2026-10-13）：全链 call OI +73,858、put OI +55,064，两侧都在增。结构参照：OI 口径墙 750 / 700 在 10-09→10-12 不动；vol 口径墙上移（call wall 755 +32.5，put wall 742.5 +25）。10-13 的 gex-levels 没有拉取，今天的墙位未明确。\n\n- **10/16 P740**（贴 vol put wall 742.5，昨天最大 flow 合约）\n  - OI 1,919 → 12,184（+10,265）；昨天 ask 12,051 / bid 3,166，多腿仅 483。\n  - 字面落在情形 1 的\"客户 Buy to Open / dealer Sell to Open\"。\n  - §6.1 原文的例子只有 Call Wall，put 合约的 dealer 股票对冲方向 SHORT_ENGINE 没有写 → **未明确**。\n- **10/16 P730 / P745 及 11/20 P720、P730、P740、P750**\n  - 10/16 P730：OI +9,514，ask 12,292 / bid 1,961。\n  - 10/16 P745：OI +2,944，ask 3,703 / bid 1,732。\n  - 11/20 P730 +2,297、P740 +1,875、P720 +894、P750 +574，均以 ask 为主。\n  - 同上，都是 Buy to Open 已成仓；dealer 股票方向未明确。\n- **10/16 C755**（vol call wall）\n  - OI 2,846 → 3,383（+537）；ask 1,964 / bid 1,621，两侧接近。\n  - Wall↑（vol）+ Ask + OI↑ → **情形 1**：dealer **买**股票。信号偏弱。\n- **10/23 C760**（昨晚的写 call 合约）\n  - OI 2,594 → 4,139（+1,545）；ask 1,140 / bid 1,962。\n  - Wall↑（vol）+ Bid + OI↑ → **情形 2**：客户 Sell to Open，dealer **卖**股票。\n- **10/16 C750**（OI call wall / magnet）\n  - OI 15,643 → 15,375（−268）；ask 6,013 / bid 8,265。\n  - OI 墙不动、vol 墙上移，\"Bid + OI↓\"只配 Wall↓（情形 3），表内**无命中**。\n  - 昨天 bid 侧成交没有变成新的空 call 仓。\n- **2028-01 C730**\n  - OI 981 → 2,074（+1,093）；ask 1,148 / bid 6，多腿仅 4/1,154。\n  - 是单腿 ask 侧新开仓，不贴墙，表内无墙位变化可配。\n- **12/18 C680 / C705 / C815 / C850 / C880 cross 及 1/15/27 P550 / C950**\n  - OI 均增（C815 +5,390、C850 +2,712、C880 +2,411、C680 +1,812、C705 +1,803、C950 +1,515、P550 +1,381）。\n  - 无 side，不进决策表。\n- **合计**：按 OI 口径墙，全部无命中。按 vol 口径墙，dealer 方向一买（C755）一卖（C760 10/23），彼此不一致。\n\n**昨晚各腿改写**：\n- \"次日 OI 缺失\" → 近月 740 / 730 put ask 侧新建 **[已验证]**。\n- 10/23 C760 写 call **[已验证]**。\n- 10/16 C750 写 call **[冲突]**：bid 主导，但 OI −268，没有成仓。\n- 2028-01 C730 \"多腿对角 stock-replacement 换月\" **[冲突]**：多腿量 4/1,154，实为单腿 ask 侧 Buy to Open。\n- ⑤ Gamma hedge 倾向 **改为不命中**：它要求\"OI 无信念\"，与 put 端约 2 万张新仓冲突。\n- 对冲指纹仍不完整：两侧 OI 都增成立，但 put_ask IV 0.387 → 0.427 抬升（IV 未闷），净 delta ≈ 平未明确。\n- 派发仍不命中：DP 价位没有下迁，IV 在升。\n- ④ 方向仍为\"不明\"，按 §9 在 ④ 止步，⑤ 无论命中什么都不改变档位。\n\n四点对照（以\"做空 setup\"为参照）：\n- **结构**：冲突。OI 墙不动，vol 墙上移，没有 Wall↓。\n- **flow**：冲突。call 净买 +45.0M、put 净买 +4.7M，call 端买写并存。\n- **次日 OI**：部分一致。put 新建已确认（偏空 / 保护）。但 call 端 C755 新买、C760 新写、C750 没有写成仓，dealer 方向一买一卖。\n- **价格（盘前）**：弱一致，量小。盘前 −0.68%，回到 741–742 之下，但远在 720 主峰之上。\n- 四点不一致，§6 置信度不升。\n\n其他变化：\n- **今天的 gamma**：net_gamma 357,800 → 296,878（−17%），本票仍为正 gamma；net_delta 77.2M → 78.7M。今天名单负 gamma 只数未明确，昨晚 5/23 临界，② 今日全场熔断状态未明确。\n- **借券**：与昨晚同一快照（费率 0.25%，可借 10,000,000 股，as-of 2026-10-12T15:25Z），无新数据，① 不变。\n- **盘前价格**：\n  - last 737.9，较前收 742.96 −0.68%；高 743.24（09:35Z 那根 13,014 股），低 734.02。\n  - 盘前冲到 2D / 1D poc 742 之上没有站稳，回落到上峰下沿 741 之下，盘前没有接受 742；720 主峰未受考验。\n  - 盘前量仅 139,603 股，量小，不作 retest 裁决。\n\n**仓位 / 意图 / 不对称性**：次日 OI 证实昨天近月 740 / 730 put 是真新买（10/16 两档合计 +19,779 张，11/20 各档同步加），是带财报前事件的保护或看空持仓。call 端是新写（10/23 C760）、新买（C755）、写而未成仓（C750）、远月单腿新买（2028-01 C730）混在一起，不是信念型派发。DP 中周期仍横移、短窗没有回落，本票仍处正 gamma（296,878），做空没有不对称优势。\n\n**失效位 / 判决线**：\n- **今天第一裁决**：RTH 能否收复并守住 741–742（2D poc）。盘前已在其下，量小不算数。\n- **转向派发 / confirmed trap**：上峰第三次失败，1W / 2D 重心回落，且日线跌破 720 主峰（1M / 1W poc）后不能收复，届时重评。\n- **转向吸筹（更不构成空头）**：回踩守住 741–742，并站上 752.24 / OI call wall 750。\n\n**运行日志**：\n- ✅ oi-change as-of 2026-10-13 rows=5687 pages=15\n- ✅ 盘前 5m as-of 2026-10-13T10:45:00Z rows=773 days=5/5（盘前量 139,603）\n- ⚠ short-data as-of 2026-10-12T15:25:13Z rows=1000（T-1，未更新）\n- ✅ greek-exposure as-of 2026-10-13 rows=251 net_gamma=296878.0594\n- gex-levels 10-13 未拉取，结构沿用 2026-10-12T20:15Z\n- 财报 11-04（距确认日 22 天，不在 7 日内）；THIN 否（nstrk 230）",
+ "ttft_ms": 77607,
+ "type": "result",
+ "duration_ms": 102454,
+ "uuid": "e9a52750-4139-49dc-85ec-1ea1ed32d8f7",
+ "ttft_stream_ms": 1445,
+ "time_to_request_ms": 33,
+ "first_content_frame_ms": 1445,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
