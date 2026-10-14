@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 59978,
+ "stop_reason": "end_turn",
+ "session_id": "cb9b7d31-05fe-46ff-9362-a295a1ad24a6",
+ "total_cost_usd": 0.3901268,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 33750,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 5872,
+  "output_tokens_details": {
+   "thinking_tokens": 3714
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 33750,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 5872,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 33750,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 33750
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 5872,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 33750,
+   "webSearchRequests": 0,
+   "costUSD": 0.3901268,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 3714,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-13 · 确认日 2026-10-14 盘前\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n- 次日 OI 只确认了 42 档的写 call 是新开仓（情形二）。\n- 这不改变 ④ 的吸筹确认，也不改变 ⑤ \"未命中派发\"，按 §9 仍然弃。\n- THIN（nstrk 38）照旧封顶在观察，不能进确认表。\n\n**次日 OI（as-of 2026-10-14，10-13 的交易 → 10-14 OI）**：\n\n- **42 档 call（OI / vol call wall 42）**：\n  - 11-13 42C：OI 4 → 107（+103）。前一日 bid 106 / ask 8，多腿 6。\n  - 11-20 42C：OI 1,022 → 1,094（+72）。前一日 bid 71 / ask 3。\n  - 10-16 42C：bid 36，OI −1，没变成持仓。\n  - 判读：vol 基 call wall 41.5 → 42（Wall↑）+ Bid + OI↑ = **情形二**。客户 Sell to Open（备兑 / 熊市 call 价差），dealer Buy to Open，dealer 通常**卖**股票。\n  - 昨晚\"42 档 bid 待次日 OI 确认\"这条腿改为 **[已验证]**。但 OI 基 call wall d/d 为 0，只有 vol 基满足 Wall↑。\n- **10-16 41 / 41.5C 与 37C**：\n  - 10-16 41.5C：ask 509 / bid 2，OI 1,319 → 1,124（−195）。\n  - 10-16 41C：ask 303 / bid 1，OI 1,261 → 1,074（−187）。\n  - 10-16 37C：ask 131 / bid 77，OI −105。\n  - Ask + OI↓ 是 Buy to Close 的特征，但墙没有下移：vol call wall 是 41.5 → 42 上移，OI 基没动。按决策表字面**无命中**。\n- **11-20 41C**：bid 73，OI 只 +4。昨晚读成\"写 call\"的单腿大部分没留成新仓 → **[冲突]**。\n- **put 侧**（put OI 合计 +538，call +13）：\n  - 3-27 39P：bid 121 / ask 12，OI +133。\n  - 11-20 35P：bid 115，OI +115。\n  - 昨晚\"卖 put\"读数 **[已验证]**，是新开的卖出 put。\n  - vol put wall 41 → 35（Wall↓）+ Bid + OI↑ 不在决策表里，**无命中**，不推断 dealer 方向。\n- **11-20 33C**：bid 100，OI 0 → 100，premium 86,000。单腿深度 ITM 卖出开仓，不在墙位，决策表无命中。\n\n**四点对照**：\n\n- **结构**：部分一致。vol call wall 上移到 42；OI 基 call wall 42 没动；Dealer Pivot 缺失。\n- **flow**：一致。42 档 bid 216 / ask 13，写在 bid。\n- **次日 OI**：一致。11-13 42C 与 11-20 42C 共 +175，确认是新仓。\n- **价格（盘前）**：冲突 / 未确认。\n  - 盘前 41.1897，较昨收 41.24 −0.12%，区间 41.18–41.3436，没碰 42。\n  - 仍在 DP core 40.86–41.00 上方：没有失守，也没有 dealer 卖股票推动下行的迹象。\n  - 盘前量只有 3,830 股（3 根 5m bar），极薄，不作数。\n\n**其他变化**：\n\n- **今天的 gamma**：net gamma 816,395（昨天 785,373），net delta 11,469,100（昨天 11,568,600）。本票仍在正 gamma 且略增，② 的读数不变，pin 更稳。\n- **借券**：short-data 仍是 10-13T15:25:53Z（fee 0.2608%，可借 10,000,000），今早没有更新，① 不变。\n- **盘前价格**：维持在 41 core 上方，④ 的 acceptance 读数不变。\n- **⑤ 补记**（只报状态，不下结论）：\n  - 期权侧有部分派发特征：call 写在 bid、call OI 合计持平（+13）、put OI↑。\n  - 但 put OI↑ 来自 bid 侧卖 put。IV30 是扩张（0.284 → 0.413），不是平 / 压缩。DP 重心在逐级上移。\n  - 按 §7.4，flow 与 DP 方向不同向，标 conflict。flow-IV 仍然缺失，只报状态。\n\n**仓位 / 意图 / 不对称性**：\n\n- 42 上方新增的是客户写的 call，dealer 买进，盖子落实在 42。40 下方是新卖出的 put（35 / 39）。\n- 正 gamma（+816k）的 pin 被持仓确认，不是派发。在被接受的 41 新 value 上做空，会被 dealer 高抛低吸来回碾，不对称性仍为负。\n\n**失效位 / 判决线**：\n\n- **下行**：收盘失守 40.75–41.0 DP core、跌回 40（OI put wall / magnet）下方，且次日不能 reclaim 41 → 吸筹读数作废，重跑 ④ 看是否转 confirmed trap / 派发。在此之前不是空头 setup。\n- **上行**：站上 42.02 / call wall 42 = 健康 acceptance 完成。\n\n**财报**：11-03（距确认日 20 天）· ⚠THIN（nstrk 38）\n\n**运行日志**：\n\n- oi-change as-of 2026-10-14 rows=648 pages=2\n- 盘前 5m as-of 2026-10-14T09:25:00Z rows=425 days=5/5（盘前量 3,830）\n- short-data as-of 2026-10-13T15:25:53Z rows=1000（未更新，T-1）\n- greek-exposure as-of 2026-10-14 rows=251 net_gamma=816394.9527",
+ "ttft_ms": 39490,
+ "type": "result",
+ "duration_ms": 60014,
+ "uuid": "84d99b47-4ebd-4c88-ace9-eb2e25e44f9d",
+ "ttft_stream_ms": 1091,
+ "time_to_request_ms": 27,
+ "first_content_frame_ms": 1091,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

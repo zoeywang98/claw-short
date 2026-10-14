@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 57667,
+ "stop_reason": "end_turn",
+ "session_id": "9d67501c-6900-4bf6-9e5e-10268499298d",
+ "total_cost_usd": 0.4300228,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 39567,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 5540,
+  "output_tokens_details": {
+   "thinking_tokens": 3408
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39567,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 5540,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 39567,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 39567
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 5540,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 39567,
+   "webSearchRequests": 0,
+   "costUSD": 0.4300228,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 3408,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**DDOG 盘前确认** · 扫描日 2026-10-13 · 确认日 2026-10-14 盘前\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n**次日 OI（as-of 2026-10-14，对应 10/13 session）**\n\n10/13 墙位决策：\n- **结构**：vol call wall 305→285，Wall↓。\n- **285 call 的 OI 与方向**：\n  - 261016C285：240→233（−7）。昨天 bid 35 / ask 7，其中多腿 37/44。\n  - 261023C285：+4（bid 5 / ask 1）。\n  - 261030C285：−1。\n  - 三个到期合计 −4。\n- **命中**：情形「Wall↓ + Bid + OI↓」。客户 Sell to Close，dealer Buy to Close，**dealer 卖股票（对冲移除）**。\n- **权重**：[已验证]，但量级极小（−2.9%），而且以多腿为主。按 §7.3，这只能算弱确认。\n\n其他墙位，均不入决策表：\n- **put wall 280 不动**：261016P280 +178（bid 162 / ask 50），270115P280 +103（bid 104，多腿 102）。\n- **OI call wall 290 不动**：270917C290 +75（ask 84）。\n\n昨晚主要 flow 合约的落地（均 [已验证]）：\n- **261218P230**：207→951（+744），昨天 bid 856。下方写 put 的 Sell to Open 成了新持仓。\n- **远月 OTM call 的 Buy to Open 成了新持仓**：\n  - 270115C360：+326（ask 353）。\n  - 270115C380：+125（ask 151）。\n  - 261120C300：+198（ask 307）。\n- **261023C300**：+291（ask 231 / bid 173），双向，方向未明确。\n- **牛市 put credit spread 开仓**：270115P270 +100（ask，多腿 100）配 P280 +103（bid）。\n- **270617P200**：623→403（−220），昨天 ask 600。属于 Buy to Close，昨晚\"平 / 移仓\"的读法成立，下方保护被撤掉。\n- **261016C185**：358→260（−98），昨天 bid 289。深 ITM 平仓方向一致；成交 301 中其余部分的去向未明确。\n- **全链合计**：call OI +1,240，put OI +1,651。\n\n**四点对照（10/13 session · 285）**\n- **结构**：Wall↓，一致。\n- **flow**：285 call 以 Bid 为主，一致。\n- **次日 OI**：285 合计 −4，方向一致，但量极小、以多腿为主。\n- **价格**：\n  - 10/13 收 283.34（−1.37%），与 dealer 卖股票一致。\n  - 盘前 284.387（+0.37%），小幅跳空向上。仍在 vol flip 283.07、1D poc 283 之上，低于 2D 重心 286.36。271–278 DP core 未被测试。\n  - 盘前只有一根 5m bar，量 312 股，量小不作裁决。\n- **小结**：§6 这一腿（dealer 卖股票）四点大体一致，但这不改变 ④ / ⑤。\n  - 次日 OI 证实期权账本在扩张：call 端是 ask 侧新开 OTM call，put 端是 bid 侧写 put。下方保护（P200）被平掉。\n  - 这与 §5.2 派发指纹要求的\"call OI 平/降 或 put OI↑ 且 call 写在 bid\"不符；put OI↑ 主要来自写 put，不是买保护。\n  - 因此 ⑤ 的\"派发未命中\"由 [假设] 转为 [已验证]。\n\n**其他变化**\n- **今天的 gamma**：greek-exposure 2026-10-14 net_gamma 19,439.7（10-13 为 17,769.5），仍为正且回升。net_delta 6.51M（10-13 为 6.57M）。本票仍处在正 gamma pin 中。名单负 gamma 只数今早未明确，② 沿用昨晚 6/23，未熔断。\n- **借券**：⚠ short-data 未更新，仍是 2026-10-13T15:25:53Z（fee 0.4081，可借 4.3M），对确认日属于 T-1。① 读数沿用。\n- **盘前价格**：见上，量小。\n- **不变项**：\n  - ①–⑤ 其余读数原样沿用。\n  - 挤压反噬风险标记（SVR 10-12 52.2%）保留。\n  - 财报 11-05，距确认日 22 天；nstrk 79，非 THIN。\n\n**仓位 / 意图 / 不对称性**：昨天的交易落地为偏多 / 中性的新持仓：远月 OTM call 被买入，230 / 280 下方 put 被写出，P200 保护被平掉。285 一线 dealer 撤对冲卖股票的量级只有个位数合约，是正 gamma pin 里的机械流，不是派发签名。空头一侧既没有 DP 方向确认，也没有期权账本确认，不对称性不在做空。\n\n**失效位 / 判决线**（判决线，非入场位）：\n- **升级**：有效跌破并收不回 271–278 DP core（1W poc 271，OI flip 277.9 在其中），且 DP 量重新放大到 1M 均值以上，才升级为 confirmed trap，重新走 ⑤ / ⑥。\n- **脱离**：重新站上 290–293（3D poc 290）并在回踩时守住，属于健康 acceptance，本票脱离空头视野。\n\n**运行日志**：\n- oi-change as-of 2026-10-14 rows=1537 pages=4\n- 盘前 5m as-of 2026-10-14T08:00:00Z（ohlc-5m rows=426 days=5/5；盘前仅 1 根 bar，量 312）\n- short-data as-of 2026-10-13T15:25:53Z rows=1000（⚠ T-1，未更新）\n- greek-exposure as-of 2026-10-14 rows=251 net_gamma=19439.7402",
+ "ttft_ms": 37719,
+ "type": "result",
+ "duration_ms": 57714,
+ "uuid": "79bdcc22-9ebc-4098-adc8-4d165578f6ec",
+ "ttft_stream_ms": 1559,
+ "time_to_request_ms": 37,
+ "first_content_frame_ms": 1560,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

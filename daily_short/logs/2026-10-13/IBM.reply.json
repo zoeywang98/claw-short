@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 157208,
+ "stop_reason": "end_turn",
+ "session_id": "e6011825-3952-40a9-bd5f-bb51ee2d5225",
+ "total_cost_usd": 2.0090446,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 213277,
+  "cache_read_input_tokens": 29103,
+  "output_tokens": 14850,
+  "output_tokens_details": {
+   "thinking_tokens": 10396
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 213277,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 14850,
+    "cache_read_input_tokens": 29103,
+    "cache_creation_input_tokens": 213277,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 213277
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 14850,
+   "cacheReadInputTokens": 29103,
+   "cacheCreationInputTokens": 213277,
+   "webSearchRequests": 0,
+   "costUSD": 2.0090446,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 10396,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**IBM** · 软件/企服 · Technology · 数据日 2026-10-13 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20261012）· ⚠ short-interest asof 20260930（FINRA，滞后 13 天）→ 这两层结论降为观察\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- **SI**：2.56% float（as-of 09-30，滞后 13 天）[已验证]，远低于 10%。\n- **SVR**：近几日 42.9%（10-12）/ 36.9%（10-09）/ 44.6%（10-08）/ 50.3%（10-07）[已验证，T-1]。近期没有连日 ≥55%，只有 09-30 的 56.9% 是孤立一天。条件 1 不成立。\n- **DTC**：近三期 8/31 4.51 → 9/15 4.56 → 9/30 4.09。没有逐期上升，也大于 2。条件 2 不成立。\n- **|spot − flip|**：spot 230.65（DP NBBO 中点，20:57Z）。\n  - 对 vol 口径 flip 231.30：差 0.65，即 0.28%，满足条件 3。\n  - 对 OI 口径 flip 222.85：差 3.38%。\n- **相位闸**：SI 9/15→9/30 为 +0.18pt。SVR 单日最大变动是 −7.7pt（10-08→10-09）。没有 ≥10pt 的单日回落。\n- **借券**：费率 0.39%（short-data 10-13 15:25Z），10-12 为 0.41%。可借量 10.0M，10-09 为 7.6M，在回升，不紧 [已验证]。\n- → **非 🧨**（条件 1、2 均不成立）\n\n② 熔断：\n- 名单负 gamma **6/23**（LITE、COHR、AAOI、GLW、VRT、NBIS），未达 ≤4 的门槛。\n- 本票 net gamma **+60,477**（greek-exposure 10-13 行）[已验证]。\n- 本票自 10-09 起由负转正：10-08 为 −27,383 → 10-09 +63,407 → 10-12 +55,758 → 10-13 +60,477。\n- → **未熔断**。但本票自身处在正 gamma 毯下，派发梯天然会被 dealer 高抛低吸压制。\n\n③ 量级（as-of 10-13）[已验证]：\n- **1D DP 绝对量**：dark 1,979,340，regular 504,098，DP% 79.7%。这是 22 日窗口里的低值，1M 为 87.3%。量为 1M 均量的 0.79×。\n- **大单参与度**：either 口径 7.13%（dark 6.40%），by-size 仅 0.66%。\n- 盘后 25 笔 block 均以 230.78 成交（prior_reference_price），占全日 2.14%，属于收盘参考价回报，不是主动定价。\n- 7.1% 未达 16–21% 的机构意图档，原文对这一区间没有定义。\n- → **薄**，不强行定方向。\n\n④ 方向（灰色重心迁移）[DP 已验证；1H K 线缺失，以日线 / 5m 代替]：\n- **Long（1M）**：centroid 224.91，poc 221。dark_vwap 228.14，被 9/14–9/17 的 237–250 高位库存抬高。\n  - 1M 主库存有两块：220–222 是 9/28–10/07 的底部换手区；229–231 是 9/18–9/22 的破位区，10/01 冲到 234.27 后收在 225.62，那次收复失败。\n- **Medium（1W）**：centroid 224.96，poc 226。相对 1M 重心为**横移**（+0.05），poc 从 221 上移到 226。\n- **Short（2D）**：centroid 229.25，poc 231。1D 为 231.25 / 231。\n  - 逐日重心：10-07 220.1 → 10-08 223.3 → 10-09 226.2 → 10-12 226.1 → 10-13 231.3。短端随价格同步上迁。\n- **Price**：spot 230.65 落在 2D 重心之上、1D 重心之下，站在新 DP 带（230–232）里面，没有跑在 inventory 前面。所以不构成 Trap warning。\n- **Retest**：\n  - 10-13 开盘 228.5，冲到 233.5（13:55Z），首次回踩低点 230.79（14:20Z）守住 230.75–231 档后回到 233.04。\n  - 尾盘被打回 230.58–230.8，收在 231 poc 下方、230 档上方。\n  - 结论：230 带守住，但\"再向上离开\"未完成。这一带正是 9/18–9/22 的旧破位库存，裁决未出。\n- **Cross-check**：\n  - net_gamma 由负转正；net_delta 由 −3.18M（10-08）转为 +161k。\n  - gex-levels vol 口径 flip 227.89→231.30，call wall 230→232.5。\n  - 衍生品结构在重建，与 DP 短端上迁同向，不支持派发。\n- → **不明**：Long→Medium 横移，Medium→Short 上移，两段不一致。偏置向上，不是派发确认，也不是 Trap warning。\n\n⑤ 动机：未命中派发；最接近 **吸货**（仅为状态，不下结论）\n- 下不了结论的原因：今日 flow 的次日 OI 腿缺失，oi-change 只反映 10-12 的交易。\n- **证据链**：\n  - **DP 迁移**：价位多窗口上迁，poc 221→226→231，逐日重心逐级抬升；价格站上 226、228 两级 [已验证]。这与派发要求的\"价位平 / 下\"相反。\n  - **OI vs 成交量**：\n    - 10-08 的 Nov 250C ask 6,545 张，次日 OI 3,132→9,312，确认为 Buy to Open [已验证]。\n    - 全链 call OI 345,141→349,345（+4,204），put OI +4,613 [已验证]。\n    - put OI 增量主要来自 10-16 到期的 215P（+2,689），属周度到期，权重低。\n  - **flow 结构**（§7.3 拆解，as-of 19:15Z）：\n    - **Jan27 220P / 215P**：17:48:11 同一时刻分 16 笔 ask 成交，共 1,587 张、约 1.70M premium，RepeatedHits，单腿，无 sweep。vol 1,729 < OI 3,146，按字面不算新建仓。可能是财报前的保护，也可能是方向押注；是否配对 DP 卖出无法验证 [假设]。\n    - **Dec27 240/270 call 价差**：bid 200 张、−1.24M。对应 10-08 买入开仓的同一价差（435DTE，193 张），属平仓，不是写 call 盖子 [已验证结构，次日 OI 缺失]。\n    - **Dec26 价差移仓**：卖 210/240 价差，买 230/260 价差，像上移行权价的 roll [假设]。\n    - **2028-12 两笔 long risk reversal**：卖 210P / 买 275C、305C。call 腿 vol > OI（50 vs 10，100 vs 13），属新开多 [已验证]。\n    - **10-16 到期的深度 ITM put**（265 / 275 / 325）在 bid 卖出，futures_floor 标记。属机械 / 融资型，降权。\n  - **flow-IV**（today_complete）[已验证数据]：\n    - call_ask 0.495，10-12 为 0.335、10-09 为 0.372，抬升。\n    - put_ask 0.484，10-12 为 0.550，回落。\n    - 两者方向相反，且被财报前期限溢价污染：7D IV 0.547，30D 0.442。不作为加注 tell。\n  - **IV×RV**：IV30 0.442，RV21 0.278，HV20 0.286。\n    - 自 9/21 起 IV > RV，IV 在高位（1Y 分位 78.4），RV 自 0.36 回落。\n    - 对应\"IV > RV 且 IV 高位 = vol 终将回归，别按趋势读\"。\n    - 不是 RV > IV 的高位空头行情签名 [已验证]。\n  - **借券**：不紧，没有燃料或拥挤信号。\n  - **gamma 位置**：spot 夹在 OI 口径 put wall 230 与 call wall 235 之间，略低于 vol 口径 flip 231.3。DP 主档 230 / 231 / 232 与墙位对齐，有 gamma hedge 成分 [已验证位，因果为假设]。\n  - **Fund rebalance**：距月末 13 个交易日，不是月末 / 季末。软件组当日 3 涨 3 跌，不是篮子型。排除。\n\n⑥ Dealer（gex-levels 10-13 19:59Z）：\n- **vol 口径**：call wall 232.5（+2.5），put wall 210（−10），flip 231.30（+3.41），magnet 235（+5）。\n- **OI 口径**：call wall 235（0），put wall 230（+5），flip 222.85（+0.06），magnet 235（+15）。\n  - strike 表的 magnet 为 220，与 gex-levels 不一致。\n- **Dealer Pivot**：缺失。\n- **flow 意图净额**（≥50k tape）：\n  - call：ask 1.47M − bid 2.09M = **−616k**。bid 侧主要是 Dec27 价差平仓（1.23M）和价差腿，不是净写盖子。\n  - put：ask 2.08M − bid 1.22M = **+860k**，主要是 Jan27 220P / 215P 那一笔。\n  - 全日 bullish 13.43M 对 bearish 13.19M，基本持平。\n- **墙位 flow**：OI call wall 235（10-16 到期）当日 ask 2,600 / bid 1,192，RepeatedHits 偏 ask。但墙位没有上移，且次日 OI [缺失]。\n- → 决策表 **无命中**。\n\n**挤压反噬**：无。SVR 42.9% < 50%；软件/企服组当日 3 涨 3 跌、均值 +0.005%，没有轧空迹象。\n**财报**：10-21（盘后）。距今 8 个自然日，刚好在 7 日弃权窗外。但 Jan27 put 买盘和 7D / 14D IV 溢价都已在定价这次事件。\n**仓位 / 意图 / 不对称性**：\n- IBM 从 220–222 的底部 DP 库存（1M poc 221）反弹，回到 9/18–9/22 的破位库存带 229–232 retest。短端 DP 随价格一路上迁，dealer gamma 自 10-09 转正，衍生品账本在做 call 价差上移和长期 risk reversal。看不到\"借强出货\"的派发签名。\n- 唯一偏空的是财报前的一笔 Jan27 220P / 215P 单腿买入，意图未验证。\n- 在正 gamma pin（230–235）里、财报前 8 天、没有派发读数的情况下做空，右尾成本高，不对称性不利。\n\n**失效位**（判决线，破位前不是 setup）：\n- **偏空条件**：收盘跌破 229.25（2D 重心）/ 230（OI put wall），回到 226（1W poc）以下且不能 reclaim，同时 2D 重心回落到 1W 重心 225 以下。届时重新按派发评估，财报日窗口另计。\n- **偏多确认**：站稳 231.3（vol flip）并离开 232.5（vol call wall），即健康 acceptance，转为吸筹确认，彻底不是做空候选。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-13 rows=15 days=22/22\n✅ RAN darkpool as-of 2026-10-13T20:57:44Z rows=161 blocks=161 spot=230.65\n✅ RAN option-trades as-of 2026-10-13T19:15:19.687000Z rows=64 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-13 2026-10-13T19:59:54.198000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-13 rows=251 net_gamma=60477.3083\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=13d\n✅ RAN short-volume as-of 2026-10-12 rows=500 ratio=0.429\n✅ RAN short-data as-of 2026-10-13T15:25:53Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 13 天）",
+ "ttft_ms": 114510,
+ "type": "result",
+ "duration_ms": 157245,
+ "uuid": "b831bc5e-3b0c-4846-901a-20f2f6ddb8cc",
+ "ttft_stream_ms": 5691,
+ "time_to_request_ms": 28,
+ "first_content_frame_ms": 5691,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

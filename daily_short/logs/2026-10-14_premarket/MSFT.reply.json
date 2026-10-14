@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 75712,
+ "stop_reason": "end_turn",
+ "session_id": "58544459-ce20-4d15-ad9d-fd8d1acd0585",
+ "total_cost_usd": 0.9302468,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 97370,
+  "cache_read_input_tokens": 13394,
+  "output_tokens": 7430,
+  "output_tokens_details": {
+   "thinking_tokens": 4834
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 97370,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 7430,
+    "cache_read_input_tokens": 13394,
+    "cache_creation_input_tokens": 97370,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 97370
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 7430,
+   "cacheReadInputTokens": 13394,
+   "cacheCreationInputTokens": 97370,
+   "webSearchRequests": 0,
+   "costUSD": 0.9302468,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4834,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**MSFT 盘前确认** · 扫描日 2026-10-13 · 确认日 2026-10-14 盘前\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n\n次日 OI（as-of 2026-10-14）：\n\n```\n合约          last_oi → curr_oi   Δ        昨日 ask / bid       多腿\n11/13 C550    7,357 → 10,283     +2,926   2,242 / 1,721        54\n10/14 C550    1,909 → 3,969      +2,060   13,317 / 14,178      962\n10/16 C550   63,268 → 61,182     −2,086   5,145 / 8,064        1,389\n10/30 C575      487 → 15,520    +15,033   15,093 / 388         15,192\n10/30 C555   16,679 → 16,695        +16   532 / 15,100         15,401\n11/20 C540    6,399 → 9,141      +2,742   365 / 364            3,400\n11/20 C600    7,764 → 10,368     +2,604   525 / 701            4,781\n11/20 C560   11,488 → 10,787       −701   549 / 1,205          1,806\n10/23 P555       54 → 2,214      +2,160   2,280 / 236          32\n10/23 P550       28 → 871          +843   899 / 271            68\n10/14 P530    2,387 → 1,795        −592   1,021 / 2,300        2,220\n全链          call +48,476 · put +37,733\n```\n\n- **550 call wall（vol 545→550，Wall↑）**：11/13 C550 是 ask 多于 bid，OI 增加 2,926（已连续 9 日增加），命中情形 1（Wall↑ + Ask + OI↑）。客户 Buy to Open，dealer Sell to Open，dealer **买**股票对冲 [已验证]。\n  - 10/14 C550 的 OI 增加，但 ask 与 bid 接近均衡（bid 略多），且今天到期，方向不计。\n  - 10/16 C550 是 OI 降、bid 为主，但墙没有下移，不符合情形 3，不入表。\n- **10/30 C555 / C575（昨晚\"上移 long call 的 roll\"[假设]）**：\n  - 575 腿：成交 15,500 大于原 OI 487，OI 增加 15,033，ask 侧，已成为新持仓 [已验证]。\n  - 555 腿：bid 15,100，但 OI 几乎不动（+16），没有出现 roll 所需的\"旧腿 OI 降\"。按 bid 侧 Sell to Open 读（熊市 call 价差）也需要 OI 增加，同样没有出现。roll 读法改为 **[冲突]**，整组意图未明确。\n  - 575 不在墙位，决策表无命中。\n- **11/20 C540/C600 cross**：两腿 OI 同增（+2,742 / +2,604），确认是新开的价差 [已验证]。side 为 none，意图仍缺失。11/20 C560 的 OI 减少 701，与昨晚 C560/C600 一组的对应关系未明确。\n- **put 墙（vol 535→530，OI 540→525，Wall↓）**：\n  - 10/14 P530 是 bid 为主、OI 减少 592，字面上对上 Wall↓ + Bid + OI↓。但它是 0DTE 小量，且 DHR 决策表的 dealer 股票方向一列是按 call 写的，put 侧对应方向未明确。\n  - 其余 put 墙附近的合约 OI 多数在增加，与 Wall↓ 不吻合，无命中。\n  - 10/23 P555 / P550 是 ask 侧短端新仓，不在墙位，不入表。\n\n四点对照：\n- **结构 · 一致**：vol call wall 上移至 550，magnet 550；OI call wall 550 不变；Dealer Pivot 缺失。\n- **flow · 一致**：10-12 与 10-13 在 550 的 flow 都以 ask 为主（10-13 的 11/13 C550 为 ask 2,242 对 bid 1,721）。\n- **次日 OI · 一致**：11/13 C550 OI +2,926 [已验证]。昨晚的 555/575 roll 腿为 [冲突]，但不在墙位，不影响情形 1 的判断。\n- **价格（盘前）· 弱一致**：\n  - 盘前 last 545.40，较前收 543.73 高 +0.31%；区间 543.45–545.89。\n  - 一直站在 2D DP core 539–541 和 2D 重心 543.44 之上，最低点 543.45 恰好贴住 2D 重心，没有失守。\n  - 盘前没有测试 550。盘前量仅 76,515 股，量小，不能算裁决。\n- 合计：情形 1（dealer 买股票）三点已验证，价格为弱一致。这指向对多头有利的对冲流，不支持做空。\n\n其他变化：\n- **借券**：short-data 仍是 2026-10-13T15:25:53Z，今早没有更新，⚠ short-data = T-1。费率 0.25%、可借 10,000,000 股不变，① 的借券读数照旧。\n- **今天的 gamma**（greek-exposure 2026-10-14）：net gamma 931,140，较 942,803 小降，仍为正。net delta 107.19M，较 110.24M 小降。② 本票读数不变；名单 23 只的负 gamma 计数今早未重算，沿用昨晚 6/23，未熔断。\n- **盘前价格**：以盘前 last 545.40 粗算，距 vol flip 527.72 为 3.24%，已大于 3%。但这不是 DP NBBO 中点，而且昨晚 🧨 条件 1、2 本来就不成立，① 结论不变。\n- ③④⑤ 原样沿用（④ 吸筹确认，⑤ 吸货）；挤压反噬标签（SVR 50.6%）仅作记录。\n- **财报**：10-28，距确认日 14 个自然日，不在 7 天窗口内。\n\n**仓位 / 意图 / 不对称性**：550 墙上的 ask 侧 call 新仓已被次日 OI 坐实，dealer 在对冲层面是股票买方。DP inventory 逐级上迁，盘前也接受在 2D core 之上。做空等于逆着已确认的建仓和 dealer 买盘，不对称性仍然不利于空头。555/575 那组只确认了 575 的新仓，意图未明确，不作为任何方向的证据。\n\n**失效位 / 判决线**：\n- 吸筹读数的失效条件照旧：收盘失守 2D DP core 539–541，且随后回踩 1W core 529–535 时没有吸收、没有 reclaim。之后才重新评估派发或 confirmed trap。\n- 盘前参考位是低点 543.45（约等于 2D 重心）。\n- vol flip 527.72 / OI flip 522.61 之上，dealer 正 gamma 缓冲仍在。\n- 在此之前不考虑空头。\n\n**运行日志**：\n- ✅ oi-change as-of 2026-10-14，rows=3367，pages=8\n- ✅ 盘前 5m as-of 2026-10-14T10:45:00Z，rows=766，days=5/5\n- ⚠ short-data as-of 2026-10-13T15:25:53Z，rows=1000（T-1，未更新）\n- ✅ greek-exposure as-of 2026-10-14，rows=251，net_gamma=931140.3905",
+ "ttft_ms": 51888,
+ "type": "result",
+ "duration_ms": 75749,
+ "uuid": "017bdad3-193e-4a33-927f-4844a32dbe8b",
+ "ttft_stream_ms": 1556,
+ "time_to_request_ms": 26,
+ "first_content_frame_ms": 1556,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
