@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 101104,
+ "stop_reason": "end_turn",
+ "session_id": "f6bd65e3-d7d0-4b09-8a3d-53b03b07e9d8",
+ "total_cost_usd": 1.7127492000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 188703,
+  "cache_read_input_tokens": 30786,
+  "output_tokens": 9848,
+  "output_tokens_details": {
+   "thinking_tokens": 6802
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 188703,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 9848,
+    "cache_read_input_tokens": 30786,
+    "cache_creation_input_tokens": 188703,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 188703
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 9848,
+   "cacheReadInputTokens": 30786,
+   "cacheCreationInputTokens": 188703,
+   "webSearchRequests": 0,
+   "costUSD": 1.7127492000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 6802,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**IBM** · 软件/企服 · Technology · 数据日 2026-10-14 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20261013）· ⚠ short-interest = FINRA asof 20260930（滞后 14 天）\n**结论**：⚪ 不构成 setup。④ 方向不明，DP 重心是上移偏置，不是派发；财报 10-21 在 7 天内，按 §8.2 弃权。\n\n① 🧨 挤仓否决：**非 🧨**\n- SI 2.56% float（as-of 09-30，滞后 14 天）[已验证]。\n- SVR（as-of 10-13，T-1）[已验证]：10/13 44.8%，10/12 42.9%，10/09 36.9%，10/08 44.6%，10/07 50.3%，没有连日 ≥55%。\n- 借券费 0.41%，可借量 7.0M（前一日 10.0M）（as-of 10-14）[已验证]。\n- 第 1 条不成立：SI < 10%，借券费 < 1%。\n- DTC 三期为 8/31 4.51 → 9/15 4.56 → 9/30 4.09，没有逐期上升，且都 > 2，第 2 条不成立。\n- |spot − flip|：spot 228.365 对 vol flip 227.9 为 0.2%，对 OI flip 222.98 为 2.4%，第 3 条成立。\n- 相位闸：SI +0.18pt，SVR 10/12→10/13 +1.9pt，没有单日 −10pt。\n\n② 熔断：**未熔断**\n- 名单负 gamma 7/23（≤4 只才触发）。\n- 本票 net gamma +72,216.5，为正（as-of 10-14）[已验证]。\n\n③ 量级：**薄**，不强行给方向（as-of 10-14，盘中到 18:00Z）[已验证]\n- 1D DP 989,140 股，是 1M 日均 2,434,530 的 0.41×；relative volume 0.34。\n- 大单参与度 9.1%（either rule），按 size 只有 1.5%，不在 16–21% 机构区间。\n\n④ 方向（灰色重心迁移）：**不明**，偏置向上（as-of 10-14）[已验证]\n- **Long**：1M poc 221，centroid 225.04，主库存在 220–222。\n- **Medium**：1W poc 226，centroid 227.42，相对长期上移。\n- **Short**：2D poc 231，centroid 230.83，继续上移。重心 Long < Medium < Short，与派发要求的逐级下移相反。\n- **Price**：10/13 从 227.3 拉到 233.5，在 230–232 换手。10/14 开在 231.13，高点 233.14 后一路回落到 228.3，跌回 2D 重心 230.83 下方。新高位节点没有被接受，因此不构成吸筹确认。\n- **Retest**：正在回测 1W core 226–227.4，spot 仍在其上方，未裁决。重心是同步上移的，不属于 Trap warning 的定义。\n- **GEX/DEX**：net gamma 从 10/08 −27,383 回到 +72,216，net delta 从 −3.18M 翻到 +0.90M。衍生品结构在支持库存上迁，不是派发。\n\n⑤ 动机：**只报状态，不定性**。所需的腿：今日次日 OI [缺失]，今日 flow-IV 未收盘 [缺失]。\n- **OI vs 成交量**（10/13 交易 → 10/14 OI）[已验证]：\n  - put OI +2,661，主要是 Jan-27 P220 +623（前一日 ask 1,719）和 Jan-27 P215 +573（ask 568），属新建 put。\n  - 前端 call 在平仓：Oct-16 C240 −508、C230 −402，Nov C250 −443。\n  - \"call OI 降 + put OI↑\" 与派发指纹的一项吻合，但时点在财报前一周，事件保护和方向押注无法区分 [假设]。\n- **Flow 结构**（今日，≥$50k，as-of 16:50Z）[已验证]：\n  - call 意图净买 +$104k，put 意图净卖 −$378k，sweep 为 0。\n  - Nov C240 ask 重复命中（630+138 张，约 $598k）；Oct-30 C232.5 ask 150 张，vol > OI（OI 19），为新单腿开仓。\n  - Jan-27 C220 的 bid 是 220/280 call vertical 的空头腿，属多腿结构，不是盖子信号。\n  - Oct-16 P225 约 3,000 张 ask 是 215/225 1×2 put frontspread（2 DTE）；Oct-23 P220 ask 重复命中 345 张，覆盖财报。\n- **flow-IV**：今日 call_ask 0.470，10/13 为 0.495，平到略降，未见加注 [假设，今日未完]。\n- **IV×RV**：IV30 0.445，RV21 0.279，HV20 0.243。IV > RV 且 IV 偏高（1y 百分位 79.2），RV 从 0.36 回落中。属于 \"vol 终将回归、别按趋势读\"，不是 RV > IV 的空头行情。7d IV 0.591 含财报溢价 [已验证]。\n- **DP 时点**：11:08 有 17,585 股在 229.63 打穿 bid 的 block 簇，之后价格继续往下淌。这只是单日现象，没有多窗口延续 [已验证 / 单日]。\n- **Fund rebalance**：距月末 12 个交易日，不构成该指纹。\n- **借券**：0.41%，不紧。\n\n⑥ Dealer：**无命中**\n- 结构（gex-levels OI 口径，10-14）[已验证]：\n  - call wall 235，日变 0；put wall 230→225；flip 222.98，+0.13；magnet 220，−15。\n  - vol 口径：call wall 250，+17.5；flip 227.9，−3.4。按 §6.1 只能读作风险中心移动，不推断 dealer 挪仓。\n  - Dealer Pivot [缺失]。\n- 对表：call wall 没有移动，不进表。put wall 下移，但 230P 在 10/13 以 bid 为主而 OI +48，与表内任一行都不符。\n- 今日 flow 的次日 OI [缺失]。\n\n**挤压反噬**：无。SVR 44.8% < 50%；软件/企服 6 只中 1 只上涨，组均值 −2.0%，不在轧空相位。\n**财报**：10-21（盘后），在 7 个自然日内。\n**仓位 / 意图 / 不对称性**：\n- 一个月内暗池库存从 220–222 逐级搬到 230–232，dealer 同步重建了正 gamma，DEX 转正，这是上迁结构，不是借强出货。\n- 今天的回落只是第一次回测新节点，1W core 226–227.4 还没破。\n- 财报前一周前端 IV 0.59，现在做空等于逆着正 gamma 毯、付事件溢价，不对称性差。\n\n**失效位**：\n- 收复 230.83（2D 重心）：上迁获价格接受，空头读数作废。\n- 跌破 227.42（1W 重心）并失守 226（1W poc）：回测失败，重跑 ④。\n- 财报 10-21 之后整票重跑。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-14 rows=14 days=22/22\n✅ RAN darkpool as-of 2026-10-14T17:57:51Z rows=80 blocks=80 spot=228.365\n✅ RAN option-trades as-of 2026-10-14T16:50:52.490000Z rows=17 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-14 2026-10-14T17:59:00.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-14 rows=251 net_gamma=72216.4661\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=14d\n✅ RAN short-volume as-of 2026-10-13 rows=500 ratio=0.448\n✅ RAN short-data as-of 2026-10-14T13:21:27Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 14 天）\n\n```watch\n[{\"price\": 230.832, \"dir\": \"above\", \"label\": \"收复2D重心 空头读数作废\"}, {\"price\": 227.416, \"dir\": \"below\", \"label\": \"失守1W重心 回测重评\"}, {\"price\": 226.0, \"dir\": \"below\", \"label\": \"失守1W poc 重跑④\"}]\n```",
+ "ttft_ms": 73671,
+ "type": "result",
+ "duration_ms": 101677,
+ "uuid": "ef625bf6-9d39-47b5-bdfc-06525c296799",
+ "ttft_stream_ms": 1635,
+ "time_to_request_ms": 602,
+ "first_content_frame_ms": 1636,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

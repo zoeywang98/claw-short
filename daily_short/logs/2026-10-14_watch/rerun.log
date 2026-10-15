@@ -1,0 +1,25 @@
+[session-sqlite] slow SQLite reclamation Worker operation pid=24917 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=1039 outcome=resolved
+== VKTX
+**VKTX 盘中重跑** · 15:05 ET · 起因：15:05 跌破 25.6（跌破OI flip，转负gamma）
+**结论**：✅ 做空候选（置信度：低）
+**仓位 / 意图 / 不对称性**：
+- 9/22 催化剂行情买进的人套在 35–41。之后每次反弹都被卖出，库存在 28 → 27 → 26 → 25 一路更低的价位换手，空头读数站在 DP 迁移这一边。
+- 下方 25.0 是今天的 DP 节点，也是 OI magnet。跌破 vol flip 24.53 后，本票转入 dealer 空 gamma 区。
+- 上方 26.0 / 27.0 是失守的 DP core，可用作止损锚（ATR14 1.79）。
+- 大单参与度 3.7%，信念强度只算低档；10-28 财报前要了结或收紧。
+**失效位**：
+- 收复并站稳 27.0（1W poc / 共同 DP core）→ 派发读数作废。
+- 重新站上 26.0（2D / 1D poc）→ 降级重评。
+- 跌破 24.53（vol flip）→ 按新价重跑 ① 的 flip 条件。
+（熔断 / 板块数据沿用 2026-10-14_1501；完整报告 logs/2026-10-14_1505/VKTX.reply.json）
+
+[session-sqlite] SQLite reclamation Worker failed pid=30697 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=465 outcome=rejected exitCode=1 error="SQLite session reclamation database owner is no longer current" errorFrame="at SqliteReclamationWorker.assertCurrent (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-worker-CLuHKRTt.mjs:157:44)"
+== FLEX
+**FLEX 盘中重跑** · 15:30 ET · 起因：15:30 站上 100.87（收复 vol flip，降温）
+**结论**：⚪ 不构成 setup（④ 按字面判为"不明"；另外 THIN 链 nstrk 24，就算方向成立，上限也只到 👀）
+**仓位 / 意图 / 不对称性**：1W 在 117–119 换手的高价库存现在被套在 spot 上方约 15%，新成交集中到 99–101（1D DP% 约 70%）。dealer gamma 接近持平、spot 在 flip 之下，对波动的阻尼变弱。长期 call 在 ask 侧被买，同时有人买熊市 put 价差，期权账本两头下注。周跌 15%、IV 高位、链又是 THIN，此时追空没有规则层面的优势。
+**失效位**：
+- 收回 108–109（旧 DP core 下沿 / 2D poc），并站上 vol flip 106.08 → 下行读数作废。
+- 跌破 99.18（今日低点，也是 20 日低点）→ 1D 新节点失守，重跑 ④。
+（熔断 / 板块数据沿用 2026-10-14_1505；完整报告 logs/2026-10-14_1530/FLEX.reply.json）
+

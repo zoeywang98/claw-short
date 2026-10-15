@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 115397,
+ "stop_reason": "end_turn",
+ "session_id": "1ee7d61f-c6aa-4903-ae49-e5064a551eab",
+ "total_cost_usd": 0.7164276,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 60678,
+  "cache_read_input_tokens": 30878,
+  "output_tokens": 11241,
+  "output_tokens_details": {
+   "thinking_tokens": 8421
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 60678,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 11241,
+    "cache_read_input_tokens": 30878,
+    "cache_creation_input_tokens": 60678,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 60678
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 11241,
+   "cacheReadInputTokens": 30878,
+   "cacheCreationInputTokens": 60678,
+   "webSearchRequests": 0,
+   "costUSD": 0.7164276,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 8421,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**VTRS** · 医药 · Healthcare · 数据日 2026-10-14 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20261013）\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- **SI**：3.66% float（as-of 09-30，滞后 14 天）[已验证]。\n- **SVR**：近几日 42.4% / 41.1% / 49.6% / 51.0%（10-13 → 10-08）。没有连日 ≥ 55%，借券费也低于 1%，第 1 条不成立 [⚠ T-1]。\n- **DTC**：4.17。近三期 5.34 → 5.57 → 4.17，没有逐期上升，第 2 条不成立 [已验证]。\n- **|spot − flip|**：spot 17.5（DP NBBO 中点），oi flip 16.13，相差 7.8%，大于 3%，第 3 条不成立。\n- **相位闸**：SI +0.11pt，SVR +1.3pt，未触发。\n- **借券**：费率 0.2736%，可借 10M 股，20 日内持平（as-of 10-14 [已验证]）。\n- → **非 🧨**\n\n② 熔断：名单负 gamma 7/23（≤4 只才触发）。本票 net gamma +405,307，21 日区间 321k–508k，一直为正 [已验证 10-14] → **未熔断**\n\n③ 量级：\n- 1D 暗池 4.16M 股，是 1M 均值的 0.98 倍；DP% 51.2%。\n- 大单参与度 13.2%，落在 16–21% 和 3–4% 两档之间，原文对中间档没有定性。\n- 最大成交：11:41 一笔 500k 股 @17.58，加一笔 100k ISO @17.58，都打在 bid 17.61–17.62 下方。之后价格仍上冲到 17.815，说明被吸收了。\n- → **足够（非薄），机构意图不确定**\n\n④ 方向：\n- **Long**：1M poc 17.0，centroid 17.137。9/28–29 冲到 18.43，18 档（18.00–18.99）积下 13.0M 暗池库存。\n- **Medium**：1W centroid 16.996，poc 17.0，18 档几乎清零，比 1M 下移。\n- **Short**：2D centroid 17.0，poc 17.0，与 1W 横移。\n- **Price**：spot 17.44–17.5 在 17 档内，没有跑在 inventory 前面。\n- **Retest**：\n  - 18 档高位库存没被接受：9/30 起跌回 17 档，10/5 高 17.91、10/14 高 17.815 都没回到 18。\n  - 但 10/8 回踩到 16.89 后收在 17.44，17 core 守住了，没有出现\"再失守\"。\n- **Cross-check**：\n  - net_delta 从 9/29 峰值 7.99M 回落到 7.21M，与价格同步回落。\n  - gex：put wall 17 / call wall 18 / oi magnet 18，正 gamma 箱体。\n- 重心是\"下移一级后停滞\"，不满足\"逐级下移 + 高位失守\"，也没有升级为 confirmed trap → **不明**（as-of 10-14 [已验证]）\n\n⑤ 动机：倾向 Gamma hedge [假设]，不定性。\n- **DP 落点**：暗池量簇在 17 档，正好是 put wall 17，位于 17–18 正 gamma 区间，1W/2D 的 DP% 没有持续迁移。\n- **期权结构（10-13）**：一笔 call_diagonal_spread（bid，301 张）。拆开是 Oct17C 买平（ask 350，OI −362）加 Jan18C 卖开（bid 346，OI +346），属于 covered call 上移展期，是多腿调仓。\n- **put 侧**：Nov17P 在 bid 卖开，OI +118，是在 put wall 卖 put。\n- **OI vs 成交量**：Nov17P 当日 vol 403 < OI 1840；call/put OI 总增量只有 +82 / +138，没有信念建仓 [已验证 oi-change 10-14]。\n- **flow-IV**：今日没有 ≥ $50k 的成交，flow-IV [缺失]，历史大多为空。\n- **IV×RV**：IV30 0.402 > RV21 0.211，IV 1 年分位 80.4%，处在 IV 高位且仍在扩张（区间可能含 11-05 财报 [假设]）。这属于\"IV > RV 高位 = vol 回归\"，不是 RV > IV 的空头 regime。\n- **与派发指纹的冲突**：派发要求 IV 平或压缩，这里 IV 在扩，不符。\n- 借券松，dealer 在 flip 上方 7.8%。\n\n⑥ Dealer：\n- **结构**：call wall 18.0（d/d 0）、put wall 17.0（oi 口径 d/d 0，vol 口径 16 → 17）、gamma flip oi 16.13（+0.04）/ vol 16.15（−1.62）、Dealer Pivot [缺失]。\n- **今日 flow 意图净额**：net call +$53k，ask 289 / bid 286 基本对半；net put −$10k，bid 353 > ask 304，偏卖 put。量级很小。\n- **次日 OI**：今日成交的次日 OI [缺失]。\n- **决策表**：墙位不变，四种情形都不成立 → **无命中**。\n\n**挤压反噬**：SI 3.66%、SVR 42.4%，都低于 50%，不标；医药组当日 3 涨 3 跌，没有轧空相位 → 无\n**财报**：11-05（盘前，22 天后）\n**仓位 / 意图 / 不对称性**：\n- 17–18 是 dealer 正 gamma 箱体，dealer 高抛低吸。9/28–29 在 18 档换手的约 13M 暗池库存被套在上方，成为头顶供给。但 17 core 刚守住一次，下方没有失守。\n- 期权侧是 overwrite 展期加卖 put 收租，两边都在卖 vol，不押方向。\n- 链子 THIN（nstrk 15 < 45），永不进确认表。在箱体里做空等于和 dealer 对赌，没有不对称性。\n**失效位**：\n- 跌破 17.0 后失守 16.865（20 日低）、不能 reclaim → 17 core 失守，按 confirmed trap / 派发重跑；再破 16.13 flip 就离开正 gamma 毯。\n- 站上 18.0 并守住 → 18 档库存被重新接受，空头读数作废。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-14 rows=2 days=22/22\n✅ RAN darkpool as-of 2026-10-14T20:05:11Z rows=23 blocks=23 spot=17.5\n✅ RAN option-trades as-of 2026-10-14 rows=0 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-14 2026-10-14T20:15:00.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-14 rows=251 net_gamma=405306.9986\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=14d\n✅ RAN short-volume as-of 2026-10-13 rows=500 ratio=0.424\n✅ RAN short-data as-of 2026-10-14T14:55:31Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 14 天）\n\n```watch\n[{\"price\": 18.0, \"dir\": \"above\", \"label\": \"收复18库存，空头作废\"}, {\"price\": 17.0, \"dir\": \"below\", \"label\": \"测试17 DP core\"}, {\"price\": 16.865, \"dir\": \"below\", \"label\": \"17 core失守，派发重跑\"}, {\"price\": 16.13, \"dir\": \"below\", \"label\": \"跌破flip，离开正gamma\"}]\n```",
+ "ttft_ms": 90371,
+ "type": "result",
+ "duration_ms": 115860,
+ "uuid": "781ee8a6-0307-4d71-a832-e66c00a7e945",
+ "ttft_stream_ms": 1329,
+ "time_to_request_ms": 456,
+ "first_content_frame_ms": 1329,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 109190,
+ "stop_reason": "end_turn",
+ "session_id": "12893bcc-669b-42f9-9f23-143b79461712",
+ "total_cost_usd": 0.9727036,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 94055,
+  "cache_read_input_tokens": 30878,
+  "output_tokens": 10704,
+  "output_tokens_details": {
+   "thinking_tokens": 7563
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 94055,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 10704,
+    "cache_read_input_tokens": 30878,
+    "cache_creation_input_tokens": 94055,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 94055
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 10704,
+   "cacheReadInputTokens": 30878,
+   "cacheCreationInputTokens": 94055,
+   "webSearchRequests": 0,
+   "costUSD": 0.9727036,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7563,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA** · 医药 · Healthcare · 数据日 2026-10-14 · 核心覆盖 8/8\n⚠ short-volume = T-1（asof 20261013）· ⚠ short-interest = FINRA 结算 asof 20260930（滞后 14 天）→ 这两层的结论只作观察\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- 第 1 条不成立。SI 2.56% float（as-of 09-30，滞后 14 天）[已验证·⚠观察]。SVR（as-of 10-13）[已验证·⚠观察]：10/07 56.9%、10/08 42.9%、10/09 36.2%、10/12 45.6%、10/13 43.3%，没有连日 ≥ 55%。借券费 0.27%（short-data，10-14）[已验证]，SI < 10% 且借券费 < 1%。\n- 第 2 条不成立。DTC 近三期 7.71（08-31）→ 27.35（09-15）→ 5.4（09-30），不是逐期上升，最新一期也 > 2。09-15 那期 DTC 27.35、费率 11.35% 是单期跳点，之后已经回落。\n- 第 3 条：|spot 40.885 − flip 40.52（vol）| = 0.89%，≤ 3%；按 OI 口径 flip 39.5，偏离 3.39%。\n- 相位闸：SVR 单日 −2.3pt，SI 2.70% → 2.56%，都没到 −10pt。可借量 10.0M → 9.2M。\n- → 非 🧨\n\n② 熔断：名单负 gamma 7/23（≤ 4 只才触发）· 本票 net gamma +769,661（greek-exposure 10-14）[已验证] → 未熔断\n\n③ 量级：1D 暗池量 4.58M，是 1M 日均的 1.50 倍。DP% 84.8%。大单参与度 21.9%（按规模口径 19.5%），落在机构区间 [已验证]。其中盘前 09:07 有一笔 818,641 股的 average_price_trade，成交价 41.25。→ 足够\n\n④ 方向（灰色重心迁移，as-of 10-14 [已验证]）：\n- Long：1M 的 poc 在 39.0，centroid 39.60。历史库存在 39。\n- Medium：1W 的 poc 在 41.0，centroid 40.52，比 1M 上移。\n- Short：2D 的 poc 在 41.0，centroid 40.97（1D 40.95），继续上移。\n- 结论是 L < M < S 逐级上移。10/9 跳空 39.25 → 41.10（成交 14.8M），暗池当天就在 41 成交了 7.19M，库存跟着价格迁移，不是 Trap 形态。\n- Price：spot 40.885 和收盘 40.72 贴近最新重心 40.97 / poc 41。\n- Retest：\n  - 10/9 盘中下探 40.48、10/12 下探 40.60，两次都收回 41 上方（收 41.10 / 41.17 / 41.25），41 core 守住过。\n  - 今天先冲到 41.87，在 41.6–41.7 打出 25 万股级的大单，尾盘 5 分钟线放量（1.13M）回落，收在 40.72，略低于 41 core。这是第二次考验，还没有裁决。\n- Cross-check：\n  - net delta 从 8.74M（10/07）扩到 11.66M，跳空后维持。\n  - net gamma 在 58 万到 83 万之间，正值。\n  - OI 口径 flip 37.52 → 39.5 上移。衍生品结构和 DP 上迁同向。\n- → 吸筹确认（迁移形态成立；价格回到 41 上方的 acceptance 待复核）\n\n⑤ 动机（只报状态，不定性）：最接近\"吸货 Accumulation\"[假设]。\n- 符合的腿：DP 多窗口上迁 ✓；IV30 从 0.284（09-30）抬到 0.420 ✓。\n- 不符合的腿：call OI 平（+13）✗。\n- OI vs 成交量 [已验证，10/13 的成交]：put OI +538，主要是 bid 侧卖出的长期 put（2027-03 39P +133、11/20 35P +115），属于卖 put 收权利金，不是买保护。10/16 41C −187、41.5C −195，对应前一天 ask 侧 303 / 509 张，是平仓。\n- 今天的 flow [已验证 · 次日 OI 缺失]：\n  - 全部偏 bid 侧，净 call premium −365,745。\n  - 11/20 45C 成交 896 张 > OI 219，单腿、重复 bid，像新开的盖帽 call 写单。\n  - 10/16 40C 重复 bid 434 张，量 < OI，是周度到期的平仓或滚仓。\n  - 22/30 深度价内 call 垂直价差打在 bid，多腿，像调仓。\n  - 全天无 sweep。\n- flow-IV：今天没有 ask 侧成交，call_all 0.64 被深度价内 22C（IV 0.94）拉高，不能和前几日比 [缺失]。\n- IV×RV：IV30 0.42 > RV21 0.286，IV 向上（iv_rank 39.7，1M 分位 100），多半是 11-03 财报前的计价。按 §5.3 不是空头 regime。\n- 25Δ RR 从 −0.021 跌到 −0.078，put 端变贵。\n- 不是月末，不是篮子 → 不是 rebalance。\n\n⑥ Dealer：\n- 结构（gex-levels，10-14）[已验证]：\n  - OI 口径：call wall 42 / put wall 40，日间不变；flip 37.52 → 39.5。\n  - vol 口径：call wall 42 → 45，put wall 35 → 40，flip 41.92 → 40.52，magnet 40。\n  - Dealer Pivot 缺失。\n- flow 意图净额：call 侧 bid 量 2,642 对 ask 828。\n- 次日 OI（10/13 的成交已验证）：41/41.5C 是 Ask + OI↓（客户买入平仓），但 call wall 没有下移，对不上决策表第 4 行。今天 45C 是 Wall↑ + Bid，对应情形 2（dealer 卖股票），需要 10-15 的 oi-change 确认 [缺失]。\n- → 无命中\n\n**挤压反噬**：无（SVR 43.3%、SI 2.56%，都 < 50%；医药组当日 3 涨 3 跌，均值 +0.26%，没有轧空迹象）\n**财报**：11-03（盘前）\n**仓位 / 意图 / 不对称性**：10/9 跳空后，买方在 41 一线完成了约 1.7 亿股量级的暗池换手（1W 在 41 的暗池量 17.3M），库存从 39 搬到 41，这是被接受的新 value，不是供给。今天 41.6–41.7 的大单加上 45C / 40C 的 bid 写单，更像持有人在 40–42 的正 gamma 区间里做备兑、给上方盖帽，不是出货。另外链上 THIN（nstrk 38），即使方向翻成空，上限也只到 👀。要翻空，需要 2D 重心开始往 40 以下迁移。\n**失效位**：跌破 40.52（1W 重心 / vol flip）且收不回 → 吸筹读数作废，重跑方向；跌破 40.0（put wall / magnet）且 2D 重心下移 → 按派发重评。站回 41.0 → 41 core 的 acceptance 恢复。\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-14 rows=3 days=22/22\n✅ RAN darkpool as-of 2026-10-14T20:00:28Z rows=55 blocks=55 spot=40.885\n✅ RAN option-trades as-of 2026-10-14T19:04:05.088000Z rows=3 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-14 2026-10-14T20:15:00.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-14 rows=251 net_gamma=769660.9605\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=14d\n✅ RAN short-volume as-of 2026-10-13 rows=500 ratio=0.433\n✅ RAN short-data as-of 2026-10-14T14:55:31Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 14 天）\n\n```watch\n[{\"price\": 40.52, \"dir\": \"below\", \"label\": \"失守1W重心，重跑方向\"}, {\"price\": 40.0, \"dir\": \"below\", \"label\": \"破put wall，派发重评\"}, {\"price\": 41.0, \"dir\": \"above\", \"label\": \"收复41 core，吸筹延续\"}]\n```",
+ "ttft_ms": 79675,
+ "type": "result",
+ "duration_ms": 109226,
+ "uuid": "2607f7f1-cb35-463f-b42d-c97456225034",
+ "ttft_stream_ms": 825,
+ "time_to_request_ms": 26,
+ "first_content_frame_ms": 825,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

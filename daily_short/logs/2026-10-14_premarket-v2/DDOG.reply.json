@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 64522,
+ "stop_reason": "end_turn",
+ "session_id": "05114d39-ff15-444f-9583-52309d4ec0f5",
+ "total_cost_usd": 0.4388082,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 38549,
+  "cache_read_input_tokens": 15041,
+  "output_tokens": 6370,
+  "output_tokens_details": {
+   "thinking_tokens": 4371
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38549,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 6370,
+    "cache_read_input_tokens": 15041,
+    "cache_creation_input_tokens": 38549,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 38549
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 6370,
+   "cacheReadInputTokens": 15041,
+   "cacheCreationInputTokens": 38549,
+   "webSearchRequests": 0,
+   "costUSD": 0.4388082,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4371,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**DDOG 盘前确认** · 扫描日 2026-10-13 · 确认日 2026-10-14 盘前\n**结论**：昨晚 ⚪ 不构成 setup → 今早 ⚪ 不构成 setup\n- ④ 仍为\"不明\"，不是派发确认，也不是 confirmed trap，✅ 门槛不成立。\n- 次日 OI 证实的是 call 买开和 put 卖开，派发指纹没有命中。\n- 照旧标\"挤压反噬风险\"：SVR 52.2%，as-of 10-12。按 §2 这只是标签，不降档。\n\n次日 OI（as-of 2026-10-14）[已验证]：\n- **墙位（结构仍是 10-13 的读数）**\n  - vol call wall 305 → 285，Wall↓。\n  - 261016C285：OI 240 → 233（−7），昨天 bid 35 / ask 7。按决策表是情形 3（Wall↓ + Bid + OI↓，Sell to Close），dealer **卖**股票（对冲移除）。但只有 7 张，44 张成交里 37 张是多腿，不足以定 dealer 方向。\n  - 305 合约的 OI 不在数据里，未明确。\n  - OI call wall 290 不动。261016C290 OI 1548 → 1557，ask 47 / bid 55，没有 Wall 变化，不套表。\n  - put wall 280 不动，不套表，只记事实：\n    - 261016P280：323 → 501（+178），bid 162 / ask 50，2DTE 卖 put 开仓。\n    - 270115P280：254 → 357（+103），bid 104，其中多腿 102。配 270115P270：110 → 210（+100），ask 100，多腿 100。bull put spread 已落成新仓。\n- **昨天的主要 flow 合约（都不在墙位，决策表无命中）**\n  - 261218P230：207 → 951（+744），bid 856 / ask 8，卖 put 开仓，已变成新持仓。\n  - 270115C360：313 → 639（+326），ask 353；270115C380：111 → 236（+125），ask 151；261120C300：577 → 775（+198），ask 307；270917C290：14 → 89（+75），ask 84、premium $679K。以上都是 call 买开。\n  - 261023C300：100 → 391（+291），ask 231 / bid 173，双向。\n  - 261016C185：358 → 260（−98），bid 289，深度 ITM 平仓，和昨晚的机械流判断一致。\n  - 270617P200：623 → 403（−220），ask 600，put 买平。\n- **合计**：put OI +1651，call OI +1240。\n- **dealer 买 / 卖股票**：未明确。唯一的表内命中（C285，−7）量级太小。\n\n四点对照：\n- **结构**：vol call wall 305 → 285、vol flip 288.0 → 283.07，风险中心下移。按 §6.1 只能读到这一步，对做空中性。\n- **flow**：剔除深度 ITM 后，call 是 ask > bid，put 以卖开为主，偏多，和做空**冲突**。\n- **次日 OI**：call 买开、put 卖开、bull put spread 都已变成新仓 [已验证]，和派发指纹（call 写在 bid、call OI 平 / 降）**冲突**。\n- **价格（盘前）**：284.387，较昨收 +0.37%。\n  - 高于 1W 重心 282.258 和 1D poc 283，没有失守 DP core；低于 2D 重心 286.359。\n  - 盘前只有 1 根 5m bar、312 股，量极小，参考价值低。\n  - 和做空**不一致**。\n\n其他变化：\n- **借券**：费率 0.4081%，没变；可借 4.3M → 3.8M。\n- 🧨 第 1 条仍不成立（SI 2.83%、借券费 < 1%），非 🧨。\n- **今天的 gamma**：net_gamma 17,769.5 → 15,473.7，仍为正；net_delta 6.57M → 6.33M。正 gamma pin 的格局没变。\n- **⑤ 动机**：昨晚倾向\"Gamma hedge [假设]\"。今早 OI 显示远月 call 有新仓、有信念，这和 Gamma hedge 的\"OI 无信念\"不符，该假设被削弱。DP 侧和价格 acceptance 仍未裁决，动机不定性 [假设]。\n- ①–④ 其余读数沿用昨晚。\n\n**仓位 / 意图 / 不对称性**：期权账本在加多头敞口（远月 call 买开、230 / 280 卖 put 开仓），没有人借强写 call 出货。价格被正 gamma 钉在 280–285 之间，做空没有不对称性。\n\n**失效位 / 判决线**：\n- 跌破 1W 重心 282.258 并失守 put wall 280、不收复 → 按 failed inventory / confirmed trap 重跑 ④。\n- 站回 2D 重心 286.359 → 健康 acceptance，空头读数作废。\n\n**运行日志**：\n- oi-change as-of 2026-10-14 rows=1537\n- 盘前 5m as-of 2026-10-14T08:00:00Z rows=426\n- short-data as-of 2026-10-14T10:44:39Z rows=992\n- greek-exposure as-of 2026-10-14 net_gamma=15473.7\n- gex-levels 今早未重跑，结构沿用 10-13\n\n```watch\n[{\"price\": 282.258, \"dir\": \"below\", \"label\": \"破1W重心，重跑④\"}, {\"price\": 280.0, \"dir\": \"below\", \"label\": \"失守put wall，trap重评\"}, {\"price\": 286.359, \"dir\": \"above\", \"label\": \"收复2D重心，空头作废\"}]\n```",
+ "ttft_ms": 47068,
+ "type": "result",
+ "duration_ms": 64557,
+ "uuid": "a813e9aa-7eae-40f0-b8a4-03a161e36c07",
+ "ttft_stream_ms": 1045,
+ "time_to_request_ms": 32,
+ "first_content_frame_ms": 1045,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

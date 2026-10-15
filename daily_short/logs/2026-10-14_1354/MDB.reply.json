@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 173383,
+ "stop_reason": "end_turn",
+ "session_id": "00f666c1-e31b-4d10-9dcb-0ef5bdabb3e8",
+ "total_cost_usd": 1.9890212,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 206767,
+  "cache_read_input_tokens": 30786,
+  "output_tokens": 16436,
+  "output_tokens_details": {
+   "thinking_tokens": 13295
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 206767,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 16436,
+    "cache_read_input_tokens": 30786,
+    "cache_creation_input_tokens": 206767,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 206767
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 16436,
+   "cacheReadInputTokens": 30786,
+   "cacheCreationInputTokens": 206767,
+   "webSearchRequests": 0,
+   "costUSD": 1.9890212,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 13295,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**MDB** · 软件/企服 · Technology · 数据日 2026-10-14 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20261013）· ⚠ short-interest asof 20260930（FINRA，滞后 14 天）\n**结论**：👀 观察。④ 是 Trap warning，尚未裁决。盘中已跌穿 371–373 共同 DP core，但 ③ 量薄、收盘未出，不升级为 confirmed trap，不给做空入场，只出判决线。\n\n① 🧨 挤仓否决：\n- SI 3.51% float（as-of 09-30，滞后 14 天）[已验证·滞后]。\n- SVR：10/13 57.3%、10/12 61.3%、10/09 49.0%、10/08 55.2%，连续两日 ≥ 55% [已验证·T-1]。但借券费 0.39%（short-data 10/14），不到 1%，且 SI < 10%，第 1 条不成立。\n- DTC 1.0 ≤ 2，第 2 条成立。近三期 2.29 → 1.13 → 1.0，逐期下降。\n- |spot − flip|：spot 360.0，vol flip 362.55，差 0.71%；OI flip 367.68，差 2.13%。第 3 条成立。\n- 相位闸：SVR 单日 −4.0pt，SI 3.57 → 3.51，均未到 −10pt，不触发。\n- 借券：费率 0.4081 → 0.3922，可借量 1.8M → 1.6M。\n- 三条只成立两条 → **非 🧨**。\n\n② 熔断：名单负 gamma 7/23（触发线 ≤ 4）。本票 net gamma +12,557.5（正）[已验证 10-14] → **未熔断**。\n\n③ 量级：\n- 1D 暗池量 397,815 股，DP% 73.2%，只有 1M 日均的 0.27×。\n- 大单参与度 8.2%（暗池 7.9%，全部按 premium 规则计入，按股数 0 笔），没进 16–21% 机构区间。\n- 相对成交量 0.255，session 只到 18:05Z [已验证·盘中未完]。\n- → **薄**\n\n④ 方向（灰色重心迁移）：\n- **Long**：1M poc 335 / 重心 335.60，库存在 325–342，即 9/28–29 崩盘时的换手。\n- **Medium**：1W 重心 376.87 / poc 371。\n- **Short**：2D 重心 379.56 / poc 373；1D 368.63 / 372 作参考。重心逐级上移。\n- **Price**：10/13 冲到 411.49，但只有当日 399–410 进了 top8，2D 重心只到 379.56。价格跑在库存前面，属于 DP non-confirmation。10/13 当日就收回 373.07。\n- **Retest**：10/14 早盘冲到 376.36，没站稳，之后失守 371–373 共同 core。现价 360.0（日内低 359.67），低于 1D/1W/2D 所有重心，至今没有 reclaim。\n- **Cross-check**：net_gamma 22,038（10/9）→ 12,557；net_delta 6.82M（10/12）→ 5.62M；OI flip 403.99 → 367.68 一路下移。衍生品结构没有确认上方库存。\n- → **Trap warning（未裁决）**。失守发生在盘中，且 ③ 薄。收盘仍在 371 下方、并且后续量级过闸，才按 confirmed trap 重跑 ✅ 门槛。\n\n⑤ 动机：派发指纹部分命中，证据链如下，只报状态 [假设]。\n- **OI vs 量**（oi-change as-of 10-14，反映 10/13 的交易）[已验证]：\n  - 上方供给：12/18 C440 702 张 ask 买平（OI 1193 → 494），配 call_ladder 700 张 bid，12/18 C480 OI +400，是盖帽者把空 call 往上滚；10/23 C387.5 430 张 bid，OI 5 → 412，是卖开 call；1/15/27 C370 / C490 两腿 OI 同降，是牛市价差获利了结。\n  - 对面需求：2/19/27 C600 655 张 ask，OI +513；1/15/27 P340 402 张 ask，OI +365；10/16 P377.5 OI +684（360/377.5 put 价差买开）。\n  - 多空都有新仓，不能单向定性。\n- **今日 flow**（premium ≥ $50k，as-of 17:39Z）[side 已验证 / 次日 OI 缺失]：\n  - call bid 139.6 万 vs call ask 21.7 万，净 call premium −117.9 万；put ask 63.3 万 vs put bid 42.8 万；sweep 0 笔。\n  - 主要成交：11/06 P355/P330 买开 put 价差 225 张（全部开仓腿）；2/19/27 C530 162 张 bid（vol 317 > OI 79，新仓）；2028 C450 50 张 bid（vol < OI，可能是平仓）。\n  - 以多腿为主，按 §7.3 偏对冲 / 调仓，不当方向押注。\n- **flow-IV**（today 未完）[假设]：call_ask 0.696，只有 4 笔，10/13 为 0.660；put_ask 0.631，10/13 为 0.714，下降；call_all 0.653，10/13 为 0.664。\n- **IV×RV**（10-14）[已验证]：iv30 0.598 < rv21 0.842（hv20 0.866）。IV rank 42、一年分位 39，不在高位。RV 从 1.01 回落（9/28 的跳空仍在窗口内），IV 0.553 → 0.598 小抬。按 §5.3 这是偏多头的 regime 读数，与派发冲突。\n- **借券**：不紧。\n- **gamma 位置**：spot 在 vol flip 之下 0.7%。\n- **DP 时点**：盘后只有 1 笔 1,000 股，不是库存转移签名；距月末还有 12 个交易日，非月末 / 季末，排除 rebalance。\n\n⑥ Dealer：\n- **结构**：call wall vol 387.5（Δ0）/ OI 400（Δ0）；put wall vol 330（Δ−30）/ OI 330（Δ−40，与 strike 表交叉核对不一致）；flip vol 362.55（Δ−1.09）/ OI 367.68（Δ−4.94）；Dealer Pivot 缺失。\n- **flow**：意图净额为写 call、买 put 价差。\n- **次日 OI**：今日的缺失。call wall 没动。\n- → **无命中**\n\n**挤压反噬**：SVR 57.3% ≥ 50%，标\"挤压反噬风险\"。板块软件/企服今日 1 涨 5 跌，均值 −2.0%，不在轧空相位，无 veto。\n**财报**：12-07\n**仓位 / 意图 / 不对称性**：\n- 10/13 冲到 411 时，上方被盖帽者和价差获利盘接走，387.5–400 一线形成供给。\n- 今天缩量回到 10/02–10/07 的价值区，期权端是卖 call 加买开 put 价差，偏对冲，不是激进做空。\n- 下方第一个库存节点是 357（1M 最大暗池节点之一），再往下是 325–342 崩盘库存 / put wall 330。\n- 但本票局部正 gamma、IV×RV 读数偏多，加上量薄，现在下注等于抛硬币，只盯判决线。\n\n**失效位**：重新收复 373（2D poc，即 371–373 共同 core 上沿），trap warning 解除，空头读数作废。下破 357 时重跑 ④。\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-14 rows=38 days=22/22\n✅ RAN darkpool as-of 2026-10-14T17:58:37Z rows=64 blocks=64 spot=360.0\n✅ RAN option-trades as-of 2026-10-14T17:39:38.672000Z rows=26 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-14 2026-10-14T18:00:12.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-14 rows=251 net_gamma=12557.4716\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=14d\n✅ RAN short-volume as-of 2026-10-13 rows=500 ratio=0.573\n✅ RAN short-data as-of 2026-10-14T13:52:47Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 14 天）\n\n```watch\n[{\"price\": 373.0, \"dir\": \"above\", \"label\": \"收复core，trap解除\"}, {\"price\": 357.0, \"dir\": \"below\", \"label\": \"失守357，重跑④\"}]\n```",
+ "ttft_ms": 147317,
+ "type": "result",
+ "duration_ms": 173533,
+ "uuid": "e111dbfb-6ae4-4190-9e50-a4af351bd46c",
+ "ttft_stream_ms": 8817,
+ "time_to_request_ms": 148,
+ "first_content_frame_ms": 8818,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

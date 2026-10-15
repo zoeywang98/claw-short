@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 44459,
+ "stop_reason": "end_turn",
+ "session_id": "f698154c-0d3d-4ca1-b6ea-daac705c9a15",
+ "total_cost_usd": 0.3550762,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 33545,
+  "cache_read_input_tokens": 15041,
+  "output_tokens": 4185,
+  "output_tokens_details": {
+   "thinking_tokens": 2599
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 33545,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 4185,
+    "cache_read_input_tokens": 15041,
+    "cache_creation_input_tokens": 33545,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 33545
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 4185,
+   "cacheReadInputTokens": 15041,
+   "cacheCreationInputTokens": 33545,
+   "webSearchRequests": 0,
+   "costUSD": 0.3550762,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 2599,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 盘前确认** · 扫描日 2026-10-13 · 确认日 2026-10-14 盘前\n**结论**：昨晚 ⚪ → 今早 ⚪ 不构成 setup。④ 仍是吸筹确认，按 §9 弃。另外是 THIN 链（nstrk 38），按 §8.2 不能进确认表。次日 OI 没有证实派发。\n\n次日 OI（as-of 2026-10-14）：\n```\n合约        last→curr OI   昨天 ask/bid    决策表                      dealer 对股票\n11/13 42C   4→107 (+103)   8/106 (多腿6)   情形二 Wall↑+Bid+OI↑        卖\n11/20 42C   1022→1094(+72) 3/71 (OI连3日增) 情形二                     卖\n10/16 41.5C 1319→1124(−195) 509/2          情形四 Ask+OI↓ 买平         买\n10/16 41C   1261→1074(−187) 303/1          情形四                      买\n10/16 37C   619→514 (−105) 131/77          双向，无命中                 —\n11/20 33C   0→100 (+100)   0/100           深 ITM 写开，不在墙位         未明确\nput 侧      3/19 39P +133（bid 121）、11/20 35P +115（bid 115）= put 写开，不是买开\n合计        call OI +13 · put OI +538\n```\n- 42 写 call 被次日 OI 证实是新仓，情形二成立：dealer 卖股票。其中结构只有 vol 口径成立（call wall 41.5 → 42），OI 口径 wall 不动。\n- 41 / 41.5C（10/16 到期）是买平：老卖方回补，dealer 买股票。\n- 两组净方向相反，dealer 没有单一方向。\n\n四点对照：\n- 结构：vol call wall 42（+0.5）、flip 41.92；OI 口径 wall 42 / 40 不变。情形二一致，但只在 vol 口径。\n- flow：42C 在 bid。一致。\n- 次日 OI：42C +103 / +72，昨晚该腿由 [缺失] 改为 [已验证]。但 41 / 41.5C 买平，方向相反。总体冲突。\n- 价格（盘前）：41.19 对昨收 41.24（−0.12%），守在 DP core 41.0（1D 重心 40.997）上方，没有失守。和情形二的卖压冲突。盘前量只有 3,830 股，量小。\n- 合计：四点不齐，不构成派发确认。\n- ⑤ 照旧不定性：call OI 平（+13）符合派发；put OI↑ 来自 bid 侧写 put，不是买 put；IV30 在抬（0.284 → 0.413），不是派发指纹。\n\n其他变化：\n- 借券：0.2643%，可借 920 万（昨晚 1000 万）。仍松，①（非 🧨）不变。\n- 今天的 gamma：net gamma 769,661（昨 785,373），net delta 11,656,600（昨 11,568,600），正 gamma 未变，②④ 不变。\n- 财报：11-03，不在 7 天内。\n\n**仓位 / 意图 / 不对称性**：39 附近的老库存已经搬到 41。次日 OI 证实 42 上方有新写的 call 压顶，近月 41 / 41.5C 的卖方在回补，put 端在 35 / 39 被写开，这是托底结构。整体是 40–42 区间消化，空头没有优势。\n\n**失效位 / 判决线**：\n- 跌破 40.60 且收不回 41.0：吸筹读数作废，重跑 ④，可能转 trap。\n- 跌破 40.00（put wall / DP 40 节点）：失守 1W 重心区，重评空头。\n- 站上 42.02（10/09 跳空高点，压过 42 写 call 盖子）：放量离开，吸筹延续。\n\n**运行日志**：oi-change as-of 2026-10-14 rows=648 · 盘前 5m as-of 2026-10-14T09:25:00Z rows=425 · short-data as-of 2026-10-14T10:44:39Z rows=992 · greek-exposure as-of 2026-10-14 rows=250 net_gamma=769660.9605\n\n```watch\n[{\"price\": 40.60, \"dir\": \"below\", \"label\": \"吸筹读数失效，重跑④\"}, {\"price\": 40.00, \"dir\": \"below\", \"label\": \"失守DP核心，重评空头\"}, {\"price\": 42.02, \"dir\": \"above\", \"label\": \"破42盖子，吸筹延续\"}]\n```",
+ "ttft_ms": 29335,
+ "type": "result",
+ "duration_ms": 44497,
+ "uuid": "21382445-dc71-4e2e-be83-f28175f8c7aa",
+ "ttft_stream_ms": 2764,
+ "time_to_request_ms": 34,
+ "first_content_frame_ms": 2765,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

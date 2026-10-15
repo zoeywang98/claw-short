@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 115526,
+ "stop_reason": "end_turn",
+ "session_id": "c866c766-f80e-48de-a8a9-747e4e886691",
+ "total_cost_usd": 0.6527892,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 54758,
+  "cache_read_input_tokens": 30786,
+  "output_tokens": 10428,
+  "output_tokens_details": {
+   "thinking_tokens": 7229
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 54758,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 10428,
+    "cache_read_input_tokens": 30786,
+    "cache_creation_input_tokens": 54758,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 54758
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 10428,
+   "cacheReadInputTokens": 30786,
+   "cacheCreationInputTokens": 54758,
+   "webSearchRequests": 0,
+   "costUSD": 0.6527892,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 7229,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**CRVS** · 医药 · Healthcare · 数据日 2026-10-14（盘中快照，至 18:05Z）· 核心覆盖 7/8 · ⚠ darkpool = FAIL（当日空 payload）· ⚠ short-volume = T-1（asof 20261013）· ⚠ short-interest = 2026-09-30（滞后 14 天）\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：非 🧨。\n- **第 1 条成立**：SI 21.16% float（as-of 09-30，滞后 14 天）[已验证]。\n- **SVR**：10/13 68.1%，10/12 48.6%，10/09 44.4%，10/08 28.0%，不是连日 ≥55%。\n- **第 2 条不成立**：DTC 8/31 29.64 → 9/15 18.16 → 9/30 13.31，逐期下降，且远大于 2。\n- **第 3 条不成立**：spot 9.31 对 flip，vol 口径 11.49、oi 口径 8.75，两个口径都在 3% 以外 [已验证 gex 18:00Z]。\n- **相位闸**：SVR 单日 +19.5pt（48.6 → 68.1），不是 −10pt；SI 20.4% → 21.2%。\n- **借券**：费率 0.28%（10/13 0.33%）；可借量 250k（前一日 350k）[已验证 13:52Z]。借券不紧。\n\n② 熔断：未熔断。\n- 名单负 gamma 7/23（LITE、COHR、AAOI、GLW、VRT、NBIS、DELL），超过 4 只，不触发。\n- 本票 net gamma +64,063（正）[已验证]。\n\n③ 量级：薄。\n- 1D DP dark 198,412，为 1M 均值的 0.45×；dp_pct 70.3%。\n- relative volume 0.32，stock_vol_pctile 7.8（decile 1）。\n- 大单参与度缺失（darkpool 层 FAIL，block_participation = null）[缺失]。\n- 2D dark 867,992，量能尚可，但当日量级闸不过 → 不强行给方向。\n\n④ 方向（灰色重心迁移）：不明（量薄 + GEX 交叉冲突）。偏置读数如下，仅报状态。\n- **Long（1M）**：centroid 10.83，poc 10.0；主库存在 12（2.83M）、10（2.84M）、11（2.18M）。\n- **Medium（1W）**：centroid 9.54，poc 10.0。\n- **Short（2D）**：centroid 9.03，poc 9.0。\n- **重心排列**：Long > Medium > Short，逐级下移，per_day 显示 12 → 11 → 10 → 9 逐档迁移。前段是下跌（09-15 收 12.95 → 9.31），不是\"上涨之后\"。\n- **Price**：spot 9.31，高于 2D 重心 9.03，低于 1W 9.54 和 1M 10.83。\n- **Retest**：10/13 开 9.99、高 10.03，回踩 10 node 被拒，收 9.41；10/14 高 9.50，没有 reclaim。高位 node 失守 [已验证 5m K 线]。\n- **Cross-check**：与下迁方向冲突。\n  - net gamma 8,560（10/12）→ 60,670 → 64,063，持续转正走强。\n  - net delta 424k → 611k。\n  - oi 口径 put wall 9.0 贴在 spot 下方。\n  - 结论：正 gamma 毯 = dealer 高抛低吸，不确认下破。\n\n⑤ 动机：不定性，只报状态。\n- **OI vs 成交量**：call OI +310（28,983 → 29,293）；put OI −2,353，几乎全来自 10/16 12P（2,604 → 240），而前一日成交只有 1 张，疑似 ITM 行权/到期处理 [假设]。\n- **flow 结构**：\n  - 2028-01 远月 call：202 张，201 在 ask，RepeatedHits ×2，vol < OI，属加/换仓，非新建。\n  - 2026-12 call：151 张全在 ask，OI 0，vol > OI，新建。\n  - 2027-01 两档：193 张全部 multi-leg，ask 5 / bid 80 / mid 108；另一档 193/233 multi-leg，疑似价差。但 multi_leg 端点 count = 0，口径冲突 [假设]。\n  - 无 sweep；≥$50k 大单 0 笔。\n- **flow-IV**：today 与 history 全为 null [缺失]。\n- **IV×RV regime**：IV30 0.906 > RV21 0.573（hv20 0.568）；IV 从 0.576（09-30）抬到 0.906，1M 百分位 95.2。属\"IV > RV 且 IV 在高位 = vol 终将回归，别按趋势读\"，不是 RV > IV 空头行情。rr skew −0.45，put 偏贵。11-03 财报落在 IV30 窗口内 [假设：含事件溢价]。\n- **借券**：不紧。\n- **gamma 位置**：spot 夹在 oi flip 8.75 与 vol flip 11.49 之间。\n- **与派发指纹的差距**：派发指纹要求 call 写在 bid、call OI 平/降、IV 平/压缩；这里 call 净买（ask 521 / bid 339，net call premium +23,556）、call OI 升、IV 扩张，对不上。DP 块/盘后时点缺失，无法判库存转移。\n\n⑥ Dealer：无命中。\n- **结构（vol 口径）**：call wall 20（不变）；put wall null（前一日 9）；flip 11.49（+1.99）。\n- **结构（oi 口径）**：call wall 15（−25，从 40 下移）；put wall 9（前一日 null）；flip 8.75（−0.29）。Dealer Pivot [缺失]。\n- **今日 flow**：call ask 偏多，net call premium +23,556。\n- **昨日 flow + 次日 OI**：昨日 call bid 282 > ask 114（net −13,616），今日 OI 确认三档 call 有增量（+81 / +81 / +38，前一日以 bid 为主）。但同期 oi call wall 下移（40 → 15）。\n- **判定**：不符合\"Wall↑ + Bid + OI↑\"等任何一种情形。今日 flow 的次日 OI [缺失]。\n\n**挤压反噬**：SVR 68.1% ≥ 50%，标\"挤压反噬风险\"。医药组当日 4/6 收涨（均 +1.06%），CRVS 本身 −1.06%，未见逼空迹象，不判 veto。\n**财报**：11-03（er_time unknown，20 天后）[已验证 screener 10-14]\n**仓位 / 意图 / 不对称性**：\n- DP 库存一个月里从 12 一档档迁到 9，10 的回踩被拒，下迁偏置是真的。但今天成交量萎到 1M 的 0.45×，dealer 处在走强的正 gamma 里，9 有 put wall 托着，下破缺少加速器。\n- 期权账本在反向加码：远月 call 被重复 lift，IV 被抬到 1M 第 95 百分位，有人为 11-03 买上行/事件。SI 21%、SVR 68% 是燃料。\n- 链深 nstrk 10（THIN）。在 20 日低点追空，不对称性偏差。\n\n**失效位**：\n- 站上 10.03（10/13 回踩高点）即 reclaim 10 DP core，下迁偏置作废。\n- 跌破 9.21（20 日低 / 当日 RTH 低）且当日 DP 量恢复、大单参与度可验证，重跑 ③④。\n- 跌破 oi flip 8.75 后 gamma 面可能翻负，重跑 ①②。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-14 rows=2 days=22/22\n❌ FAIL darkpool reason: empty payload: no dark pool prints on 2026-10-14\n✅ RAN option-trades as-of 2026-10-14 rows=0 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-14 2026-10-14T18:00:30.803000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-14 rows=251 net_gamma=64063.0912\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=14d\n✅ RAN short-volume as-of 2026-10-13 rows=500 ratio=0.681\n✅ RAN short-data as-of 2026-10-14T13:52:47Z rows=1000\ncoverage 7/8 · SI as-of 2026-09-30（滞后 14 天）\n\n```watch\n[{\"price\": 10.03, \"dir\": \"above\", \"label\": \"收复10 core，下迁作废\"}, {\"price\": 9.21, \"dir\": \"below\", \"label\": \"破20日低，重跑③④\"}, {\"price\": 8.75, \"dir\": \"below\", \"label\": \"破oi flip，重跑①②\"}]\n```",
+ "ttft_ms": 85610,
+ "type": "result",
+ "duration_ms": 115935,
+ "uuid": "90c30e32-eeb5-4469-96d7-767296e8a85e",
+ "ttft_stream_ms": 6068,
+ "time_to_request_ms": 421,
+ "first_content_frame_ms": 6069,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

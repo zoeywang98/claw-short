@@ -14,7 +14,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze import HERE, MODEL, send_text  # noqa: E402
+from analyze import HERE, MODEL, send_text, split_watch  # noqa: E402
 
 RUNS = "/Users/yuwang/.openclaw/workspace-claw-short/uw_short_fetch/runs"
 SYSTEM = """你把当天做空扫描里每只票的分析结论汇总成一条 Discord 帖子。
@@ -59,7 +59,7 @@ def main(argv=None):
         if t in failed:
             continue
         try:
-            parts.append(json.load(open(os.path.join(log, f"{t}.reply.json")))["result"])
+            parts.append(split_watch(json.load(open(os.path.join(log, f"{t}.reply.json")))["result"])[0])
         except (OSError, KeyError, ValueError):
             failed.append(t)
     stats = (f"完成 {len(tickers) - len(failed)}/{len(tickers)}"

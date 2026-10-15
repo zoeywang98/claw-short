@@ -12,6 +12,7 @@ usage: analyze.py --date D --ticker T [--brief PATH] [--market-brief PATH] [--dr
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -34,6 +35,26 @@ def system_prompt(market_brief):
              "## SHORT_ENGINE.md\n\n" + open(os.path.join(WS, "SHORT_ENGINE.md")).read(),
              "## 当日市场数据（market_brief）\n\n" + open(market_brief).read()]
     return "\n\n".join(parts)
+
+
+WATCH_BLOCK = re.compile(r"\n*```watch[ \t]*\n(.*?)\n```[ \t]*", re.S)
+
+
+def split_watch(text):
+    """Cut the ```watch``` block (decision lines for watch.py) out of a reply: (text to post, [{price, dir, label}])."""
+    lines = []
+    for m in WATCH_BLOCK.finditer(text or ""):
+        try:
+            lines += [x for x in json.loads(m.group(1)) if isinstance(x, dict)
+                      and isinstance(x.get("price"), (int, float)) and x.get("dir") in ("above", "below")]
+        except ValueError:
+            pass
+    return WATCH_BLOCK.sub("", text or "").rstrip() + "\n", lines
+
+
+def save_watch(log_dir, ticker, text):
+    with open(os.path.join(log_dir, f"{ticker}.watch.json"), "w") as f:
+        json.dump(split_watch(text)[1], f, ensure_ascii=False)
 
 
 def chunks(text, limit=DISCORD_CHUNK):
@@ -130,11 +151,12 @@ def main(argv=None):
     if p.returncode != 0 or r.get("is_error") or not r.get("result"):
         print(f"❌ {a.ticker}: {str(r.get('result'))[:500]}", file=sys.stderr)
         return 1
+    save_watch(log, a.ticker, r["result"])
     png = render_chart(a.date, a.ticker, a.brief)   # dry runs draw it too, for a look before posting
     if not a.dry_run:
         if png:
             post_chart(png, f"**{a.ticker}** 暗池灰色重心迁移（1M / 1W / 2D）· 截至 {a.date} 收盘")
-        post(r["result"])
+        post(split_watch(r["result"])[0])
     return 0
 
 

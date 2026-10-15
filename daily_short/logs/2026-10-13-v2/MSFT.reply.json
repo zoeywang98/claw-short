@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 84508,
+ "stop_reason": "end_turn",
+ "session_id": "d192ed44-99d8-415f-ae2d-8e7b637fad3a",
+ "total_cost_usd": 4.320992,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 520073,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 8020,
+  "output_tokens_details": {
+   "thinking_tokens": 4942
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 520073,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 8020,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 520073,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 520073
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 8020,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 520073,
+   "webSearchRequests": 0,
+   "costUSD": 4.320992,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4942,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**MSFT** · 软件/企服 · Technology · 数据日 2026-10-13 · 核心覆盖 8/8 · ⚠ short-volume = T-1（asof 20261012），SVR 结论只作观察\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：非 🧨，三条里两条不成立。\n- SI 0.82% float，as-of 09-30，滞后 13 天。[已验证]\n- SVR 近五日：10-12 50.6%、10-09 36.5%、10-08 42.0%、10-07 41.0%、10-06 50.0%。没有连日 ≥55%。[⚠T-1]\n- 借券费 0.25%，可借 10,000,000 股，20 日内基本不变（只有 09-18 为 0.295%）。[已验证，as-of 10-13]\n- 第 1 条：SI < 10% 且借券费 < 1%，不成立。\n- 第 2 条：DTC 2.55 > 2。近三期 08-31 3.18 → 09-15 3.73 → 09-30 2.55，不是逐期上升，不成立。\n- 第 3 条：|spot 543.08 − vol flip 527.72| = 2.83%，成立。按 OI flip 522.61 算是 3.77%。\n- 相位闸：SVR 单日 +14pt（36.5 → 50.6），SI 09-15 → 09-30 为 −0.08pt。没有回补 climax 签名。\n\n② 熔断：未熔断。\n- 名单负 gamma 6/23（LITE/COHR/AAOI/GLW/VRT/NBIS），门槛是 ≤4 只。[已验证]\n- 本票 net gamma +942,803，是名单内最大正 gamma 之一。spot 在两个 flip 上方，处在正 gamma 毯下。\n\n③ 量级：足够。[已验证，as-of 10-13]\n- 1D 暗池量 10.37M 股，DP% 50.3%，是 1M 日均的 1.06×。\n- 大单参与度 20.6%（暗池 19.2%），落在机构区间 16–21%。\n- 收盘后有约 1.63M 股 average_price / prior_reference 大宗成交，集中在 543.45，偏机械性执行。\n- 13:53 有一笔 140k 股 QCT 成交，价 546.58。\n\n④ 方向（灰色重心迁移）：吸筹确认。\n- **Long（1M）**：重心 507.23，poc 493.5，主库存在 493–517。\n- **Medium（1W）**：重心 533.18，poc 529，比 1M 上移约 26。\n- **Short（2D）**：重心 543.44，poc 541，继续上移。1D 重心 546.23，poc 543，545–550 档 DP% 达 72–81%。三窗逐级上迁，Long < Medium < Short。\n- **Price**：spot 543.08，贴在 2D 重心 543.44 处，没有明显跑在库存前面。\n  - 但 1D 层面：盘中冲到 551.15，在 call wall 550 被拒，全天回落到 543.06，收在 1D 的 545–550 成交簇下方。\n- **Retest**：2D core 539–543 未破，RTH 低点 543.06 守住，尚未出现失守。\n- **Cross-check**：\n  - net_gamma 从 09-24 的 395k 升到 943k，net_delta 从 57M 升到 110M。\n  - vol flip 543.91 → 527.72，OI flip 522.61 不变。\n  - 衍生品结构和库存上迁同向，判为吸筹确认，不做空。\n  - 唯一瑕疵：1D 在 545–550 的承接没有被价格接受，盯 541。\n\n⑤ 动机：只报状态，不定性。腿未全验证，倾向「吸货 / markup」，标 [假设]。\n- **OI vs 成交量**：10-12 的 11/13 550C 主动买 7,997 张，今日 OI +7,085（272 → 7,357），确认为新建多头仓。[已验证]\n- **今日 flow 结构**：10/30 555C 卖 14,467 张（打 bid），配对 575C 买 14,467 张（打 ask），属于多腿 mlat。\n  - 这是典型的 roll-up 签名：平掉 555 多头、换到 575。\n  - 555C 原有 OI 16,679；575C 成交量 > OI 487。\n  - 次日 OI [缺失]。\n- **11/20 540C/600C**：3,000 张 cross，无方向 side，不计入意图。\n- **意图净额（≥50k 档）**：call 主动买 − 主动卖 = +2.07M，put 主动买 − 主动卖 = +3.03M。全天看涨溢价 231.1M 对看跌溢价 231.8M，接近持平。\n- **flow-IV**：call 主动买 0.379，前一日 0.347，history 区间 0.347–0.553；put 主动买 0.304，前一日 0.352。没有单向加注信号。[已验证]\n- **IV×RV**：IV30 0.303 > RV21 0.214（HV20 0.207）。\n  - IV30 一个月内从低位 0.24 扩到 9/30 的 0.336，现在回落。\n  - 不属于 RV > IV 的空头行情。\n  - IV30 窗口里包含 10-28 财报溢价。\n- **其他**：借券宽松；非月末 / 季末，排除 Fund rebalance。\n\n⑥ Dealer：今日 flow 无命中。\n- **结构（vol 口径）**：call wall 545 → 550（+5），put wall 535 → 530（−5），gamma flip 543.91 → 527.72。\n- **结构（OI 口径）**：call wall 550 不变，put wall 540 → 525，flip 522.56 → 522.61。\n- Dealer Pivot [缺失]。\n- 今日 flow 的次日 OI 缺失，所以判「无命中」。\n- 参考昨日：10-12 的 550 strike 主动买 + 今日 OI↑，对应情形「客户 BTO / dealer STO」，dealer 通常买股票对冲。属于 4 点中 3 点一致，方向偏多。\n\n**挤压反噬**：SVR 10-12 为 50.6% ≥ 50%，标「挤压反噬风险」（⚠T-1）。板块轧空相位：无。软件/企服当日 3 涨 3 跌，均值约 0%。\n**财报**：10-28（盘后）\n**仓位 / 意图 / 不对称性**：\n- 库存从 1M 的 507 一路迁到 2D 的 543，dealer 处在深度正 gamma，flip 在 528 / 523，远在下方。\n- 期权侧是 550 多头新开仓，加上 555 → 575 的多头展期，持仓者在加码，没有撤退迹象。\n- 做空不对称性差：上方 550 是 call wall 加 magnet，形成 pin；下方 539–543 有 2D 暗池库存托底，而且正 gamma 会把派发梯碾平。\n\n**失效位**：\n- 收盘跌破 541（2D poc）且不收复：吸筹读数作废，重跑④，检查 trap / 派发。\n- 跌破 533.18（1W 重心）：中期迁移转向。\n- 跌破 527.72（vol flip）：gamma 毯撤除。\n- 站上 550 并守住：新高位 acceptance 确认。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-13 rows=25 days=22/22\n✅ RAN darkpool as-of 2026-10-13T20:57:45Z rows=2371 blocks=2371 spot=543.08\n✅ RAN option-trades as-of 2026-10-13T19:58:44.952000Z rows=1209 premium>=50,000 pages=3\n✅ RAN gex-levels as-of 2026-10-13 2026-10-13T19:59:59.030000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-13 rows=251 net_gamma=942803.1430\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=13d\n✅ RAN short-volume as-of 2026-10-12 rows=500 ratio=0.506\n✅ RAN short-data as-of 2026-10-13T15:25:53Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 13 天）\n\n```watch\n[{\"price\": 541.0, \"dir\": \"below\", \"label\": \"破2D poc，吸筹读数重评\"}, {\"price\": 533.18, \"dir\": \"below\", \"label\": \"失守1W重心，查派发\"}, {\"price\": 527.72, \"dir\": \"below\", \"label\": \"破vol flip，gamma毯撤\"}, {\"price\": 550.0, \"dir\": \"above\", \"label\": \"站上call wall，接受确认\"}]\n```",
+ "ttft_ms": 55711,
+ "type": "result",
+ "duration_ms": 84742,
+ "uuid": "7522c28e-1377-4b28-ac60-657985610526",
+ "ttft_stream_ms": 2738,
+ "time_to_request_ms": 506,
+ "first_content_frame_ms": 2739,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

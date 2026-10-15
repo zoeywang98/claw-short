@@ -158,6 +158,9 @@ def main(argv=None):
     ap.add_argument("--asof", help="HH:MM New York cutoff for replays (default: now)")
     ap.add_argument("--wait-minutes", type=int, default=30, help="keep retrying until the day's OI is published")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--label", default="premarket", help="output suffix: analysis_data/<D>_<label>/, logs/<D>_<label>/ "
+                    "(replays use another label so the real pre-market record is kept)")
+    ap.add_argument("--workers", type=int, default=4)
     a = ap.parse_args(argv)
 
     now = datetime.now(L.NY)
@@ -179,9 +182,9 @@ def main(argv=None):
     client = UWClient(load_token())
     cal_days = L.Calendar.from_ohlc(client.get("/api/stock/SPY/ohlc/1d", {"timeframe": "1Y"}).body).days
     cal = L.Calendar(cal_days + [D])
-    raw_root = os.path.join(WS, "uw_short_fetch", "runs", "premarket", D)
-    an_dir = os.path.join(WS, "analysis_data", f"{D}_premarket")
-    log_dir = os.path.join(HERE, "logs", f"{D}_premarket")
+    raw_root = os.path.join(WS, "uw_short_fetch", "runs", "premarket", D if a.label == "premarket" else f"{D}_{a.label}")
+    an_dir = os.path.join(WS, "analysis_data", f"{D}_{a.label}")
+    log_dir = os.path.join(HERE, "logs", f"{D}_{a.label}")
     os.makedirs(an_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
 
@@ -222,9 +225,11 @@ def main(argv=None):
         r = claude(system, json.dumps(L_round(data), ensure_ascii=False))
         with open(os.path.join(log_dir, f"{T}.reply.json"), "w") as f:
             json.dump(r, f, ensure_ascii=False, indent=1)
+        if not r.get("is_error") and r.get("result"):
+            analyze.save_watch(log_dir, T, r["result"])
         return T, v, r
 
-    with ThreadPoolExecutor(max_workers=4) as ex:
+    with ThreadPoolExecutor(max_workers=a.workers) as ex:
         results = list(ex.map(one, names))
 
     lines, problems = [], []
@@ -237,7 +242,7 @@ def main(argv=None):
         problems += post(header)
         for T, v, r in results:
             if not r.get("is_error") and r.get("result"):
-                problems += [f"{T} {p}" for p in post(r["result"])]
+                problems += [f"{T} {p}" for p in post(analyze.split_watch(r["result"])[0])]
     if problems:
         print("\n".join(problems), file=sys.stderr)
     return 0 if all(not r.get("is_error") for _, _, r in results) else 1
