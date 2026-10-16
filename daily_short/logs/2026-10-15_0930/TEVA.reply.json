@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 143161,
+ "stop_reason": "end_turn",
+ "session_id": "37516e4c-9751-4ad6-a927-7467c0e8269a",
+ "total_cost_usd": 0.8349116000000001,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 67536,
+  "cache_read_input_tokens": 30878,
+  "output_tokens": 14422,
+  "output_tokens_details": {
+   "thinking_tokens": 11313
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 67536,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 14422,
+    "cache_read_input_tokens": 30878,
+    "cache_creation_input_tokens": 67536,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 67536
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 14422,
+   "cacheReadInputTokens": 30878,
+   "cacheCreationInputTokens": 67536,
+   "webSearchRequests": 0,
+   "costUSD": 0.8349116000000001,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 11313,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA** · 医药 · Healthcare · 数据日 2026-10-15（盘中 09:35 ET 快照）· 核心覆盖 8/8\n⚠ short-volume = T-1（asof 20261014）· ⚠ short-interest = FINRA（asof 20260930，滞后 15 天）· ⚠ 熔断计数板 = T-1（asof 20261014）· 1D DP 和当日 flow 只有开盘 5 分钟，不完整 · ⚠THIN（nstrk 7 < 45）\n**结论**：⚪ 不构成 setup\n\n① 🧨 挤仓否决：\n- SI 2.56% float（as-of 09-30，滞后 15 天）[已验证]\n- SVR：10-14 41.9% / 10-13 43.3% / 10-12 45.6% / 10-09 36.2%，没有连日 ≥55% [已验证·T-1]\n- 借券费 0.26%，可借 8.7M（10-14 为 9.2M）[已验证 as-of 10-15 09:25Z]\n- 第 1 条不成立。\n- DTC 5.4；近三期 08-31 7.71 → 09-15 27.35 → 09-30 5.4，不是逐期上升，第 2 条不成立。\n- |spot 41.6 − flip 39.5（OI 口径；vol 口径今日为 null）| = 2.1，约 5.1% > 3%，第 3 条不成立。\n- 相位闸：SVR 单日 −1.4pt，SI −0.14pt，未触发。\n- → **非 🧨**\n\n② 熔断：名单负 gamma 7/23（as-of 10-14）· 本票 net gamma +777,227（10-15，正）→ **未熔断**\n\n③ 量级：\n- 1D dark 119,078 股，只有开盘 5 分钟，其中 60,365 股是 08:54 盘前一笔 average_price_trade @40.72，不可用。\n- 完整日 10-14：dark 5.01M，是 1M 均值的 1.50 倍，DP% 86%，大单参与度 21.9%（机构带）。\n- → **足够**（以 10-14 为准）\n\n④ 方向（灰色重心迁移）：\n- **Long**：1M poc 39.0，重心 39.64（39 档 30.1M 股为主库存）。\n- **Medium**：1W poc 41.0，重心 40.79。\n- **Short**：2D poc 41.0，重心 40.85。\n- Long < Medium < Short 逐级上移；中→短只上移 +0.06，接近停滞。\n- 迁移在 10-09 跳空当日同步完成：当日 dark 9.18M，其中 7.19M 落在 41 档。价格没有跑在 inventory 前面，不是 trap。\n- **Price**：spot 41.6 在最新重心 40.85 之上。\n- **Retest**：\n  - 10-12 低点 40.6。\n  - 10-14 冲到 41.87 被拒，收在 40.72（尾盘 5 分钟 1.13M）。\n  - 两次都守在 40.75–41 新 DP core 下沿；10-15 开盘 41.33 收复。→ 健康 acceptance。\n- **Cross-check**：\n  - net gamma 09-28 416,310 → 10-15 777,227。\n  - net delta 10-09 从 8.49M 跳到 11.44M，之后稳定在 11.2–11.7M，与 DP 上迁同向。\n- → **吸筹确认**（唯一瑕疵是短窗停滞）\n\n⑤ 动机：派发指纹不成立，因为 DP 价位多窗上迁、高位没有失守。倾向 10-09 吸货 / 库存转移，标 [假设]，只报状态，不定性。\n- **OI vs 量**：\n  - 10-09 42C 11/20：ask 647，OI 107 → 877，新建仓买方 [已验证]。\n  - 10-14 45C 11/20：量 933（bid 887）> 旧 OI 219，次日 OI +783，是卖开写 call [已验证]。\n  - 49C 11/27：bid 150，OI 0 → 150，同样是卖开 [已验证]。\n- **flow 结构**：\n  - net call premium：10-12 −273,045 / 10-13 −64,875 / 10-14 −365,745。\n  - 10-14 call bid 2,642 vs ask 828。10-09 的追 call 之后，转为在 41.5/45/49 写 call，是盖子，不是点火。\n  - 多腿（10-09 35/46、37/46 卖方 vertical；10-14 22/30 vertical bid 155,550）属于调仓型，不计方向。sweep 0。\n- **flow-IV**：今日缺失（≥50k tape 0 笔）。10-08 → 10-09 call_ask 0.385 → 0.420，在抬。10-14 call_all 0.640 被 2DTE 合约抬高，不可比。\n- **IV×RV**：\n  - IV30 从 0.284（09-30）升到 0.424，RV21 从 0.319 降到 0.285。\n  - IV > RV，IV 从低位 expand（1Y 分位 68%），不是 RV > IV 的空头 regime。\n  - IV30 窗口已覆盖 11-03 财报 [假设：有一部分是事件溢价]。\n- **借券**：宽松。\n- **Gamma 位置**：正 gamma，处在 40–42 之间的 pin 区。\n- **DP 时点**：今日 block 成交价 = 10-14 收盘价 40.72，像是对收盘价的代理成交，机械性质 [假设]。距月末 12 个工作日，不按 Fund rebalance 读。\n\n⑥ Dealer：\n- **结构**：call wall 42 / put wall 40 / gamma flip 39.5（OI 口径，日间变化 0.0）；vol 口径今日 wall 和 flip 为 null，magnet 40；Dealer Pivot 缺失。\n- **当日 flow**：缺失（全量只有 8C/36P）。昨日意图净额 = 写 call。\n- **次日 OI**（10-15 vs 10-14）[已验证]：call +774 / put +175，主体是 45C 卖开。\n- wall 没有移动 → 决策表**无命中**。\n\n**挤压反噬**：SI 2.56% / SVR 41.9%，都低于 50%，不标。医药组 10-14 涨 3 跌 3、均值 +0.26%，没有普涨或逼空。→ 无\n**财报**：11-03（premarket，还有 19 天）\n**仓位 / 意图 / 不对称性**：\n- 1M 主库存在 39。10-09 跳空时，换手把重心整体搬到 41，并守住了两次回踩。这是被接受的新 value，不是被套的高价筹码。\n- 上方是 call 被持续卖开，形成 42–45 的供给盖子，不是空头卖压。dealer 净多 gamma，在 40–42 区间高抛低吸。\n- 做空最多吃到 40（约 −3.8%），还要扛 IV 进财报和正 gamma 托底，不对称性不在空头一侧。\n- 链 THIN，就算之后转派发，上限也只是观察。\n\n**失效位**：\n- 收盘跌破 40.0（put wall / magnet，也是新 DP core 下沿），且 1W/2D 重心转为下迁 → 吸筹读数作废，重跑 ④ 看 confirmed trap。\n- 再跌破 39.5 flip → 进入负 gamma 区，重评。\n- 放量站上 42.02（20 日高，call wall 42 上沿）→ 吸筹延续，写 call 的盖子失效。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-15 rows=3 days=22/22\n✅ RAN darkpool as-of 2026-10-15T13:33:25Z rows=1 blocks=1 spot=41.6\n✅ RAN option-trades as-of 2026-10-15 rows=0 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-15 2026-10-15T13:35:05.001000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-15 rows=251 net_gamma=777226.7585\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=15d\n✅ RAN short-volume as-of 2026-10-14 rows=500 ratio=0.419\n✅ RAN short-data as-of 2026-10-15T09:25:31Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 15 天）\n\n```watch\n[{\"price\": 40.0, \"dir\": \"below\", \"label\": \"跌破新core 重评派发\"}, {\"price\": 39.5, \"dir\": \"below\", \"label\": \"破flip 负gamma重评\"}, {\"price\": 42.02, \"dir\": \"above\", \"label\": \"破前高 盖子失效\"}]\n```",
+ "ttft_ms": 120169,
+ "type": "result",
+ "duration_ms": 143232,
+ "uuid": "4c1a3512-be3d-4836-86fb-1ba8e63afc02",
+ "ttft_stream_ms": 701,
+ "time_to_request_ms": 34,
+ "first_content_frame_ms": 701,
+ "queued_turn_count": 0,
+ "result_index": 0
+}

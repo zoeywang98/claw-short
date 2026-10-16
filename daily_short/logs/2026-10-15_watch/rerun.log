@@ -1,0 +1,118 @@
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1388 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=75969 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=2631 isMainThread=false pid=75946 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1134 isMainThread=true pid=75946 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1413 isMainThread=false pid=75969 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1552.043792000004 isMainThread=true operation="dispatch outbound-prepared-v1 delivery platform send" pid=75946 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=233.87795900000492 isMainThread=true operation=state.write pid=75946 threadId=0 thresholdMs=100
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1005 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=75946 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":0,"validation":734,"configuration":11,"schema":18,"registration":242} integrityGateOutcome=healthy integrityGateMs=700 integrityWorkerCheckMs=494 integrityWorkerLifetimeMs=698 integrityOutsideWorkerMs=2 canonicalIndexMs=16 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=75969 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=1497 outcome=resolved
+[session-sqlite] slow SQLite reclamation Worker operation pid=75946 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=2221 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=3140 isMainThread=true pid=75992 threadId=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=75992 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=2078 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1233 isMainThread=false pid=75992 threadId=5 thresholdMs=1000
+[session-sqlite] SQLite reclamation Worker failed pid=76348 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=369 outcome=rejected exitCode=1 error="SQLite session reclamation database owner is no longer current" errorFrame="at SqliteReclamationWorker.assertCurrent (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-worker-CLuHKRTt.mjs:157:44)"
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=273.05975000000035 isMainThread=true operation="dispatch outbound-prepared-v1 delivery platform send" pid=77154 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1285 isMainThread=true pid=77171 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=259.40399999999863 isMainThread=true operation=state.write pid=77154 threadId=0 thresholdMs=100
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1410 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=77154 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":2,"validation":1084,"configuration":13,"schema":29,"registration":282} integrityGateOutcome=healthy integrityGateMs=1029 integrityWorkerCheckMs=711 integrityWorkerLifetimeMs=1016 integrityOutsideWorkerMs=13 canonicalIndexMs=33 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=77154 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=3196 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1262 isMainThread=false pid=77154 threadId=5 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=3137.1823330000007 isMainThread=true operation="dispatch outbound-prepared-v1 delivery platform send" pid=77171 threadId=0 thresholdMs=100
+[session-sqlite] slow SQLite reclamation Worker operation pid=77171 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=2088 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1261 isMainThread=false pid=77171 threadId=5 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=77196 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=1055 outcome=resolved
+[session-sqlite] SQLite reclamation Worker failed pid=77470 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=574 outcome=rejected exitCode=1 error="SQLite session reclamation database owner is no longer current" errorFrame="at SqliteReclamationWorker.assertCurrent (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-worker-CLuHKRTt.mjs:157:44)"
+== AEHR
+**AEHR 盘中重跑** · 09:30 ET · 起因：09:30 跌破 67.5（破盘前低，下破被接受）
+**结论**：👀 观察
+**仓位 / 意图 / 不对称性**：
+- 9/17–10/5 在 87–107 换手的 1M 库存（poc 97）整体套在头顶。最新成交逐日在更低价区出清，上方 71–72.5 有 DP core 和 flip 两层阻力，dealer 负 gamma 会放大下行。
+- 期权端不同步：有人在下跌中 ask 新开 2027-03 65C，put 溢价也在抬，IV30 扩张。这不是安静的派发。
+- 链 THIN（nstrk 16 < 45，盘初口径）。明天 10/16 是月度 opex（OI magnet 70），加上 SI 16% 的回补燃料，反抽风险不对称，按 §8.2 只能放观察行，不进确认表。
+**失效位**：站回并守住 2D DP 重心 71.87（poc 71），派发梯失效，需要重评；收复 OI gamma flip 72.47，空头读数作废。向下失守 66.2732（20 日低），派发延续，但仍受 THIN 上限约束。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/AEHR.reply.json）
+
+== COHR
+**COHR 盘中重跑** · 09:30 ET · 起因：09:30 跌破 250（破OI magnet 250）
+**结论**：✅ 做空候选（置信度：低）
+**仓位 / 意图 / 不对称性**：
+- 被套的一方：10/02–10/07 在 333–338 成交的大额库存（10/02 单是 337 就有 2.64M）。最新换手已经下到 250–265，比那里低约 25%，上方是层层供给：263–267、285–289、305–312、333–338。
+- 期权账本：在写 call、买远期 put；dealer short gamma（−54k）、net delta −5.0M，下行会被放大。OI magnet 在 240，put OI 堆在 240 / 220 / 200。
+- 不对称性：现价已经从高点跌了约 27%，ATR 23。short gamma 下反弹也会很猛，追空的赔率差；更好的位置是在 257.47–263 之间的反弹没能收复时介入。
+**失效位**：收复并站稳 2D 重心 265.76（2D poc 263）→ 空头读数作废。收复 OI flip 257.47 是一级预警。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/COHR.reply.json）
+
+== DDOG
+**DDOG 盘中重跑** · 09:30 ET · 起因：09:30 跌破 265（破265 put wall，看260）
+**结论**：👀 观察。上周在 283–291 承接的高位库存没有被市场接受，价格已经跳空跌穿 268–269 共同 DP core，方向偏空。但三点挡住 ✅：④ 按字面不满足 L>M>S（1M 268 < 1W 286），只能记"不明"；当日量还没成形；THIN（nstrk 22）把上限压在 👀。判决线：收复 269 → 偏空读数作废；跌破 257.71（OI gamma flip）→ 进负 gamma，重评。
+**仓位 / 意图 / 不对称性**：10-09 到 10-13 在 283–291 换手的 1W 库存（1W dark 约 5.0M 股）现在套在现价上方 9–11%。268–269 core 已被跳空跌穿，上方是两层套牢供给（269、283）。期权端是 put OI 增、call OI 降，并有人在 ask 开长端 240 put；但 IV30 已经在高位，下行保护不便宜。正 gamma 缓冲只剩 5.2K，spot 离 OI flip 257.71 只有 1%：跌破后 dealer 的对冲会放大波动，站回 269 则偏空读数失效。
+**失效位**：
+- 收复并站稳 269（2D poc，1M poc 268）→ 偏空读数作废。
+- 跌破 257.71（OI gamma flip）→ 盘后重跑 ④⑥，并按全日链重查 THIN。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/DDOG.reply.json）
+
+== DELL
+**DELL 盘中重跑** · 09:30 ET · 起因：09:30 跌破 486.01（破盘前低 跳空延续）
+**结论**：✅ 做空候选（置信度：低）
+**仓位 / 意图 / 不对称性**：
+- 一个月的库存堆在 568–576，在 595 下方三次放量停滞后被放弃。现在 504–513、530–531、568–576 是三层被套的头顶供给，越往上抛压越重。
+- spot 在两条 flip 下方，处于负 gamma 区，dealer 对冲顺势放大波动。
+- 现价距 2D core 约 7%，离 vol put wall 470 只有 0.1%，追空的 R:R 差。更好的位置是等反抽 1D core 483–488 / vol flip 485.42 收复失败再介入。
+**失效位**：
+- 站回并守住 2D poc 507（重回 2D core 504–513）→ 派发读数作废。
+- 收复 vol flip 485.42 → 预警重评。
+- 下方 vol put wall 470 失守视为延续，不追。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/DELL.reply.json）
+
+== LITE
+**LITE 盘中重跑** · 09:30 ET · 起因：09:30 跌破 855.01（破盘前低，缺口延续）
+**结论**：👀 观察
+**仓位 / 意图 / 不对称性**：
+- 10/01–10/09 在 1040–1115 换手的高位库存现在被套。此后每天的灰色成交重心下移 30–80 点，从未 reclaim，dealer 也同步翻成短 gamma、净 delta 转负，属于借强出货后的结构塌陷。
+- 但 1W 重心还被 10/09 那一天托在 1063，字面上没有逐级下移，所以只能挂观察。
+- 现在追空是在跌掉 −28% 之后、离 vol flip 796.5 和 800 put OI 墙（7,008 张）只差 2–3% 时进场，又赶上 10/16 到期的 pin 风险，盈亏比差。
+- 更好的位置是反抽 843–850（当日 DP 上沿）或 896–919（2D 核心）失败时。
+**失效位**：
+- 站回并守住 919.0（2D 核心上沿）→ 空头读数作废。
+- 收复 850.0（当日 DP 上沿）→ 派发读数降级，重跑。
+- 下破 796.5（vol flip）→ 短 gamma 加速区，派发升级重评。
+- 明日 1W 窗口滚出 10/09 后，若 1M > 1W > 2D 成立 → 重跑④。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/LITE.reply.json）
+
+== MSFT
+**MSFT 盘中重跑** · 09:30 ET · 起因：09:30 站上 533（收回1W DP core）
+**结论**：⚪ 不构成 setup
+**仓位 / 意图 / 不对称性**：10-05→10-13 的拉升有 DP 库存跟随（1W 重心抬到约 538），但 10-13 在 543–550 一带堆了约 1,040 万 dark，同时有人在 550 / 555–575 卖 call，结果高位被拒。现在价格回到 533–535 的共同核心，正 gamma 约 61 万，夹在两个 flip 之间，10-16 opex 叠加 550C 约 7.4 万张 OI，更像 dealer 高抛低吸的 pin 区，而不是派发梯。此处做空等于卖进库存核心、对手是正 gamma，不对称性差。真正的裁决在于 533 核心是否失守，以及 IV 里的财报溢价（10-28）。
+**失效位**：
+- 收盘跌破 533 且 retest 收不回 → 2D 核心失守，进一步看 529（10-06/07 节点）和 525（OI put wall），届时重跑 ④。
+- 站回 543（10-13 高位节点下沿）→ 高位库存被重新接受，空头读数作废。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/MSFT.reply.json）
+
+== NBIS
+**NBIS 盘中重跑** · 09:30 ET · 起因：09:30 跌破 176.51（破盘前低，派发延续）
+**结论**：👀 观察
+**仓位 / 意图 / 不对称性**：
+- 1M 的 232–239 库存（poc 237）已经浮亏约 28%。最新换手被压在 186 下方，负 gamma 加上 net delta 翻负，下行会被 dealer 放大。这是方向确认，但不是干净的空单。
+- caveat（降档原因）：SI 20.4% float 很拥挤，离 🧨 只差 DTC 一条。10-14 成交 34.0M，约为 avg30 16.9M 的 2 倍；下一期 FINRA 如果 DTC ≤2，就直接转 🧨。按 §8.2 降为 👀。
+- 另外，call 侧是在 roll 低行权价，不是投降，多头没走。
+**失效位**：
+- 站回并守住 186（2D poc / 2D 核心 183–190）→ failed-acceptance 读数作废。
+- 收复 171.23（vol flip）→ gamma 位置改变，重评。
+- 跌破 167.5（vol put wall）→ 重评。
+- 下一期 FINRA 出现 DTC ≤2 → 🧨，需要重跑。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/NBIS.reply.json）
+
+== TEVA
+**TEVA 盘中重跑** · 09:30 ET · 起因：09:30 站上 41（站稳41 core，吸筹延续）
+**结论**：⚪ 不构成 setup
+**仓位 / 意图 / 不对称性**：
+- 1M 主库存在 39。10-09 跳空时，换手把重心整体搬到 41，并守住了两次回踩。这是被接受的新 value，不是被套的高价筹码。
+- 上方是 call 被持续卖开，形成 42–45 的供给盖子，不是空头卖压。dealer 净多 gamma，在 40–42 区间高抛低吸。
+- 做空最多吃到 40（约 −3.8%），还要扛 IV 进财报和正 gamma 托底，不对称性不在空头一侧。
+- 链 THIN，就算之后转派发，上限也只是观察。
+**失效位**：
+- 收盘跌破 40.0（put wall / magnet，也是新 DP core 下沿），且 1W/2D 重心转为下迁 → 吸筹读数作废，重跑 ④ 看 confirmed trap。
+- 再跌破 39.5 flip → 进入负 gamma 区，重评。
+- 放量站上 42.02（20 日高，call wall 42 上沿）→ 吸筹延续，写 call 的盖子失效。
+（熔断 / 板块数据沿用 2026-10-14；完整报告 logs/2026-10-15_0930/TEVA.reply.json）
+

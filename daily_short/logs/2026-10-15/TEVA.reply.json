@@ -1,0 +1,99 @@
+{
+ "duration_api_ms": 92179,
+ "stop_reason": "end_turn",
+ "session_id": "fbbe491c-9e0f-45a8-bc9b-2bf42af11e57",
+ "total_cost_usd": 0.9052212,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 90899,
+  "cache_read_input_tokens": 30906,
+  "output_tokens": 8592,
+  "output_tokens_details": {
+   "thinking_tokens": 5369
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 90899,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 8592,
+    "cache_read_input_tokens": 30906,
+    "cache_creation_input_tokens": 90899,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 90899
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5[1m]": {
+   "inputTokens": 2,
+   "outputTokens": 8592,
+   "cacheReadInputTokens": 30906,
+   "cacheCreationInputTokens": 90899,
+   "webSearchRequests": 0,
+   "costUSD": 0.9052212,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 5369,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA** · 医药 · Healthcare · 数据日 2026-10-15 · 核心覆盖 8/8\n⚠ short-volume = T-1（asof 20261014）· ⚠ short-interest = 2026-09-30（FINRA，滞后 15 天）→ 这两层的结论只作观察\n**结论**：⚪ 不构成 setup（④ 为吸筹确认，按 §9 弃；另外本票 THIN，即使有空头读数，上限也只是 👀）\n\n① 🧨 挤仓否决：非 🧨。三条只成立一条。\n- **第 1 条不成立**：SI 2.56% float（as-of 09-30，滞后 15 天）[已验证·滞后]。SVR 近几日 41.9% / 43.3% / 45.6% / 36.2% / 42.9%（as-of 10-14）[已验证·T-1]，没有连日 ≥ 55%。借券费 0.2627%、可借 8.8M 股（as-of 10-15）[已验证]。SI < 10% 且借券费 < 1%。\n- **第 2 条不成立**：DTC 近三期 7.71（08-31）→ 27.35（09-15）→ 5.4（09-30），不 ≤ 2，也不是逐期上升。\n- **第 3 条成立**：spot 41.25 对 vol flip 42.48 差 2.98%，对 OI flip 40.51 差 1.79%，都 ≤ 3%。\n- **相位闸不适用**：SI 单日 −0.14pt，SVR −1.4pt。\n\n② 熔断：未熔断。\n- 名单负 gamma 10/23，> 4 只（as-of 10-15）[已验证]。\n- 本票 net gamma +815,665，为正，dealer 在本票是正 gamma 的 pin 结构。\n\n③ 量级：足够。\n- 1D dark 4.718M，是 1M 日均 3.188M 的 1.48×。1D DP% 86.2%。\n- 大单参与度 29.8%，远离 3–4% 的噪音档，属于机构级。其中盘后 5 笔 1.198M 股（13.4%），最大一笔是 16:00:09 的 931k，average_price_trade @41.11。\n- [已验证 as-of 10-15]\n\n④ 方向（灰色重心迁移）：吸筹确认 [已验证 as-of 10-15]\n- **Long**：1M poc 39.0，重心 39.74，历史库存在 39。\n- **Medium**：1W poc 41.0，重心 40.83，整段上移约 1.1。\n- **Short**：2D poc 41.0，重心 40.92，同向小幅上移。逐日重心为 10-09 40.70 → 10-12 40.77 → 10-13 41.00 → 10-14 40.86 → 10-15 40.99，在 41 附近换手。\n- **Price**：spot 41.25 贴在最新重心上方，价格没有跑在 inventory 前面。10-09 跳空 39.25→41.10 之后，DP 当天就同步迁到 41，不构成 non-confirmation。\n- **Retest**：10-14 尾盘下探到 40.71、收 40.72。10-15 开在 41.33，盘中低点 41.03，收 41.12，41 的 DP core 守住并收回。但还没有\"再向上离开\"：三次冲高 42.02 / 41.87 / 41.85 都压在 42 下方。\n- **Cross-check**：net_delta 从 8.49M（10-08）扩到 11.64M 并维持；net_gamma 从 676k 升到 815k；OI flip 从 37.52 抬到 40.51，跟着价格上移。衍生品结构确认了 inventory 迁移。\n- 结论：Long < Medium < Short 加上价格站在新 DP 区，属于吸筹确认 → 弃。短窗只比中窗高 0.09，正在横移，记作待观察，不改变结论。\n\n⑤ 动机：指纹冲突，只报状态，不定性。\n- **OI vs 成交量**：\n  - 10-14 的 45C 11/20：bid 887 / 933，次日 OI +783；49C 11/27：bid 150，OI +150。都是 bid 侧新开 [已验证 as-of 10-15]，读作写 call。\n  - 今天 42C 11/20：成交 2142 > OI 1197，bid 2108，属于 RepeatedHits，没有 sweep。次日 OI 还没出 [缺失]。\n- **Flow 结构**：≥50k 的 4 笔全部是 call bid。其中两笔是 mlet，多腿结构（call_diagonal ×3）也在 bid。今天全天 call ask 1212 vs bid 4409，净 call premium −810.8k。读作单腿加多腿写 call 盖顶，不是点火。\n- **Flow-IV**：今天 call_ask 没有成交 [缺失]。call_all 0.836 被 29C 1DTE 深度价内的 IV 3.37 拉高，不可比。ask 侧历史只有 10-08 0.385 和 10-09 0.420。\n- **IV×RV**：IV30 从 0.297（09-16）升到 0.434，RV21 从 0.319 回落到 0.278，IV > RV。期限结构 14d 0.335 < 30d 0.434，30 天窗口里含 11-03 财报，IV30 的扩张大概率是事件溢价，不是意图 [假设]。\n- **借券**：借券费 0.26%，可借量 8.8M，不紧。\n- **Gamma 位置**：今天的 DP 主簇 41 落在 call wall 42 和 put wall 40 之间。次日 10-16 月度 opex，40C 10/16 OI 6731。\n- 状态：DP 价位上迁、价格站稳，指向吸货。call 写在 bid，像派发的一个分量，也可能是持股加备兑写 call [假设]。⑤ 不给定性。\n\n⑥ Dealer：今天无命中。\n- **结构位**：call wall vol 45→42（−3），OI 42 不变。put wall 40 不变。flip vol 40.52→42.48，OI 39.5→40.51。Dealer Pivot [缺失]。\n- **10-14 那个交易日**：vol wall 42→45，45C bid，次日 OI +783，对上表中\"Wall↑ + Bid + OI↑\"，即客户 Sell to Open，dealer 通常卖股票。但 10-15 价格守在 41，价格这一点没有确认，四点不一致。\n- **今天**：Wall↓ 加 Bid，次日 OI 待出 [缺失]，无命中。\n\n**挤压反噬**：SVR 41.9% < 50%，不挂标签。医药组当日 4/6 上涨、均值 +2.39%，有普涨迹象（定性）。本票没有空头读数，所以无需 veto。\n**财报**：11-03（盘前），19 个自然日后，不在 7 天内。链为 THIN（nstrk 34 < 45），物理上不入确认表。\n**仓位 / 意图 / 不对称性**：\n- 1M 的 39 库存经 10-09 跳空整体搬到 41，回踩 40.71 被接住，接盘方愿意在更高价位完成换手。\n- 期权端是有人在 42 / 45 / 49 持续写 call，加上正 gamma 和 opex，dealer 会在 40–42 区间高抛低吸。\n- 这是被盖住的吸筹结构，不是借强出货。做空没有 DP 的支撑，赔率不对称地站在多头一边。\n\n**失效位**：\n- 跌破 40.71（10-14 retest 低点）且收不回 41 DP core → 吸筹读数作废，按 confirmed trap 重跑。\n- 进一步失守 40.0（put wall / 1W 次级节点）→ 整体重评。\n- 站上 42.02（20 日 / 52 周高点，也是 call wall 42）→ 吸筹延续，确认向上离开。\n\n**运行日志**：\n✅ RAN darkpool-levels as-of 2026-10-15 rows=3 days=22/22\n✅ RAN darkpool as-of 2026-10-15T20:00:36Z rows=35 blocks=35 spot=41.25\n✅ RAN option-trades as-of 2026-10-15T18:27:07.207000Z rows=4 premium>=50,000 pages=1\n✅ RAN gex-levels as-of 2026-10-15 2026-10-15T19:59:58.000000Z rows=12 days=6 sources=vol,oi\n✅ RAN greek-exposure as-of 2026-10-15 rows=251 net_gamma=815664.9875\n✅ RAN short-interest as-of 2026-09-30 rows=128 lag=15d\n✅ RAN short-volume as-of 2026-10-14 rows=500 ratio=0.419\n✅ RAN short-data as-of 2026-10-15T15:26:10Z rows=1000\ncoverage 8/8 · SI as-of 2026-09-30（滞后 15 天）\n\n```watch\n[{\"price\": 40.71, \"dir\": \"below\", \"label\": \"吸筹作废，重跑trap\"}, {\"price\": 40.0, \"dir\": \"below\", \"label\": \"失守put wall重评\"}, {\"price\": 42.02, \"dir\": \"above\", \"label\": \"新高接受，吸筹延续\"}]\n```",
+ "ttft_ms": 61401,
+ "type": "result",
+ "duration_ms": 92214,
+ "uuid": "b83ecafa-d8ca-4e7c-b015-5fcf60238505",
+ "ttft_stream_ms": 5274,
+ "time_to_request_ms": 26,
+ "first_content_frame_ms": 5275,
+ "queued_turn_count": 0,
+ "result_index": 0
+}
