@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Intraday single-name rerun (ZZ 2026-10-14): live fetch → brief → analyze.py with today's rules → a short post
-(conclusion, positioning, invalidation lines). watch.py launches it when a name crosses one of its decision lines.
+(the fixed format's 综合结构 header, 结论 and 失效位 lines). watch.py launches it when a name crosses one of its
+decision lines.
 
 The market brief (breaker board, cross-section) is reused from the newest analysis_data/<D>_HHMM run of the day, else
 the last post-close scan. Fetched data is relabelled runs/tickers/<T>/<D>_HHMM, so the 17:00 scan starts clean; the new
@@ -40,9 +41,9 @@ def market_brief(D):
     return scans[-1] if scans else None
 
 
-def section(text, head):
-    """The '**head**…' block of a reply, up to the next bold heading at line start."""
-    m = re.search(r"^\*\*" + re.escape(head) + r"[^\n]*(?:\n(?!\*\*).*)*", text, re.M)
+def line(text, pattern):
+    """First line of a reply matching `pattern` (the fixed-format header / 结论 / 失效位 lines)."""
+    m = re.search(r"^.*" + pattern + r".*$", text, re.M)
     return m.group(0).strip() if m else ""
 
 
@@ -77,10 +78,11 @@ def one(T, D, label, mb, reason, dry):
     text = analyze.split_watch(r["result"])[0]
     m = re.search(r"\*\*结论\*\*[:：]\s*(.*)", text)
     mb_from = os.path.basename(os.path.dirname(mb))
-    post = "\n".join(x for x in [
+    post = "\n".join(x for x in [   # short version of the fixed format: header, 结论, 失效位 (ZZ 2026-10-17)
         f"**{T} 盘中重跑** · {label[-4:-2]}:{label[-2:]} ET · 起因：{reason}",
+        line(text, r"综合结构[:：]"),
         f"**结论**：{m.group(1).strip() if m else '未明确'}",
-        section(text, "仓位"), section(text, "失效位"),
+        line(text, r"失效位\**[:：]"),
         f"（熔断 / 板块数据沿用 {mb_from}；完整报告 logs/{label}/{T}.reply.json）"] if x)
     if not dry:
         try:

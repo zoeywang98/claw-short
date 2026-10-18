@@ -1,0 +1,49 @@
+UW short-engine fetch · target 2026-06-18 · latest trading day 2026-10-16 · run 2026-10-18 01:26 EDT
+UW usage: daily used=?/? · this run: 51 requests, 45 cache hits, 4s
+calendar: Thu · 8 weekdays to month end (2026-06-30) · 8 to quarter end · last quad witching 2026-03-20 (90d ago)
+watchlist (breaker board, SHORT_ENGINE §3) net gamma < 0 → 0/0
+✅ RAN screener-batch as-of 2026-06-18 rows=1
+✅ RAN correlations as-of 2026-06-18 rows=2
+✅ RAN sector-etf-flows as-of 2026-06-18 rows=30 etfs=XLI
+
+== BE ==
+✅ RAN darkpool-levels as-of 2026-06-18 rows=77 days=22/22
+✅ RAN darkpool as-of 2026-06-18T23:58:19Z rows=693 blocks=693 spot=329.5
+     note: UW dark pool feed only carries prints with premium >= $100k
+❌ FAIL option-trades reason: option-trades only serves the latest trading day (2026-10-16); see flow-alerts / flow-per-strike / net-prem-ticks for 2026-06-18
+✅ RAN gex-levels as-of 2026-06-18 2026-06-18T20:00:00.000000Z rows=12 days=6 sources=vol,oi
+✅ RAN greek-exposure as-of 2026-06-18 rows=167 net_gamma=54437.9718
+✅ RAN short-interest as-of 2026-05-29 rows=120 lag=20d
+     note: FINRA short interest lags; 20 calendar days behind 2026-06-18
+✅ RAN short-volume as-of 2026-06-18 rows=500 ratio=0.557
+❌ FAIL short-data reason: no row on or before 2026-06-18
+coverage 6/8
+-- supplemental --
+✅ RAN lit-blocks as-of 2026-06-18T20:09:51Z rows=26 blocks=26
+     note: UW lit feed only carries large prints (not the full lit tape)
+✅ RAN ohlc-daily as-of 2026-06-18 rows=169
+✅ RAN ohlc-5m as-of 2026-06-18T23:55:00Z rows=803 days=5/5
+✅ RAN oi-change as-of 2026-06-18 rows=2056 pages=5
+❌ FAIL option-contracts reason: live snapshot only (latest trading day 2026-10-16)
+✅ RAN oi-per-strike as-of 2026-06-18 rows=150 prev=2026-06-17
+✅ RAN options-volume as-of 2026-06-18 rows=10
+✅ RAN interpolated-iv as-of 2026-06-18 rows=9
+✅ RAN iv-rv as-of 2026-06-18 rows=64 iv30=1.115 rv21_last=['2026-06-18', 1.004557]
+✅ RAN option-sentiment as-of 2026-06-18 rows=30
+❌ FAIL unusualness reason: endpoint has no date parameter; only the latest day (2026-10-16)
+❌ FAIL options-pulse reason: empty payload
+✅ RAN multi-leg as-of 2026-06-18 rows=0 days=5 min_size=50
+✅ RAN flow-per-strike as-of 2026-06-18 rows=138 days=5/5
+✅ RAN net-prem-ticks as-of 2026-06-18 rows=390
+✅ RAN greek-exposure-strike as-of 2026-06-18 rows=150
+✅ RAN offlit-levels as-of 2026-06-18 rows=28233 bins=153
+✅ RAN flow-alerts as-of 2026-06-18T19:43:48.193397Z rows=54 pages=1
+✅ RAN spot-gex as-of 2026-06-18T19:59:44.000000Z rows=482 gamma_oi=50134592.61
+✅ RAN contract-history as-of 2026-06-18 rows=72 contracts=4/7
+✅ RAN rr-skew as-of 2026-06-18 rows=167 expiry=2026-07-17 delta=25
+✅ RAN screener as-of 2026-06-18 rows=1
+supplemental 19/22
+spot 329.5 (DP NBBO mid @ 2026-06-18T23:58:19Z) · last RTH mid 329.185 @ 2026-06-18T19:59:53Z
+session through 2026-06-19T00:00:00Z: prev close 284.99 · premarket vol 208,817 · RTH open 297.36 · last 329.3521 (15.6% vs prev close) · RTH vol 11,868,981
+block participation (≥10,000 sh or ≥$200,000, auctions excluded): dark 12.3% + lit 0.2% = 12.5% of day volume 16,008,425
+walls cross-check (gex-levels oi vs greek-exposure/strike): differ: put_wall 275.0 vs 300.0; gamma_magnet 275.0 vs 300.0

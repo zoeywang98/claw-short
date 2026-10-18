@@ -1,0 +1,298 @@
+{
+ "target_date": "2026-06-23",
+ "asof_cutoff": null,
+ "latest_trading_day": "2026-10-16",
+ "generated_at": "2026-10-18T01:31:02-04:00",
+ "usage": {
+  "x-uw-req-per-minute-remaining": "1000000",
+  "x-uw-req-per-minute-reset": "60000"
+ },
+ "requests": 51,
+ "cache_hits": 45,
+ "tickers": {
+  "BE": {
+   "coverage": {
+    "core": "6/8",
+    "supplemental": "19/22"
+   },
+   "layers": {
+    "darkpool-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-06-23",
+     "rows": 72,
+     "extra": "days=22/22",
+     "reason": null,
+     "notes": []
+    },
+    "darkpool": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-06-23T23:42:54Z",
+     "rows": 535,
+     "extra": "blocks=535 spot=321.0",
+     "reason": null,
+     "notes": [
+      "UW dark pool feed only carries prints with premium >= $100k"
+     ]
+    },
+    "option-trades": {
+     "status": "FAIL",
+     "core": true,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "option-trades only serves the latest trading day (2026-10-16); see flow-alerts / flow-per-strike / net-prem-ticks for 2026-06-23",
+     "notes": []
+    },
+    "gex-levels": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-06-23 2026-06-23T20:00:00.000000Z",
+     "rows": 12,
+     "extra": "days=6 sources=vol,oi",
+     "reason": null,
+     "notes": []
+    },
+    "greek-exposure": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-06-23",
+     "rows": 169,
+     "extra": "net_gamma=11612.6618",
+     "reason": null,
+     "notes": []
+    },
+    "short-interest": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-05-29",
+     "rows": 120,
+     "extra": "lag=25d",
+     "reason": null,
+     "notes": [
+      "FINRA short interest lags; 25 calendar days behind 2026-06-23"
+     ]
+    },
+    "short-volume": {
+     "status": "RAN",
+     "core": true,
+     "as_of": "2026-06-23",
+     "rows": 500,
+     "extra": "ratio=0.592",
+     "reason": null,
+     "notes": []
+    },
+    "short-data": {
+     "status": "FAIL",
+     "core": true,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "no row on or before 2026-06-23",
+     "notes": []
+    },
+    "lit-blocks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23T19:58:59Z",
+     "rows": 37,
+     "extra": "blocks=37",
+     "reason": null,
+     "notes": [
+      "UW lit feed only carries large prints (not the full lit tape)"
+     ]
+    },
+    "ohlc-daily": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 171,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "ohlc-5m": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23T23:55:00Z",
+     "rows": 811,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": []
+    },
+    "oi-change": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 2256,
+     "extra": "pages=5",
+     "reason": null,
+     "notes": []
+    },
+    "option-contracts": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "live snapshot only (latest trading day 2026-10-16)",
+     "notes": []
+    },
+    "oi-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 158,
+     "extra": "prev=2026-06-22",
+     "reason": null,
+     "notes": []
+    },
+    "options-volume": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 10,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "interpolated-iv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 9,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "iv-rv": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 63,
+     "extra": "iv30=1.096 rv21_last=['2026-06-23', 0.982903]",
+     "reason": null,
+     "notes": []
+    },
+    "option-sentiment": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 30,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "unusualness": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "endpoint has no date parameter; only the latest day (2026-10-16)",
+     "notes": []
+    },
+    "options-pulse": {
+     "status": "FAIL",
+     "core": false,
+     "as_of": null,
+     "rows": 0,
+     "extra": null,
+     "reason": "empty payload",
+     "notes": []
+    },
+    "multi-leg": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 0,
+     "extra": "days=5 min_size=50",
+     "reason": null,
+     "notes": []
+    },
+    "flow-per-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 146,
+     "extra": "days=5/5",
+     "reason": null,
+     "notes": []
+    },
+    "net-prem-ticks": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 386,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "greek-exposure-strike": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 158,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    },
+    "offlit-levels": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 23196,
+     "extra": "bins=139",
+     "reason": null,
+     "notes": []
+    },
+    "flow-alerts": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23T19:46:09.605480Z",
+     "rows": 58,
+     "extra": "pages=1",
+     "reason": null,
+     "notes": []
+    },
+    "spot-gex": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23T19:59:54.000000Z",
+     "rows": 517,
+     "extra": "gamma_oi=17198824.8",
+     "reason": null,
+     "notes": []
+    },
+    "contract-history": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 74,
+     "extra": "contracts=4/7",
+     "reason": null,
+     "notes": []
+    },
+    "rr-skew": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 169,
+     "extra": "expiry=2026-07-17 delta=25",
+     "reason": null,
+     "notes": []
+    },
+    "screener": {
+     "status": "RAN",
+     "core": false,
+     "as_of": "2026-06-23",
+     "rows": 1,
+     "extra": null,
+     "reason": null,
+     "notes": []
+    }
+   }
+  }
+ }
+}

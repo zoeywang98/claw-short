@@ -390,6 +390,29 @@ class PointInTime(unittest.TestCase):
         r = L.layer_ohlc_5m(ctx)
         self.assertEqual([b[4] for b in r.data["days"][D]], [1.0, 2.0])
 
+    def test_bars_4h_split_rth_at_1330(self):
+        def row(utc, o, h, l, c, v, mt="r"):
+            return [utc, o, h, l, c, v, mt]
+        days = {"2026-10-16": [row("2026-10-16T13:25:00Z", 9, 99, 1, 9, 5, "pr"),      # 09:25 ET pre-market: skipped
+                               row("2026-10-16T13:30:00Z", 10, 12, 9, 11, 100),       # 09:30 ET -> AM
+                               row("2026-10-16T17:25:00Z", 11, 13, 10, 12, 50),       # 13:25 ET -> AM
+                               row("2026-10-16T17:30:00Z", 12, 15, 11, 14, 70),       # 13:30 ET -> PM
+                               row("2026-10-16T19:55:00Z", 14, 14, 8, 9, 30),         # 15:55 ET -> PM
+                               row("2026-10-16T20:00:00Z", 9, 20, 1, 9, 5, "po")]}    # post-market: skipped
+        self.assertEqual(L.bars_4h(days), [["2026-10-16", "AM", 10, 13, 9, 12, 150, 2],
+                                           ["2026-10-16", "PM", 12, 15, 8, 9, 100, 2]])
+
+    def test_finra_settlement_publication_lag(self):
+        self.assertFalse(L.published_by("2026-06-30", "2026-06-30"))   # settled, not yet public
+        self.assertTrue(L.published_by("2026-06-15", "2026-06-24"))    # 7 business days later
+        self.assertFalse(L.published_by("2026-06-15", "2026-06-23"))
+
+    def test_greek_exposure_strike_keeps_delta(self):
+        rows = [{"date": D, "strike": "100", "call_gex": "5", "put_gex": "-7", "call_delta": "300", "put_delta": "-450"}]
+        ctx, _ = make_ctx(lambda path, p: {"data": rows})
+        r = L.layer_greek_exposure_strike(ctx)
+        self.assertEqual(r.data["strikes"], [[100.0, 5.0, -7.0, -2.0, 300.0, -450.0, -150.0]])
+
     def test_flow_per_strike_rebuilds_D_from_minutes(self):
         def router(path, p):
             if path.endswith("intraday"):

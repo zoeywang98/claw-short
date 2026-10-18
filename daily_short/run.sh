@@ -16,6 +16,7 @@ WS=/Users/yuwang/.openclaw/workspace-claw-short
 FETCH=$WS/uw_short_fetch
 HERE=$WS/daily_short
 RUNS=$FETCH/runs
+FINVIZ=/Users/yuwang/.openclaw/workspace-claw-general/finviz/fv_short_interest.py
 export PATH=/Users/yuwang/.nvm/versions/node/v24.16.0/bin:/Users/yuwang/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:$PATH
 # every per-ticker layer except greek-exposure: the market pass only needs each name's net gamma
 MARKET_SKIP=darkpool-levels,darkpool,option-trades,gex-levels,short-interest,short-volume,short-data,lit-blocks,ohlc-daily,ohlc-5m,oi-change,option-contracts,oi-per-strike,options-volume,interpolated-iv,option-sentiment,unusualness,options-pulse,multi-leg,flow-per-strike,net-prem-ticks,greek-exposure-strike,offlit-levels,flow-alerts,spot-gex,contract-history,rr-skew,iv-rv
@@ -65,6 +66,14 @@ if [ $FRESH -eq 1 ]; then
     python3 fetch.py --quiet --tickers "$T" --date "$DATE" --out "$RUNS/tickers/$T" > "$LOG/$T.fetch.out" 2>&1
     echo "$T fetch · $(usage_line "$RUNS/tickers/$T/$DATE/run_log.txt")"
   done
+  # Finviz short interest for the 空头闸 line (ZZ 2026-10-17); reads the logged-in DICloak Finviz window.
+  # Exit 1 = some tickers unknown to Finviz (the rest are saved); any failure only makes the posts say "没拉到".
+  python3 "$FINVIZ" ${TICKERS//,/ } --rows 1 --out-dir "$FETCH/finviz_si" > "$LOG/_finviz.out" 2>&1
+  case $? in
+    0) echo "finviz SI · ok" ;;
+    1) echo "⚠ finviz SI · some tickers missing (see logs/$DATE/_finviz.out)" ;;
+    *) echo "⚠ finviz SI failed (see logs/$DATE/_finviz.out)" ;;
+  esac
 fi
 python3 brief.py --date "$DATE" --tickers "$TICKERS" --cross-section "$MARKET" > "$LOG/_cross_section.out" 2>&1 \
   && echo "cross-section · $(tail -1 "$LOG/_cross_section.out")" \

@@ -278,6 +278,7 @@ class Config:
     dp_days: int = 22            # 21-day window + the D-21 snapshot
     gex_days: int = 6
     flow_days: int = 5
+    bars_4h_days: int = 10       # sessions of RTH 4H bars (09:30-13:30 / 13:30-16:00 ET) built from 5m bars
     block_shares: int = 10_000
     block_premium: float = 200_000
     flow_min_premium: float = 50_000
@@ -777,8 +778,22 @@ def _latest_on_or_before(rows: List[Dict[str, Any]], key: str, D: str) -> Option
     return max(cand, key=lambda r: str(r[key])) if cand else None
 
 
+FINRA_PUBLISH_LAG_BDAYS = 7   # a settlement is disseminated about 7 business days after the settlement date
+
+
+def published_by(settlement: str, d: str) -> bool:
+    """Whether a FINRA settlement date had been published by day d (weekdays only; holidays ignored)."""
+    day, n = date.fromisoformat(settlement), 0
+    while n < FINRA_PUBLISH_LAG_BDAYS:
+        day += timedelta(days=1)
+        n += day.weekday() < 5
+    return day.isoformat() <= d
+
+
 def layer_short_interest(ctx: Ctx) -> LayerResult:
     rows = rows_of(ctx.get("short_interest_v2", f"/api/shorts/{ctx.T}/interest-float/v2"))
+    if ctx.D < ctx.today_ny:   # past date: drop settlements that were not public yet on D (no look-ahead)
+        rows = [r for r in rows if r.get("market_date") and published_by(r["market_date"], ctx.D)]
     latest = _latest_on_or_before(rows, "market_date", ctx.D)
     if not latest:
         return FAIL("empty payload" if not rows else f"no row on or before {ctx.D}")
@@ -865,8 +880,29 @@ def layer_ohlc_daily(ctx: Ctx) -> LayerResult:
                        data={"bars": bars, "derived": derived, "columns": ["date", "open", "high", "low", "close", "volume"]})
 
 
+def bars_4h(days: Dict[str, List[List[Any]]]) -> List[List[Any]]:
+    """RTH 4H bars from 5m rows ([start_time, o, h, l, c, v, market_time]): per session AM = 09:30-13:30 ET and
+    PM = 13:30-16:00 ET (the usual 4H split of a US session). n5m = 5m bars in it (48 AM / 30 PM when complete)."""
+    out = []
+    for d in sorted(days):
+        seg: Dict[str, List[List[Any]]] = {"AM": [], "PM": []}
+        for r in days[d]:
+            t = parse_ts(r[0])
+            if r[6] != "r" or t is None or None in r[1:5]:
+                continue
+            t = t.astimezone(NY)
+            seg["AM" if t.hour * 60 + t.minute < 13 * 60 + 30 else "PM"].append(r)
+        for name in ("AM", "PM"):
+            b = seg[name]
+            if b:
+                out.append([d, name, b[0][1], max(x[2] for x in b), min(x[3] for x in b), b[-1][4],
+                            sum(x[5] or 0 for x in b), len(b)])
+    return out
+
+
 def layer_ohlc_5m(ctx: Ctx) -> LayerResult:
-    days = ctx.cal.window(ctx.D, ctx.cfg.flow_days)
+    days = ctx.cal.window(ctx.D, max(ctx.cfg.flow_days, ctx.cfg.bars_4h_days))
+    keep = set(days[-ctx.cfg.flow_days:])   # raw 5m rows only for the flow window; older days feed the 4H bars
     out: Dict[str, List[List[Any]]] = {}
     for d in days:
         rows = [r for r in rows_of(ctx.get(f"ohlc_5m_{d}", f"/api/stock/{ctx.T}/ohlc/5m", {"date": d}, cache_date=d))
@@ -880,9 +916,14 @@ def layer_ohlc_5m(ctx: Ctx) -> LayerResult:
     if ctx.D not in out:
         return FAIL(f"empty payload for {ctx.D}" + (" before the cutoff" if ctx.pit else ""))
     last = out[ctx.D][-1][0]
-    return LayerResult(ok=True, as_of=last, rows=sum(len(v) for v in out.values()), extra=f"days={len(out)}/{len(days)}",
+    raw = {d: v for d, v in out.items() if d in keep}
+    return LayerResult(ok=True, as_of=last, rows=sum(len(v) for v in raw.values()), extra=f"days={len(raw)}/{len(keep)}",
                        notes=pit_note(ctx, f"{ctx.D} bars closed by the cutoff (last bar starts {last})"),
-                       data={"columns": ["start_time", "open", "high", "low", "close", "volume", "market_time"], "days": out})
+                       data={"columns": ["start_time", "open", "high", "low", "close", "volume", "market_time"], "days": raw,
+                             "bars_4h": {"columns": ["date", "bar", "open", "high", "low", "close", "volume", "n5m"],
+                                         "rows": bars_4h(out),
+                                         "definition": "RTH only; AM = 09:30-13:30 ET, PM = 13:30-16:00 ET; "
+                                                       "n5m = 5m bars (48 / 30 when complete)"}})
 
 
 # --------------------------------------------------------------------------- supplemental: OI
@@ -1016,7 +1057,9 @@ def layer_oi_per_strike(ctx: Ctx) -> LayerResult:
 
 def layer_options_volume(ctx: Ctx) -> LayerResult:
     end = ctx.K  # daily totals: D's row is end-of-day
-    rows = sorted((r for r in rows_of(ctx.get("options_volume", f"/api/stock/{ctx.T}/options-volume", {"limit": 30}))
+    # the endpoint ignores `date` and returns the latest `limit` sessions, so a past D needs a longer window
+    limit = min(500, max(30, sum(1 for d in ctx.cal.days if d > end) + 10))
+    rows = sorted((r for r in rows_of(ctx.get("options_volume", f"/api/stock/{ctx.T}/options-volume", {"limit": limit}))
                    if r.get("date") and r["date"] <= end), key=lambda r: r["date"])
     if not rows or rows[-1]["date"] != end:
         return FAIL(f"no row for {end}")
@@ -1318,12 +1361,15 @@ def layer_greek_exposure_strike(ctx: Ctx) -> LayerResult:
     strikes = []
     for r in rows:
         k, c, p = num(r.get("strike")), num(r.get("call_gex")), num(r.get("put_gex"))
+        cd, pd = num(r.get("call_delta")), num(r.get("put_delta"))
         if k is not None:
-            strikes.append([k, c, p, (c or 0.0) + (p or 0.0)])
+            strikes.append([k, c, p, (c or 0.0) + (p or 0.0), cd, pd, (cd or 0.0) + (pd or 0.0)])
     strikes.sort(key=lambda x: x[0])
     return LayerResult(ok=True, as_of=rows[0].get("date") or ctx.D, rows=len(strikes),
-                       data={"columns": ["strike", "call_gex", "put_gex", "net_gex"], "strikes": strikes,
-                             "note": "open-interest basis; cross-check for gex-levels (vol basis by default)"})
+                       data={"columns": ["strike", "call_gex", "put_gex", "net_gex", "call_dex", "put_dex", "net_dex"],
+                             "strikes": strikes,
+                             "note": "open-interest basis; cross-check for gex-levels (vol basis by default); "
+                                     "dex = UW call_delta / put_delta per strike"})
 
 
 def oi_basis_walls(strikes: List[List[float]], spot: Optional[float],

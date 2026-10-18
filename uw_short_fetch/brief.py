@@ -13,6 +13,7 @@ import argparse
 import json
 import os
 import sys
+from collections import defaultdict
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 CORE = ["darkpool-levels", "darkpool", "option-trades", "gex-levels",
@@ -152,6 +153,250 @@ def gex(layers):
     return out
 
 
+FINVIZ_DIR = os.path.join(PROJECT_DIR, "finviz_si")   # <T>.json from workspace-claw-general/finviz/fv_short_interest.py
+FINVIZ_MAX_LAG_DAYS = 3   # a Finviz file fetched more than this many days after D is not used (replays of old days)
+CLOSE_REF_CONDS = ("prior_reference_price", "average_price_trade")
+ML_CODES = {"mlet", "mlat", "mlct", "mlft", "tlet", "tlat", "tlct", "tlft"}   # UW multi-leg trade codes
+
+
+def _tenor(dte):
+    return "0-7d" if dte <= 7 else "8-30d" if dte <= 30 else "31-90d" if dte <= 90 else ">90d"
+
+
+def _tape_items(L, target):
+    """(type, dte, side, premium, legs, sweep, sym, size, oi) per print: option-trades when the fetch has them,
+    else UW flow alerts (each alert split into its ask and bid premium). Futures-floor prints are left out."""
+    import datetime as _dt
+    trades = data(L, "option-trades").get("trades") or []
+    for r in trades:
+        if "futures_floor" in (r.get("report_flags") or []) or r.get("dte") is None:
+            continue
+        yield (r.get("type"), r["dte"], r.get("side"), r.get("premium") or 0,
+               "multi" if r.get("code") in ML_CODES else "single", bool(r.get("sweep")), r.get("sym"),
+               r.get("size"), r.get("open_interest"))
+    if trades or not target:
+        return
+    d0 = _dt.date.fromisoformat(target)
+    for a in data(L, "flow-alerts").get("alerts") or []:
+        if a.get("floor") or not a.get("expiry"):
+            continue
+        dte = (_dt.date.fromisoformat(a["expiry"]) - d0).days
+        legs = "multi" if a.get("multileg") else "single"
+        for side in ("ask", "bid"):
+            prem = a.get(f"{side}_premium") or 0
+            if prem:
+                yield (a.get("type"), dte, side, prem, legs, bool(a.get("sweep")), a.get("sym"), None,
+                       a.get("open_interest"))
+
+
+def _bucket_of(price, level_rows):
+    """The price-levels bucket holding `price` (buckets are labelled by their lower edge)."""
+    below = [r[0] for r in level_rows if r[0] is not None and r[0] <= price]
+    return max(below) if below else None
+
+
+def finviz_si(ticker, target):
+    import datetime as _dt
+    p = os.path.join(FINVIZ_DIR, f"{ticker}.json")
+    if not os.path.exists(p):
+        return {"status": "missing", "reason": f"no {p} (fv_short_interest.py not run, or Finviz/DICloak failed)"}
+    doc = json.load(open(p))
+    fetched = (doc.get("fetched_at") or "")[:10]
+    if fetched and target and (_dt.date.fromisoformat(fetched) - _dt.date.fromisoformat(target)).days > FINVIZ_MAX_LAG_DAYS:
+        return {"status": "not used", "reason": f"fetched {fetched}, more than {FINVIZ_MAX_LAG_DAYS} days after {target}"}
+    from uwsf.layers import published_by   # past target: keep only settlements already public on that day
+    rows = [r for r in doc.get("rows") or [] if not target or (r.get("date", "") <= target and
+            (not fetched or fetched <= target or published_by(r["date"], target)))][:6]
+    return {"source": doc.get("source"), "fetched_at": doc.get("fetched_at"), "page": doc.get("page"),
+            "units": doc.get("units"), "rows": rows}
+
+
+def template_inputs(snap, L):
+    """Numbers for the fixed 7-section post (daily_short/INSTRUCTIONS.md, ZZ 2026-10-17). Data only: the wording
+    rules live in INSTRUCTIONS.md."""
+    der = snap.get("derived") or {}
+    spot = (der.get("spot") or {}).get("mid")
+    daily = data(L, "ohlc-daily")
+    closes = {b[0]: b[4] for b in (daily.get("bars") or [])}
+    out = {"spot": spot, "close": (daily.get("derived") or {}).get("close")}
+
+    b4 = data(L, "ohlc-5m").get("bars_4h") or {}
+    rows4 = (b4.get("rows") or [])[-20:]
+
+    def halves(seg12):
+        if len(seg12) != 12:
+            return None
+        return {name: {"from": f"{seg[0][0]} {seg[0][1]}", "to": f"{seg[-1][0]} {seg[-1][1]}",
+                       "high": max(r[3] for r in seg), "low": min(r[4] for r in seg)}
+                for name, seg in (("earlier_6", seg12[:6]), ("last_6", seg12[6:]))}
+    out["bars_4h"] = {"columns": b4.get("columns"), "rows": rows4, "definition": b4.get("definition"),
+                      "last_12_halves": halves(rows4[-12:]),
+                      "prev_session_12_halves": halves(rows4[-14:-2])}   # same split one session (2 bars) earlier
+
+    dl = data(L, "darkpool-levels")
+    win = dl.get("windows") or {}
+    per_day = {d: {**v, "levels": [[x.get("price"), x.get("dark"), x.get("regular")] if isinstance(x, dict) else x
+                                   for x in (v.get("levels") or [])]}
+               for d, v in (dl.get("per_day") or {}).items()}
+    days = sorted(per_day)
+    close_buckets = []
+    for d in days[-5:]:
+        lv = per_day[d]["levels"]
+        c = closes.get(d)
+        bk = _bucket_of(c, lv) if c is not None else None
+        dark = sum(r[1] or 0 for r in lv if r[0] == bk) if bk is not None else None
+        tot = per_day[d].get("dark_total")
+        prices = sorted({r[0] for r in lv if r[0] is not None})
+        i = prices.index(bk) if bk in prices else None
+        adj = [p for p in (prices[i - 1] if i else None, prices[i + 1] if i is not None and i + 1 < len(prices) else None)
+               if p is not None]
+        nmax = max((sum(r[1] or 0 for r in lv if r[0] == p) for p in adj), default=None)
+        close_buckets.append({"date": d, "close": c, "bucket": bk, "dark_in_bucket": dark,
+                              "share_of_day_dark": (dark / tot) if (dark is not None and tot) else None,
+                              "neighbors_max_dark": nmax,
+                              "spike_vs_neighbors": (dark / nmax) if (dark and nmax) else None})
+    prints = data(L, "darkpool").get("block_trades") or []   # D's block prints only
+    ref = defaultdict(lambda: [0, 0, set()])
+    for x in prints:
+        if x.get("sale_cond") in CLOSE_REF_CONDS and x.get("price") is not None:
+            a = ref[round(x["price"], 2)]
+            a[0] += x.get("size") or 0
+            a[1] += 1
+            a[2].add(x["sale_cond"])
+    D = snap.get("target_date")
+    own_close = {cb["date"]: cb["bucket"] for cb in close_buckets}
+    agg2 = defaultdict(float)
+    for d in days[-2:]:
+        lv = per_day[d]["levels"]
+        minus = defaultdict(float)
+        if d == D:   # D: take out the close-referenced block prints we can see, wherever they printed
+            for p, v in ref.items():
+                bk = _bucket_of(p, lv)
+                if bk is not None:
+                    minus[bk] += v[0]
+        for r in lv:
+            if r[0] is None or (d != D and r[0] == own_close.get(d)):   # earlier day: drop its closing-price bucket
+                continue
+            agg2[r[0]] += max((r[1] or 0) - minus.get(r[0], 0.0), 0.0)
+    top2 = sorted(agg2.items(), key=lambda kv: -kv[1])[:6]
+    clusters = []   # top-8 buckets grouped where neighbours are within 1% of price; heaviest group = main node
+    for p, v in sorted(sorted(agg2.items(), key=lambda kv: -kv[1])[:8]):
+        if clusters and p - clusters[-1]["high"] <= 0.01 * p:
+            clusters[-1]["high"] = p
+            clusters[-1]["dark"] += v
+        else:
+            clusters.append({"low": p, "high": p, "dark": v})
+    main_cluster = max(clusters, key=lambda c: c["dark"]) if clusters else None
+    m1, d1 = win.get("1M") or {}, win.get("1D") or {}
+    avg = (m1.get("dark_total") / m1.get("days_present")) if m1.get("dark_total") and m1.get("days_present") else None
+    out["dark_pool"] = {
+        "windows": {k: pick(win.get(k) or {}, ["from", "to", "centroid_top8", "poc"]) for k in ("1D", "2D", "1W", "1M")},
+        "dp_1d_vs_1m_avg": (d1["dark_total"] / avg) if (avg and d1.get("dark_total")) else None,
+        "close_buckets_5d": close_buckets,
+        "top6_2d_ex_close_prints": {"rows": [[k, v] for k, v in top2],
+                                    "low": min(k for k, _ in top2) if top2 else None,
+                                    "high": max(k for k, _ in top2) if top2 else None,
+                                    "main_cluster": main_cluster,
+                                    "clusters_top8": clusters,
+                                    "definition": "2D window dark volume by bucket, without closing-price prints: on D the "
+                                                  "close_ref_prints_D block prints are subtracted from their buckets; on "
+                                                  "the earlier day its whole closing-price bucket is left out"},
+        "close_ref_prints_D": [[p, v[0], v[1], sorted(v[2])] for p, v in
+                               sorted(ref.items(), key=lambda kv: -kv[1][0])[:5]],
+        "close_ref_prints_columns": ["price", "shares", "prints", "sale_cond"],
+    }
+
+    ov = (data(L, "options-volume").get("series") or [])[-5:]
+    day = ov[-1] if ov else {}
+    prior = ov[:-1]
+    keys = ("call_volume_ask_side", "call_volume_bid_side", "put_volume_ask_side", "put_volume_bid_side")
+    prior_avg = {k: (sum(r.get(k) or 0 for r in prior) / len(prior)) if prior else None for k in keys}
+    split, sweeps = defaultdict(float), defaultdict(float)
+    far = defaultdict(lambda: defaultdict(lambda: [0.0, 0, None]))
+    for typ, dte, side, prem, legs, sweep, sym, size, oi in _tape_items(L, snap.get("target_date")):
+        split[f"{typ}|{_tenor(dte)}|{side}|{legs}"] += prem
+        if sweep and dte <= 30:
+            sweeps[f"{typ}|{side}"] += prem
+        if dte > 90 and legs == "single" and side in ("ask", "bid"):
+            a = far[f"{typ}|{side}"][sym]
+            a[0] += prem
+            a[1] += size or 0
+            a[2] = oi
+    tape_src = "option-trades" if data(L, "option-trades").get("trades") else \
+        ("flow-alerts" if data(L, "flow-alerts").get("alerts") else "missing")
+    out["options"] = {
+        "day": pick(day, ["date", "call_premium", "put_premium", "net_call_premium", "net_put_premium", *keys]),
+        "prior_4d_avg": prior_avg,
+        "day_vs_prior_4d": {k: (day.get(k) / prior_avg[k]) if (day.get(k) and prior_avg.get(k)) else None for k in keys},
+        "tape_premium_split": {"source": tape_src,
+                               "definition": "option-trades premium >= $50k (fetch filter), futures_floor excluded; "
+                                             "key = type|tenor|side|single-or-multi-leg (UW multi-leg codes). "
+                                             "source flow-alerts = UW flow alerts' ask / bid premium (option-trades "
+                                             "only serves the latest session, so past dates fall back to alerts)",
+                               "premium": {k: round(v) for k, v in sorted(split.items())}},
+        "sweeps_le_30d": {k: round(v) for k, v in sorted(sweeps.items())},
+        "far_gt_90d_single_top3": {k: [[s, round(v[0]), v[1], v[2]] for s, v in
+                                       sorted(c.items(), key=lambda kv: -kv[1][0])[:3]] for k, c in sorted(far.items())},
+        "far_columns": ["sym", "premium", "contracts", "open_interest"],
+    }
+
+    ge = data(L, "greek-exposure")
+    gx = data(L, "gex-levels")
+    ges = data(L, "greek-exposure-strike")
+    strikes = ges.get("strikes") or []
+    near = [[s[0], s[1], s[2], s[3], s[6] if len(s) > 6 else None] for s in strikes
+            if spot and s[0] is not None and spot * 0.8 <= s[0] <= spot * 1.2]
+    below = [s for s in near if s[0] < (spot or 0)]
+    above = [s for s in near if s[0] > (spot or 0)]
+    dex_above = [s for s in strikes if spot and len(s) > 6 and spot < s[0] <= spot * 1.3]
+    neg = [s for s in dex_above if (s[6] or 0) < 0]
+    biggest = max((-s[6] for s in neg), default=0)
+    dense = [s for s in neg if -s[6] >= 0.5 * biggest] if biggest else []
+    first_pos = None
+    if dense:   # above the last still-heavy negative strike, the first clearly positive one (tiny strikes ignored)
+        last_heavy = max(s[0] for s in neg if -s[6] >= 0.25 * biggest)
+        first_pos = next((s[0] for s in dex_above if s[0] > last_heavy and (s[6] or 0) >= 0.1 * biggest), None)
+    out["dealer"] = {
+        "net_gex_series": [pick(x, ["date", "net_gamma", "net_delta"]) for x in (ge.get("series_21d") or [])[-5:]],
+        "gamma_flip": {"oi": (gx.get("latest_oi") or {}).get("gamma_flip"), "vol": (gx.get("latest") or {}).get("gamma_flip")},
+        "walls": {src: pick(gx.get(k) or {}, ["call_wall", "put_wall", "gamma_magnet"])
+                  for src, k in (("oi", "latest_oi"), ("vol", "latest"))},
+        "strikes_spot_pm20pct": {"columns": ["strike", "call_gex", "put_gex", "net_gex", "net_dex"], "rows": near,
+                                 "source": "greek-exposure/strike, open-interest basis"},
+        "put_gamma_nodes_below_spot": [[s[0], s[2]] for s in sorted(below, key=lambda s: s[2] or 0)[:3]],
+        "put_gamma_nodes_above_spot": [[s[0], s[2]] for s in sorted(above, key=lambda s: s[2] or 0)[:2]],
+        "call_gamma_nodes_above_spot": [[s[0], s[1]] for s in sorted(above, key=lambda s: -(s[1] or 0))[:3]],
+        "dex_above_spot": {"dense_negative": [[s[0], s[6]] for s in dense],
+                           "dense_low": min((s[0] for s in dense), default=None),
+                           "dense_high": max((s[0] for s in dense), default=None),
+                           "first_positive_above_dense": first_pos,
+                           "definition": "strikes in (spot, spot*1.3]; dense = net_dex < 0 and at least half of the "
+                                         "most negative one; first_positive = first strike above the last strike "
+                                         "still at <= -25% of the most negative, with net_dex >= +10% of it"},
+    }
+
+    iv = {r.get("days"): r.get("volatility") for r in (data(L, "interpolated-iv").get("term") or [])}
+    ivrv = data(L, "iv-rv")
+    sc = data(L, "screener")
+    out["iv"] = {"interpolated": {f"{k}d": v for k, v in sorted(iv.items()) if k is not None},
+                 "front_7d_minus_30d": (iv[7] - iv[30]) if (iv.get(7) is not None and iv.get(30) is not None) else None,
+                 "iv30_last": (ivrv.get("iv30") or [None])[-1], "rv21_last": (ivrv.get("rv21_trailing") or [None])[-1],
+                 "iv_rank": sc.get("iv_rank"), "iv_percentile_1y": sc.get("iv_percentile_1y")}
+
+    si, sd, sv = data(L, "short-interest"), data(L, "short-data"), data(L, "short-volume")
+    sd20 = sorted(sd.get("daily_last_20d") or [], key=lambda x: x.get("date") or "")
+    sv20 = sorted(sv.get("series_20d") or [], key=lambda x: x.get("market_date") or "")
+    out["short"] = {
+        "uw_short_interest": {**pick(si.get("latest") or {}, ["market_date", "si_float", "days_to_cover"]),
+                              "lag_days": si.get("lag_days")},
+        "uw_borrow": {"latest": sd.get("latest"),
+                      "5_sessions_ago": pick(sd20[-6], ["date", "fee_rate", "short_shares_available"]) if len(sd20) >= 6 else None},
+        "uw_svr": [pick(x, ["market_date", "short_volume_ratio"]) for x in sv20[-3:]],
+        "finviz": finviz_si(snap.get("ticker"), snap.get("target_date")),
+    }
+    return out
+
+
 def build(snap, tier=None):
     L = snap.get("layers") or {}
     f = Filt(((snap.get("derived") or {}).get("spot") or {}).get("mid"), snap.get("target_date"), tier)
@@ -166,6 +411,7 @@ def build(snap, tier=None):
         "ticker": snap.get("ticker"), "group": snap.get("group"), "target_date": snap.get("target_date"),
         "coverage": snap.get("coverage"), "as_of": snap.get("as_of"),
         "run_log_core": layer_log(L),
+        "template_inputs": template_inputs(snap, L),
         "derived": snap.get("derived"),
         "darkpool_levels": dp_levels(L),
         "darkpool": darkpool(L, f),
@@ -241,7 +487,11 @@ def main(argv=None):
     ap.add_argument("--no-market", action="store_true", help="write per-ticker briefs only")
     ap.add_argument("--cross-section", metavar="MARKET_BRIEF",
                     help="add the whole-watchlist cross-section (--tickers) to this market_brief.json and exit")
+    ap.add_argument("--finviz-max-lag-days", type=int, default=FINVIZ_MAX_LAG_DAYS,
+                    help="use finviz_si/<T>.json fetched up to this many days after --date (rows are always cut at "
+                         "--date; raise it for a past date whose FINRA settlement was already public then)")
     a = ap.parse_args(argv)
+    globals()["FINVIZ_MAX_LAG_DAYS"] = a.finviz_max_lag_days
     if a.cross_section:
         write_cross_section(a.cross_section, a.date, [t for t in a.tickers.split(",") if t])
         return 0

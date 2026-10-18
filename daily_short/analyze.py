@@ -17,6 +17,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import holding  # noqa: E402
+
 WS = "/Users/yuwang/.openclaw/workspace-claw-short"
 HERE = os.path.join(WS, "daily_short")
 DATA = os.path.join(WS, "uw_short_fetch", "data")
@@ -122,6 +125,7 @@ def main(argv=None):
     ap.add_argument("--brief", help="default: data/<D>/<T>/brief.json")
     ap.add_argument("--market-brief", help="default: data/<D>/market_brief.json")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--holding-suffix", default="", help="read earlier entries from logs/<date><suffix> (tests only)")
     a = ap.parse_args(argv)
     a.brief = a.brief or os.path.join(DATA, a.date, a.ticker, "brief.json")
     a.market_brief = a.market_brief or os.path.join(DATA, a.date, "market_brief.json")
@@ -129,7 +133,9 @@ def main(argv=None):
     log = os.path.join(HERE, "logs", a.date)
     os.makedirs(log, exist_ok=True)
     brief = open(a.brief).read()
-    user = f"## 本票数据（{a.ticker} brief）\n\n{brief}"
+    held = holding.holding_state(a.date, a.ticker, json.loads(brief), a.holding_suffix)
+    user = (f"## 持仓状态（holding）\n\n{json.dumps(held, ensure_ascii=False)}\n\n" if held else "") \
+        + f"## 本票数据（{a.ticker} brief）\n\n{brief}"
     sandbox = os.path.join(HERE, "sandbox")   # empty cwd: no project CLAUDE.md / memory gets picked up
     os.makedirs(sandbox, exist_ok=True)
     cmd = ["claude", "-p", "--model", MODEL, "--effort", EFFORT,

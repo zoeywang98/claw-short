@@ -86,6 +86,8 @@ option-trades 的聚合里另有 flow_iv：call/put 各自按 premium 加权的�
 
 `brief.py --date D --tickers A,B,... --cross-section <market_brief.json>`：把全名单截面（涨跌、SVR、DP 量对均值、大单参与度、net gamma）写进市场数据，daily_short/run.sh 在逐只分析前调用。
 
+每份 brief 开头有 `template_inputs`（ZZ 2026-10-17 的固定 7 段报告用，只有数字、不下结论）：常规时段 4H K 线（近 10 个交易日，由 ohlc-5m 合成，09:30–13:30 / 13:30–16:00）、DP 成本区和去掉收盘参考价单后的 2D 主要节点、期权 premium 按类型 × 期限 × ask/bid × 单腿/多腿拆分、逐 strike 的 GEX 和 DEX（greek-exposure-strike 现在带 call/put delta）、IV 期限（7 / 30 天）、空头数据（UW + `finviz_si/<T>.json` 里的 Finviz SI）。
+
 ## 已经处理的数据坑
 
 - greek-exposure、SI、short-volume、short-data 都按日期取 max(date) ≤ D 的那一行，不按位置取第一行或最后一行
