@@ -12,10 +12,11 @@
   - net gamma：greek_exposure.today.net_gamma
   - IV30 / RV21：iv_rv 最后一天；IV rank：screener.iv_rank
   - put 被买：options_volume_5d 最后一天的 net_put_premium
+  - 浅：template_inputs.dark_pool 的 close_vs_2D.below_pct 和 prev_session.close_below_2D
   - 派发确认看重心迁移和 K 线（价格是否失守高位、回踩站不回）；派发指纹和 flow 偏空看 option_trades、oi_change、flow_per_strike。期权 flow 按 ask / bid 意图净额读，不按 call / put 计数；画墙只用 gex_levels，永远不用期权 flow 的 strike。
 - Finviz 的 SI 只在"空头闸"里对照，不参与判定。
 - 持仓：消息里有"持仓状态（holding）"时，表示之前开过的空单还没结束（SHORT_ENGINE"持有"）。
-  - status 是"持有中"：今天规则命中就写"✅ 做空 · 规则 n · 持有自 MM-DD"，没命中就写"✅ 持有 · MM-DD 规则 n · 失效 <stop>"。
+  - status 是"持有中"：今天规则命中就写"✅ 做空 · 规则 n[ · 浅] · 持有自 MM-DD"，没命中就写"✅ 持有 · MM-DD 规则 n · 失效 <stop>"。
   - status 是"盘中已站回失效位（按收盘才算）"：照"持有中"写，结论行末尾加" · ⚠ 盘中已站回失效位，按收盘定"。
   - status 是"今天收盘站回失效位"或"满 10 个交易日"：空单结束，今天照常按 4 条规则定档。
   - 失效位一律用 holding.stop（开仓日的 2D 重心），不用今天的 2D 重心。
@@ -27,7 +28,7 @@
 
 ```
 **<T> 综合结构：<偏空|偏多|中性>，<阶段>**
-**结论**：[✅ 做空 · 规则 <n>[、<m>][ · 持有自 <MM-DD>]|✅ 持有 · <MM-DD> 规则 <n> · 失效 <stop>|⚪ 不做空] · <D> 收盘 <close> · 2D 重心 <c2D> · 财报 <MM-DD|未查> · 覆盖 <N>/8<提示>
+**结论**：[✅ 做空 · 规则 <n>[、<m>][ · 浅][ · 持有自 <MM-DD>]|✅ 持有 · <MM-DD> 规则 <n> · 失效 <stop>|⚪ 不做空] · <D> 收盘 <close> · 2D 重心 <c2D> · 财报 <MM-DD|未查> · 覆盖 <N>/8<提示>
 
 价格结构
 - 4H[继续处于|转为][下降趋势|上升趋势|震荡区间]（<高低点事实>）
@@ -76,7 +77,7 @@ IV
 
 - 综合结构方向：close 低于 DP 成本区且 1W、2D 重心都低于 1M → 偏空；close 高于 DP 成本区且 1W、2D 重心都高于 1M → 偏多；其它 → 中性。
 - 阶段只用这几种：偏空时，close 在承接观察区（Dark Pool 第 4 行的区间）内或距其上沿 ≤1% → "但进入第一承接观察区"；close 距"反弹首先面对"的第一个价位 ≤1% → "但反弹进入第一压力区"；否则 4H 下降 → "下跌趋势延续"，其它 → "方向待确认"。偏多时，close 在派发观察区内或距其下沿 ≤1% → "但进入第一压力观察区"；距"回落首先面对"第一个价位 ≤1% → "但回踩第一支撑区"；否则 4H 上升 → "上涨趋势延续"，其它 → "方向待确认"。中性 → "区间震荡" 或 "方向待确认"。
-- 结论行：命中规则写"✅ 做空 · 规则 <n>"（命中几条写几条，用"、"隔开），没命中写"⚪ 不做空"。<提示> 只在有时写，每项用 " · " 接在后面：⚪ 写"原因：<没跌破 2D 重心|跌破 2D 但没命中规则|<MM-DD> 空单今天收盘站回失效位|<MM-DD> 空单满 10 天>"；数据 as-of 不是当天写"⚠ <层> = T-1"；核心层 FAIL 写"❌ <层>"。
+- 结论行：命中规则写"✅ 做空 · 规则 <n>"（命中几条写几条，用"、"隔开），没命中写"⚪ 不做空"。" · 浅"只跟在 ✅ 做空 的规则号后面（✅ 持有 不加），两条都满足才加：close_vs_2D.below_pct ≤ 2.0；prev_session.close_below_2D 是 false。prev_session 缺失或 close_below_2D 不是 false 就不加。<提示> 只在有时写，每项用 " · " 接在后面：⚪ 写"原因：<没跌破 2D 重心|跌破 2D 但没命中规则|<MM-DD> 空单今天收盘站回失效位|<MM-DD> 空单满 10 天>"；数据 as-of 不是当天写"⚠ <层> = T-1"；核心层 FAIL 写"❌ <层>"。
 - 4H：用 template_inputs.bars_4h。last_12_halves 里 last_6 的 high 和 low 都低于 earlier_6 → 下降趋势；都高于 → 上升趋势；其它 → 震荡区间。prev_session_12_halves 按同一规则得到同一结论 → "继续处于"，否则 → "转为"。括号里写判定用的两组数："前 6 根 高 <earlier_6.high> 低 <earlier_6.low> → 近 6 根 高 <last_6.high> 低 <last_6.low>"。
 - DP成本区 = template_inputs.dark_pool.windows 里 1D、2D、1W 三个 centroid_top8 的最小值–最大值。close 低于最小值 → 低于；高于最大值 → 高于；否则 → 位于…内。
 - 反弹首先面对（close 低于或位于成本区时用"反弹"，高于时用"回落"）：从 1D / 2D / 1W 重心、OI 和 vol 的 gamma flip、负 DEX 密集区下沿、OI call wall（回落时换成主要 Put gamma 节点和 OI put wall）、最近 6 根 4H 的最高价（回落时用最低价）里，取 close 上方（回落时取下方）最近的三个，由近到远；相距 ≤0.5% 的合并成"a–b"，合并后不满三个就继续往外取，直到三个或候选用完。

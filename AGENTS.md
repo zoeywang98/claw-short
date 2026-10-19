@@ -2,7 +2,7 @@
 
 做空候选分析 bot。
 
-- 规则唯一来源：`SHORT_ENGINE.md`（与其他文档冲突时以它为准）。v3（ZZ 2026-10-18）只剩回测里准的 4 条做空规则，都要求收盘跌破 2D 暗池重心；回测和旧版全文在 `analysis_data/backtest-2026-10-18/`
+- 规则唯一来源：`SHORT_ENGINE.md`（与其他文档冲突时以它为准）。v3（ZZ 2026-10-18）只剩回测里准的 4 条做空规则，都要求收盘跌破 2D 暗池重心；回测和旧版全文在 `analysis_data/backtest-2026-10-18/`。✅ 里跌破 2D 不到 2%、又是第一天跌破的标"浅"（ZZ 2026-10-18，回测弱一档；数据在 brief 的 `template_inputs.dark_pool.close_vs_2D` / `prev_session`）
 - 数据工具：`uw_short_fetch/`（只取数、不判断；用法见其 README.md）
 - 每日收盘扫描：`daily_short/run.sh`（17:00 ET 定时任务调用，每只票一个独立会话）
 - 报告格式固定（ZZ 2026-10-17："不要每天编造你自己的语言"）：`daily_short/INSTRUCTIONS.md` 的 7 段（价格结构 / Dark Pool / Options Flow / Dealer Positioning / Delta Exposure / IV / 空头闸），每行句式和取数口径写死；所需数字由 `brief.py` 算好放在 brief 的 `template_inputs`。盘前确认（`CONFIRM.md`）用同一套标题和说法，只写有新数据的段落

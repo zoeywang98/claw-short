@@ -287,11 +287,31 @@ def template_inputs(snap, L):
         else:
             clusters.append({"low": p, "high": p, "dark": v})
     main_cluster = max(clusters, key=lambda c: c["dark"]) if clusters else None
+    # close vs 2D centroid, today and one session earlier: the "浅" tier in INSTRUCTIONS (ZZ 2026-10-18)
+    c2d, close = (win.get("2D") or {}).get("centroid_top8"), out["close"]
+    prev = None
+    if len(days) >= 3:
+        from uwsf.layers import level_stats   # same top-8 centroid the darkpool-levels layer uses for its windows
+        agg = defaultdict(lambda: [0.0, 0.0])
+        for d in days[-3:-1]:
+            for p, dk, rg in per_day[d]["levels"]:
+                if p is not None:
+                    agg[p][0] += dk or 0.0
+                    agg[p][1] += rg or 0.0
+        pc2d, pclose = level_stats(dict(agg))["centroid_top8"], closes.get(days[-2])
+        prev = {"date": days[-2], "close": pclose, "centroid_2D": pc2d,
+                "close_below_2D": (pclose < pc2d) if (pclose is not None and pc2d) else None}
     m1, d1 = win.get("1M") or {}, win.get("1D") or {}
     avg = (m1.get("dark_total") / m1.get("days_present")) if m1.get("dark_total") and m1.get("days_present") else None
     out["dark_pool"] = {
         "windows": {k: pick(win.get(k) or {}, ["from", "to", "centroid_top8", "poc"]) for k in ("1D", "2D", "1W", "1M")},
         "dp_1d_vs_1m_avg": (d1["dark_total"] / avg) if (avg and d1.get("dark_total")) else None,
+        "close_vs_2D": {"close": close, "centroid_2D": c2d,
+                        "below_pct": ((c2d - close) / close * 100) if (close and c2d) else None,
+                        "definition": "(2D centroid_top8 - close) / close * 100; positive = close below the 2D centroid"},
+        "prev_session": prev,
+        "prev_session_definition": "the session before window_end: its close and its own 2D window (that session + "
+                                   "the one before), same top-8 centroid as darkpool_levels.windows",
         "close_buckets_5d": close_buckets,
         "top6_2d_ex_close_prints": {"rows": [[k, v] for k, v in top2],
                                     "low": min(k for k, _ in top2) if top2 else None,
