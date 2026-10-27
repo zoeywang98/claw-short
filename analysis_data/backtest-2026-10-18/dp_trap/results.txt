@@ -1,0 +1,139 @@
+### trap.py (main spec R5 G2 N3, P2 event list)
+
+=== R(rally)≥5%  G(close above max(2D,1W))≥2%  N=3  
+P1 trap warning, at P1 close (as short)       1D n=177/53d/23T raw  +0.7% exc  +0.2% lag  46% td -0.3  3D n=175/51d/23T raw  +1.5% exc  +0.1% lag  46% td -1.4  5D n=166/49d/23T raw  -0.9% exc  -2.2% lag  61% td -3.4
+P1 → broke core within N: P1-day close        1D n= 40/26d/17T raw  -4.0% exc  -2.9% lag  78% td -3.6  3D n= 40/26d/17T raw  -9.0% exc  -7.1% lag  85% td -5.8  5D n= 36/24d/17T raw -13.4% exc -10.7% lag  94% td -7.3
+P1 → held N days: P1-day close                1D n=137/46d/22T raw  +2.1% exc  +1.2% lag  36% td +2.5  3D n=135/44d/22T raw  +4.6% exc  +2.2% lag  34% td +1.6  5D n=130/42d/22T raw  +2.6% exc  +0.2% lag  52% td -0.9
+P2 confirmed trap, at break close             1D n= 38/27d/17T raw  -0.1% exc  -0.4% lag  55% td +0.0  3D n= 34/25d/17T raw  -2.6% exc  -2.3% lag  68% td -2.3  5D n= 34/25d/17T raw  -3.0% exc  -2.7% lag  62% td -1.5
+  P2 & next day did not reclaim core (from next)  1D n= 26/20d/14T raw  -0.1% exc  +0.2% lag  62% td -0.2  3D n= 24/19d/13T raw  -2.0% exc  -1.4% lag  75% td -1.5  5D n= 24/19d/13T raw  -2.3% exc  -2.1% lag  62% td -1.5
+  P2 & next day reclaimed core (from next)    1D n= 11/10d/ 9T raw  -1.8% exc  -1.3% lag  73% td -0.8  3D n= 10/ 9d/ 9T raw  -5.9% exc  -4.1% lag  70% td -1.6  5D n= 10/ 9d/ 9T raw  -7.3% exc  -4.2% lag  60% td -1.3
+Held N days, from day P1+N (expect up)        1D n=133/43d/22T raw  -1.3% exc  -1.2% beat  41% td -2.3  3D n=130/42d/22T raw  -2.0% exc  -2.3% beat  37% td -3.4  5D n=126/40d/22T raw  -1.0% exc  -1.9% beat  42% td -2.9
+control: above core≥G, no strong rally        1D n= 92/53d/16T raw  +0.1% exc  -0.1% lag  59% td -0.6  3D n= 90/51d/16T raw  -0.1% exc  -0.9% lag  51% td -0.8  5D n= 87/49d/16T raw  -0.9% exc  -2.1% lag  60% td -2.1
+control: first-day break <2D, not P2          1D n=302/60d/23T raw  +0.1% exc  +0.0% lag  49% td +0.3  3D n=289/58d/23T raw  -0.4% exc  -0.2% lag  52% td -0.4  5D n=283/56d/23T raw  +0.2% exc  +0.2% lag  52% td +1.0
+control: first-day break <2D, all             1D n=320/61d/23T raw  +0.0% exc  -0.1% lag  50% td +0.5  3D n=304/59d/23T raw  -0.6% exc  -0.4% lag  53% td -0.5  5D n=298/57d/23T raw  -0.1% exc  +0.0% lag  53% td +0.8
+P1 days 179 | broke within 3: 40 (22%) | P2 events 38
+   P2 2026-08-03 RVMD  warn 2026-07-30 +2d depth  0.5% below2D True reclaim_next True | 1D  +6.0% 3D  +8.4% 5D +13.4% | exc3  +5.6% exc5  +7.9%
+   P2 2026-08-06 DDOG  warn 2026-08-04 +2d depth 18.1% below2D True reclaim_next False | 1D  +2.0% 3D  +7.6% 5D +10.0% | exc3  +3.6% exc5  +3.0%
+   P2 2026-08-06 NBIS  warn 2026-08-04 +2d depth  0.4% below2D True reclaim_next False | 1D  -1.0% 3D  +1.8% 5D +34.3% | exc3  -2.3% exc5 +27.3%
+   P2 2026-08-10 COHR  warn 2026-08-07 +1d depth  5.9% below2D True reclaim_next False | 1D  +1.1% 3D  +0.6% 5D  +8.0% | exc3  -3.6% exc5  +1.0%
+   P2 2026-08-12 DDOG  warn 2026-08-10 +2d depth  0.9% below2D True reclaim_next True | 1D  +4.7% 3D  +2.7% 5D  -3.1% | exc3  +1.0% exc5  +1.0%
+   P2 2026-08-13 COHR  warn 2026-08-12 +1d depth  5.7% below2D True reclaim_next False | 1D  -0.4% 3D  -6.4% 5D -11.4% | exc3  -4.2% exc5  -7.3%
+   P2 2026-08-13 GLW   warn 2026-08-12 +1d depth  2.6% below2D True reclaim_next True | 1D  +4.7% 3D  +0.9% 5D  -4.5% | exc3  +3.0% exc5  -0.4%
+   P2 2026-08-18 AAOI  warn 2026-08-14 +2d depth  2.5% below2D True reclaim_next False | 1D  -7.0% 3D  -5.0% 5D -13.9% | exc3  -3.0% exc5 -11.4%
+   P2 2026-08-18 AEHR  warn 2026-08-17 +1d depth  2.2% below2D True reclaim_next False | 1D -12.4% 3D -17.5% 5D -22.4% | exc3 -15.5% exc5 -19.9%
+   P2 2026-08-18 COHR  warn 2026-08-17 +1d depth 10.6% below2D True reclaim_next False | 1D  -6.2% 3D  -5.5% 5D  -6.0% | exc3  -3.5% exc5  -3.4%
+   P2 2026-08-19 AEHR  warn 2026-08-14 +3d depth 10.8% below2D True reclaim_next False | 1D  -1.8% 3D -10.7% 5D -15.6% | exc3  -7.5% exc5 -15.0%
+   P2 2026-08-24 VKTX  warn 2026-08-19 +3d depth  0.3% below2D True reclaim_next True | 1D  +2.8% 3D  +1.9% 5D  -1.4% | exc3  -2.6% exc5  -2.6%
+   P2 2026-08-27 MRK   warn 2026-08-25 +2d depth  1.1% below2D True reclaim_next False | 1D  -0.8% 3D  +0.2% 5D  +1.9% | exc3  +5.1% exc5  +5.3%
+   P2 2026-08-28 COHR  warn 2026-08-26 +2d depth  2.3% below2D True reclaim_next False | 1D  -0.5% 3D  -3.8% 5D  +1.0% | exc3  -2.3% exc5  -0.5%
+   P2 2026-08-31 FLEX  warn 2026-08-27 +2d depth  0.8% below2D True reclaim_next False | 1D  -2.2% 3D  -1.2% 5D  +4.6% | exc3  -1.0% exc5  +1.5%
+   P2 2026-09-01 DDOG  warn 2026-08-27 +3d depth  1.8% below2D True reclaim_next False | 1D  -6.5% 3D  -4.9% 5D  +0.6% | exc3  -8.2% exc5  -4.4%
+   P2 2026-09-01 LITE  warn 2026-08-27 +3d depth  0.3% below2D True reclaim_next False | 1D  +0.2% 3D  +1.4% 5D +13.8% | exc3  -1.9% exc5  +8.8%
+   P2 2026-09-02 NOW   warn 2026-08-31 +2d depth  1.8% below2D True reclaim_next True | 1D  +6.5% 3D  -1.8% 5D  -4.1% | exc3  -6.5% exc5  -6.0%
+   P2 2026-09-10 VRT   warn 2026-09-04 +3d depth  4.8% below2D True reclaim_next False | 1D  +3.6% 3D  -5.4% 5D  -2.7% | exc3  -3.9% exc5  -3.3%
+   P2 2026-09-11 MDB   warn 2026-09-10 +1d depth  0.3% below2D True reclaim_next True | 1D  +5.5% 3D  +3.9% 5D  +5.9% | exc3  +6.7% exc5  +6.6%
+   P2 2026-09-14 FLEX  warn 2026-09-11 +1d depth  2.4% below2D True reclaim_next False | 1D  -0.3% 3D  +0.6% 5D  +3.0% | exc3  -1.3% exc5  -2.3%
+   P2 2026-09-22 DELL  warn 2026-09-17 +3d depth  1.8% below2D True reclaim_next False | 1D  +0.2% 3D  +2.5% 5D  -1.7% | exc3  +3.4% exc5  +1.2%
+   P2 2026-09-24 CRVS  warn 2026-09-22 +2d depth  2.4% below2D False reclaim_next False | 1D  -1.5% 3D  -0.3% 5D  -7.4% | exc3  +0.8% exc5  -7.0%
+   P2 2026-09-24 VKTX  warn 2026-09-23 +1d depth  3.6% below2D True reclaim_next False | 1D  -3.2% 3D -13.4% 5D -17.0% | exc3 -12.3% exc5 -16.6%
+   P2 2026-09-25 VKTX  warn 2026-09-22 +3d depth  2.5% below2D True reclaim_next False | 1D  -7.1% 3D  -8.3% 5D -15.8% | exc3  -5.6% exc5 -16.3%
+   P2 2026-09-28 META  warn 2026-09-24 +2d depth  3.0% below2D True reclaim_next True | 1D  +3.2% 3D  +1.4% 5D  +3.7% | exc3  -0.6% exc5  +0.1%
+   P2 2026-10-06 AEHR  warn 2026-10-02 +2d depth 10.4% below2D True reclaim_next False | 1D  -3.0% 3D  -8.1% 5D -15.9% | exc3  -6.3% exc5 -10.4%
+   P2 2026-10-07 NBIS  warn 2026-10-06 +1d depth  0.9% below2D True reclaim_next False | 1D  -7.4% 3D -11.4% 5D -21.6% | exc3  -8.7% exc5 -13.3%
+   P2 2026-10-08 AAOI  warn 2026-10-05 +3d depth  0.9% below2D True reclaim_next True | 1D  +3.5% 3D  -7.7% 5D -20.9% | exc3  -6.0% exc5 -14.9%
+   P2 2026-10-08 GLW   warn 2026-10-06 +2d depth  5.4% below2D True reclaim_next False | 1D  +2.5% 3D  -2.8% 5D  -9.4% | exc3  -1.1% exc5  -3.4%
+   P2 2026-10-08 LITE  warn 2026-10-06 +2d depth  2.3% below2D True reclaim_next True | 1D  +5.2% 3D  -5.8% 5D -17.1% | exc3  -4.1% exc5 -11.0%
+   P2 2026-10-14 DDOG  warn 2026-10-09 +3d depth  3.4% below2D True reclaim_next False | 1D  -1.1% 3D  -3.3% 5D  +1.4% | exc3  +0.7% exc5  +2.6%
+   P2 2026-10-14 MDB   warn 2026-10-09 +3d depth  1.7% below2D True reclaim_next True | 1D  +2.9% 3D  -2.1% 5D  +9.7% | exc3  +1.9% exc5 +10.9%
+   P2 2026-10-16 VKTX  warn 2026-10-15 +1d depth  2.5% below2D True reclaim_next False | 1D  -0.5% 3D  +4.8% 5D  -3.1% | exc3  +0.9% exc5  -0.8%
+   P2 2026-10-22 DDOG  warn 2026-10-21 +1d depth  1.1% below2D True reclaim_next True | 1D  +4.6% 3D   -   5D   -   | exc3   -   exc5   -  
+   P2 2026-10-22 DELL  warn 2026-10-21 +1d depth  2.0% below2D True reclaim_next False | 1D  +0.8% 3D   -   5D   -   | exc3   -   exc5   -  
+   P2 2026-10-22 RVMD  warn 2026-10-20 +2d depth  0.9% below2D True reclaim_next False | 1D  -0.4% 3D   -   5D   -   | exc3   -   exc5   -  
+   P2 2026-10-23 VKTX  warn 2026-10-20 +3d depth  4.1% below2D True reclaim_next False | 1D  -0.7% 3D   -   5D   -   | exc3   -   exc5   -  
+
+### grid.py
+grid: P1 (warning day, as short) | P2 (break, as short) | other first-day 2D breaks   — 3D and 5D lag% / mean excess / n
+R 5 G0 N1 | P1 3D  50%  -0.3% n284 5D  62%  -2.3% n272 | P2 3D  68%  -3.2% n 28 5D  71%  -3.5% n 28 | held(from P1+N, beat) 3D  43%  -1.3% n249 | other1st 3D  51%  -0.1% n276 5D  51%  +0.4% n270
+R 5 G0 N3 | P1 3D  50%  -0.3% n284 5D  62%  -2.3% n272 | P2 3D  62%  -1.7% n 66 5D  59%  -1.4% n 66 | held(from P1+N, beat) 3D  41%  -1.7% n200 | other1st 3D  51%  -0.1% n269 5D  52%  +0.3% n263
+R 5 G0 N5 | P1 3D  50%  -0.3% n284 5D  62%  -2.3% n272 | P2 3D  55%  -0.4% n 87 5D  52%  +0.5% n 87 | held(from P1+N, beat) 3D  47%  +0.1% n158 | other1st 3D  51%  -0.1% n262 5D  53%  +0.2% n256
+R 5 G2 N1 | P1 3D  46%  +0.1% n175 5D  61%  -2.2% n166 | P2 3D  73%  -3.8% n 11 5D  82%  -6.2% n 11 | held(from P1+N, beat) 3D  44%  -1.4% n160 | other1st 3D  52%  -0.3% n293 5D  52%  +0.2% n287
+R 5 G2 N3 | P1 3D  46%  +0.1% n175 5D  61%  -2.2% n166 | P2 3D  68%  -2.3% n 34 5D  62%  -2.7% n 34 | held(from P1+N, beat) 3D  37%  -2.3% n130 | other1st 3D  52%  -0.2% n289 5D  52%  +0.2% n283
+R 5 G2 N5 | P1 3D  46%  +0.1% n175 5D  61%  -2.2% n166 | P2 3D  56%  -0.8% n 50 5D  50%  +0.2% n 50 | held(from P1+N, beat) 3D  45%  -0.4% n103 | other1st 3D  52%  -0.3% n284 5D  53%  +0.1% n278
+R 5 G4 N1 | P1 3D  45%  +1.4% n 60 5D  53%  -0.6% n 58 | P2 3D 100% -13.9% n  2 5D 100% -18.3% n  2 | held(from P1+N, beat) 3D  57%  +0.2% n 58 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R 5 G4 N3 | P1 3D  45%  +1.4% n 60 5D  53%  -0.6% n 58 | P2 3D  56%  -3.8% n  9 5D  67%  -7.3% n  9 | held(from P1+N, beat) 3D  43%  -1.7% n 49 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R 5 G4 N5 | P1 3D  45%  +1.4% n 60 5D  53%  -0.6% n 58 | P2 3D  50%  -0.2% n 18 5D  39%  +0.3% n 18 | held(from P1+N, beat) 3D  50%  -0.2% n 38 | other1st 3D  52%  -0.3% n299 5D  54%  +0.1% n293
+R 8 G0 N1 | P1 3D  52%  -0.4% n164 5D  67%  -3.2% n159 | P2 3D  90%  -6.1% n 10 5D  70%  -8.5% n 10 | held(from P1+N, beat) 3D  40%  -2.0% n151 | other1st 3D  51%  -0.2% n294 5D  53%  +0.3% n288
+R 8 G0 N3 | P1 3D  52%  -0.4% n164 5D  67%  -3.2% n159 | P2 3D  66%  -2.4% n 35 5D  57%  -2.2% n 35 | held(from P1+N, beat) 3D  37%  -1.9% n121 | other1st 3D  52%  -0.2% n289 5D  53%  +0.3% n283
+R 8 G0 N5 | P1 3D  52%  -0.4% n164 5D  67%  -3.2% n159 | P2 3D  52%  +0.2% n 52 5D  44%  +1.4% n 52 | held(from P1+N, beat) 3D  47%  +0.7% n 97 | other1st 3D  52%  -0.3% n283 5D  54%  +0.1% n277
+R 8 G2 N1 | P1 3D  46%  +0.3% n115 5D  66%  -3.0% n110 | P2 3D 100%  -7.7% n  5 5D  80% -10.8% n  5 | held(from P1+N, beat) 3D  40%  -2.0% n107 | other1st 3D  52%  -0.3% n299 5D  53%  +0.2% n293
+R 8 G2 N3 | P1 3D  46%  +0.3% n115 5D  66%  -3.0% n110 | P2 3D  80%  -4.1% n 20 5D  65%  -4.6% n 20 | held(from P1+N, beat) 3D  33%  -2.7% n 88 | other1st 3D  52%  -0.2% n296 5D  53%  +0.2% n290
+R 8 G2 N5 | P1 3D  46%  +0.3% n115 5D  66%  -3.0% n110 | P2 3D  59%  -1.0% n 34 5D  47%  +0.4% n 34 | held(from P1+N, beat) 3D  47%  +0.2% n 70 | other1st 3D  52%  -0.3% n291 5D  54%  +0.0% n285
+R 8 G4 N1 | P1 3D  42%  +1.6% n 45 5D  62%  -1.6% n 45 | P2 3D 100% -13.9% n  2 5D 100% -18.3% n  2 | held(from P1+N, beat) 3D  56%  -0.0% n 43 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R 8 G4 N3 | P1 3D  42%  +1.6% n 45 5D  62%  -1.6% n 45 | P2 3D  62%  -4.9% n  8 5D  75%  -9.2% n  8 | held(from P1+N, beat) 3D  32%  -2.8% n 37 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R 8 G4 N5 | P1 3D  42%  +1.6% n 45 5D  62%  -1.6% n 45 | P2 3D  56%  -0.7% n 16 5D  44%  -0.5% n 16 | held(from P1+N, beat) 3D  52%  +0.5% n 29 | other1st 3D  52%  -0.3% n300 5D  53%  +0.1% n294
+R10 G0 N1 | P1 3D  50%  -0.4% n121 5D  66%  -3.4% n118 | P2 3D  86%  -7.2% n  7 5D  71% -10.3% n  7 | held(from P1+N, beat) 3D  38%  -2.2% n112 | other1st 3D  52%  -0.2% n297 5D  53%  +0.3% n291
+R10 G0 N3 | P1 3D  50%  -0.4% n121 5D  66%  -3.4% n118 | P2 3D  73%  -4.1% n 22 5D  59%  -4.0% n 22 | held(from P1+N, beat) 3D  36%  -1.8% n 94 | other1st 3D  52%  -0.2% n294 5D  53%  +0.2% n288
+R10 G0 N5 | P1 3D  50%  -0.4% n121 5D  66%  -3.4% n118 | P2 3D  56%  -0.7% n 34 5D  44%  +1.0% n 34 | held(from P1+N, beat) 3D  52%  +0.9% n 79 | other1st 3D  52%  -0.3% n291 5D  54%  +0.1% n285
+R10 G2 N1 | P1 3D  43%  +0.5% n 90 5D  63%  -2.7% n 87 | P2 3D 100%  -8.6% n  4 5D  75% -11.7% n  4 | held(from P1+N, beat) 3D  42%  -1.8% n 84 | other1st 3D  52%  -0.3% n300 5D  53%  +0.2% n294
+R10 G2 N3 | P1 3D  43%  +0.5% n 90 5D  63%  -2.7% n 87 | P2 3D  83%  -5.0% n 12 5D  58%  -5.1% n 12 | held(from P1+N, beat) 3D  32%  -2.6% n 73 | other1st 3D  52%  -0.3% n298 5D  53%  +0.1% n292
+R10 G2 N5 | P1 3D  43%  +0.5% n 90 5D  63%  -2.7% n 87 | P2 3D  57%  -0.2% n 23 5D  39%  +1.7% n 23 | held(from P1+N, beat) 3D  50%  +0.2% n 60 | other1st 3D  52%  -0.3% n294 5D  54%  -0.0% n288
+R10 G4 N1 | P1 3D  37%  +2.3% n 38 5D  61%  -1.3% n 38 | P2 3D 100% -13.9% n  2 5D 100% -18.3% n  2 | held(from P1+N, beat) 3D  58%  +0.2% n 36 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R10 G4 N3 | P1 3D  37%  +2.3% n 38 5D  61%  -1.3% n 38 | P2 3D  80%  -7.7% n  5 5D  80% -13.4% n  5 | held(from P1+N, beat) 3D  30%  -2.6% n 33 | other1st 3D  52%  -0.3% n302 5D  53%  +0.1% n296
+R10 G4 N5 | P1 3D  37%  +2.3% n 38 5D  61%  -1.3% n 38 | P2 3D  73%  -1.3% n 11 5D  45%  -1.0% n 11 | held(from P1+N, beat) 3D  56%  +0.9% n 27 | other1st 3D  52%  -0.3% n300 5D  53%  +0.1% n294
+
+Jul22-Aug24 (new backfill)   | P1 3D  48%  +0.2% n 81 5D  58%  -1.4% n 81 | P2 3D  67%  -2.4% n 12 5D  58%  -1.6% n 12 | held beat 3D  40%  -1.4% n 68 5D  44%  -0.5% n 68 | other1st 3D  52%  -0.5% n104 5D  58%  -0.2% n104
+Aug25-Oct26                  | P1 3D  44%  +0.0% n 94 5D  65%  -3.0% n 85 | P2 3D  68%  -2.3% n 22 5D  64%  -3.3% n 22 | held beat 3D  34%  -3.2% n 62 5D  40%  -3.6% n 58 | other1st 3D  51%  -0.1% n185 5D  49%  +0.5% n179
+Sep25-Oct26 (scan period)    | P1 3D  33%  +1.3% n 36 5D  56%  -1.2% n 27 | P2 3D  62%  -2.8% n  8 5D  75%  -5.0% n  8 | held beat 3D  44%  -2.3% n 18 5D  21%  -8.7% n 14 | other1st 3D  52%  -0.1% n 97 5D  54%  -0.2% n 91
+
+P2 depth>2% (below P1-day core low)    1D  68%  -1.5% n 22 3D  75%  -3.3% n 20 5D  80%  -6.1% n 20
+P2 depth<=2%                           1D  38%  +1.1% n 16 3D  57%  -1.0% n 14 5D  36%  +2.1% n 14
+P2 ex-optics                           1D  48%  +0.2% n 25 3D  52%  -1.1% n 21 5D  48%  -0.3% n 21
+P2 optics only                         1D  69%  -1.6% n 13 3D  92%  -4.3% n 13 5D  85%  -6.8% n 13
+P2 break on day +1                     1D  58%  -1.0% n 12 3D  70%  -3.8% n 10 5D  80%  -5.6% n 10
+P2 break on day +2/+3                  1D  54%  -0.1% n 26 3D  67%  -1.7% n 24 5D  54%  -1.5% n 24
+
+first-day 2D break, shallow ≤2%, is P2       1D  55%  -0.4% n 38 3D  68%  -2.3% n 34 5D  62%  -2.7% n 34
+first-day 2D break, shallow ≤2%, not P2      1D  49%  -0.0% n228 3D  48%  +0.3% n224 5D  50%  +0.8% n218
+first-day 2D break, deep >2%, not P2         1D  50%  +0.2% n 74 3D  63%  -1.9% n 65 5D  62%  -1.7% n 65
+
+### cuts.py
+
+== spec R5 G2 N3  (depth = below today 2D, same as v3 浅)
+P2 all                               1D  55%  -0.4% n 38 3D  68%  -2.3% n 34 5D  62%  -2.7% n 34
+P2 deep >2%                          1D  52%  -0.1% n 27 3D  67%  -2.3% n 24 5D  62%  -2.4% n 24
+P2 shallow ≤2%                       1D  60%  -1.0% n 10 3D  78%  -2.8% n  9 5D  56%  -3.2% n  9
+other 1st-day break deep >2%         1D  50%  +0.2% n 74 3D  63%  -1.9% n 65 5D  62%  -1.7% n 65
+other 1st-day break shallow ≤2%      1D  49%  -0.0% n228 3D  48%  +0.3% n224 5D  50%  +0.8% n218
+P2 optics                            1D  69%  -1.6% n 13 3D  92%  -4.3% n 13 5D  85%  -6.8% n 13
+P2 ex-optics                         1D  48%  +0.2% n 25 3D  52%  -1.1% n 21 5D  48%  -0.3% n 21
+P2 ex-optics deep >2%                1D  40%  +1.2% n 15 3D  42%  -0.0% n 12 5D  33%  +3.3% n 12
+other 1st-day deep >2% ex-optics     1D  60%  -0.3% n 40 3D  61%  -1.6% n 36 5D  61%  -1.3% n 36
+other 1st-day optics                 1D  42%  +0.3% n 74 3D  58%  -1.1% n 69 5D  55%  -0.8% n 67
+
+== spec R5 G0 N1  (depth = below today 2D, same as v3 浅)
+P2 all                               1D  60%  -1.3% n 30 3D  68%  -3.2% n 28 5D  71%  -3.5% n 28
+P2 deep >2%                          1D  52%  -0.5% n 23 3D  67%  -2.0% n 21 5D  71%  -2.3% n 21
+P2 shallow ≤2%                       1D  86%  -4.1% n  7 3D  71%  -6.8% n  7 5D  71%  -7.0% n  7
+other 1st-day break deep >2%         1D  51%  +0.1% n 65 3D  62%  -1.9% n 56 5D  61%  -1.9% n 56
+other 1st-day break shallow ≤2%      1D  49%  +0.0% n225 3D  48%  +0.4% n220 5D  49%  +1.0% n214
+P2 optics                            1D  67%  -1.9% n 12 3D  83%  -3.3% n 12 5D  75%  -3.6% n 12
+P2 ex-optics                         1D  56%  -0.9% n 18 3D  56%  -3.1% n 16 5D  69%  -3.4% n 16
+P2 ex-optics deep >2%                1D  36%  +1.1% n 11 3D  44%  -0.3% n  9 5D  67%  -0.5% n  9
+other 1st-day deep >2% ex-optics     1D  61%  -0.4% n 36 3D  62%  -1.6% n 32 5D  59%  -1.3% n 32
+other 1st-day optics                 1D  43%  +0.4% n 70 3D  57%  -1.1% n 65 5D  54%  -0.6% n 63
+
+== spec R5 G2 N1  (depth = below today 2D, same as v3 浅)
+P2 all                               1D  62%  -1.3% n 13 3D  73%  -3.8% n 11 5D  82%  -6.2% n 11
+P2 deep >2%                          1D  55%  -0.8% n 11 3D  67%  -2.3% n  9 5D  78%  -4.2% n  9
+P2 shallow ≤2%                       1D 100%  -4.4% n  2 3D 100% -10.5% n  2 5D 100% -14.9% n  2
+other 1st-day break deep >2%         1D  51%  +0.1% n 77 3D  63%  -1.9% n 68 5D  62%  -1.7% n 68
+other 1st-day break shallow ≤2%      1D  50%  -0.1% n230 3D  48%  +0.3% n225 5D  49%  +0.8% n219
+P2 optics                            1D  83%  -3.6% n  6 3D  83%  -4.5% n  6 5D  83%  -6.9% n  6
+P2 ex-optics                         1D  43%  +0.6% n  7 3D  60%  -2.9% n  5 5D  80%  -5.3% n  5
+P2 ex-optics deep >2%                1D  20%  +2.6% n  5 3D  33%  +2.1% n  3 5D  67%  +1.2% n  3
+other 1st-day deep >2% ex-optics     1D  60%  -0.4% n 42 3D  61%  -1.6% n 38 5D  61%  -1.3% n 38
+other 1st-day optics                 1D  43%  +0.3% n 76 3D  59%  -1.2% n 71 5D  55%  -0.6% n 69
+
+ALT (1W moved <50% of price move) N=1: P1 3D  48%  +0.3% n220 5D  61%  -1.6% n208 | P2 1D  55%  -1.2% n 20 3D  72%  -2.5% n 18 5D  78%  -3.4% n 18 | P2 deep>2% 3D  67%  -1.9% n 15 5D  80%  -3.3% n 15
+
+ALT (1W moved <50% of price move) N=3: P1 3D  48%  +0.3% n220 5D  61%  -1.6% n208 | P2 1D  52%  -0.0% n 52 3D  60%  -1.3% n 48 5D  58%  -0.6% n 48 | P2 deep>2% 3D  57%  -1.0% n 35 5D  57%  -0.5% n 35
