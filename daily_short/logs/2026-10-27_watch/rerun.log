@@ -1,0 +1,67 @@
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1115 isMainThread=false pid=7052 threadId=3 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=7052 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=1515 outcome=resolved
+== LITE
+**LITE 盘中重跑** · 09:30 ET · 起因：09:30 站上 835.214（站回10-22失效位，空单结束）
+**LITE 综合结构：中性，方向待确认**
+**结论**：✅ 持有 · 10-22 规则 2、3、4 · 失效 835 · 10-27 收盘 836 · 2D 重心 823 · 财报 11-05 · 覆盖 8/8 · ⚠ short-volume = T-1 · ⚠ 盘中已站回失效位，按收盘定
+**失效位**：站回835（10-22 开仓日 2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-26；完整报告 logs/2026-10-27_0930/LITE.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1970 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=10091 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=8007 isMainThread=false pid=10091 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1381 isMainThread=true pid=10091 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=9927 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=10091 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":43,"validation":9400,"configuration":290,"schema":154,"registration":40} integrityGateOutcome=healthy integrityGateMs=8687 integrityWorkerCheckMs=3645 integrityWorkerLifetimeMs=8663 integrityOutsideWorkerMs=24 canonicalIndexMs=307 repairedIndexCount=0 thresholdMs=1000
+== NBIS
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**NBIS 盘中重跑** · 09:41 ET · 起因：09:40 站上 163.905（站回失效位，规则失效）\n**NBIS 综合结构：中性，方向待确认**\n**结论**：✅ 持有 · 10-22 规则 2、3、4 · 失效 164 · 10-27 收盘 170 · 2D 重心 158 · 财报 11-10 · 覆盖 8/8 · ⚠ short-volume = T-1 · ⚠ 盘中已站回失效位，按收盘定\n**失效位**：站回164（10-22 开仓日 2D 重心）规则失效\n（熔断 / 板块数据沿用 2026-10-27_0930；完整报告 logs/2026-10-27_0941/NBIS.reply.json）']' timed out after 120 seconds
+
+[outbound/deliver] failed to ack queued delivery f0b91e68-6371-4ad4-8815-eabec9ac3dc8; preserved unknown-after-send state: another OpenClaw process owns state-lifecycle
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=4429 isMainThread=false pid=10091 threadId=5 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=10091 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=8207 outcome=rejected exitCode=1 error="SQLite session reclamation commit was not authorized" errorFrame="at waitForSqliteReclamationParentRelease (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-commit-DdiLAbAH.mjs:85:131)"
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=244.76299999999173 isMainThread=true operation=state.write pid=10091 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1706 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=11554 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=3096 isMainThread=false pid=11554 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=2884 isMainThread=true pid=11554 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1797 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=11554 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":1,"validation":1659,"configuration":47,"schema":72,"registration":18} integrityGateOutcome=healthy integrityGateMs=1602 integrityWorkerCheckMs=1013 integrityWorkerLifetimeMs=1584 integrityOutsideWorkerMs=18 canonicalIndexMs=36 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=11554 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=3138 outcome=resolved
+== DDOG
+**DDOG 盘中重跑** · 09:47 ET · 起因：09:45 跌破 276.169（跌破2D重心，重评）
+**DDOG 综合结构：中性，方向待确认**
+**结论**：✅ 做空 · 规则 3 · 10-27 收盘 275 · 2D 重心 281 · 财报 11-04 · 覆盖 8/8 · ⚠ short-volume = T-1
+**失效位**：站回281（2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-27_0941；完整报告 logs/2026-10-27_0947/DDOG.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=4603 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=22119 threadId=0 thresholdMs=1000
+== NVT
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**NVT 盘中重跑** · 10:32 ET · 起因：10:30 站上 133.938（站回开仓2D重心，规则失效）\n**NVT 综合结构：中性，方向待确认**\n**结论**：✅ 持有 · 10-22 规则 3 · 失效 133.9 · 10-27 收盘 134.0 · 2D 重心 130 · 财报 10-30 · 覆盖 8/8 · ⚠ short-volume = T-1 · ⚠ 盘中已站回失效位，按收盘定\n**失效位**：站回134（10-22 开仓日 2D 重心）规则失效\n（熔断 / 板块数据沿用 2026-10-27_0947；完整报告 logs/2026-10-27_1032/NVT.reply.json）']' timed out after 120 seconds
+
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=6488 isMainThread=false pid=22119 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=4358 isMainThread=true pid=22119 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=4140 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=22119 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":15,"validation":3945,"configuration":52,"schema":58,"registration":70} integrityGateOutcome=healthy integrityGateMs=3687 integrityWorkerCheckMs=1564 integrityWorkerLifetimeMs=3545 integrityOutsideWorkerMs=142 canonicalIndexMs=148 repairedIndexCount=0 thresholdMs=1000
+[outbound/deliver] failed to ack queued delivery 37f19460-4b37-4fdc-8294-6d64015a2db2; preserved unknown-after-send state: another OpenClaw process owns state-lifecycle
+CLI cleanup timed out: agent-databases after 5000ms
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=4234 isMainThread=false pid=22119 threadId=5 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=22119 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=11335 outcome=rejected exitCode=1 error="SQLite session reclamation commit was not authorized" errorFrame="at waitForSqliteReclamationParentRelease (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-commit-DdiLAbAH.mjs:85:131)"
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1471 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=25437 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=4455 isMainThread=false pid=25437 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1693 isMainThread=true pid=25437 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1465 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=25437 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":0,"validation":1426,"configuration":12,"schema":17,"registration":10} integrityGateOutcome=healthy integrityGateMs=1397 integrityWorkerCheckMs=903 integrityWorkerLifetimeMs=1395 integrityOutsideWorkerMs=2 canonicalIndexMs=16 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=25437 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=3267 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=2082 isMainThread=false pid=25437 threadId=5 thresholdMs=1000
+== VKTX
+**VKTX 盘中重跑** · 10:52 ET · 起因：10:50 站上 24.7227（站回开仓2D重心，规则失效）
+**VKTX 综合结构：中性，方向待确认**
+**结论**：✅ 持有 · 10-23 规则 3 · 失效 24.72 · 10-27 收盘 24.9 · 2D 重心 23.98 · 财报 10-28 · 覆盖 8/8 · ⚠ short-volume = T-1 · ⚠ 盘中已站回失效位，按收盘定
+**失效位**：站回24.72（10-23 开仓日 2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-27_1032；完整报告 logs/2026-10-27_1052/VKTX.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1158 isMainThread=true pid=32002 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1419 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=32002 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":0,"validation":1229,"configuration":48,"schema":102,"registration":40} integrityGateOutcome=healthy integrityGateMs=1114 integrityWorkerCheckMs=698 integrityWorkerLifetimeMs=1107 integrityOutsideWorkerMs=7 canonicalIndexMs=61 repairedIndexCount=0 thresholdMs=1000
+[outbound/deliver] failed to ack queued delivery d15ac2e8-fcb7-4402-a5d8-bcb51fcb6c22; preserved unknown-after-send state: another OpenClaw process owns state-lifecycle
+[session-sqlite] slow SQLite reclamation Worker operation pid=32002 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=11331 outcome=rejected exitCode=1 error="SQLite session reclamation database owner is no longer current" errorFrame="at SqliteReclamationWorker.assertCurrent (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-worker-CLuHKRTt.mjs:157:44)"
+== MRK
+**MRK 盘中重跑** · 11:20 ET · 起因：11:20 站上 142.489（站回2D重心，重评）
+**MRK 综合结构：中性，区间震荡**
+**结论**：⚪ 不做空 · 10-27 收盘 143 · 2D 重心 141 · 财报 10-29 · 覆盖 8/8 · 原因：没跌破 2D 重心 · ⚠ short-volume = T-1
+**失效位**：跌破141（2D 重心）重评
+（熔断 / 板块数据沿用 2026-10-27_1052；完整报告 logs/2026-10-27_1120/MRK.reply.json）
+
