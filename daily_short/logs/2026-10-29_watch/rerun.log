@@ -1,0 +1,51 @@
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=2477 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=5113 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1553 isMainThread=false pid=5113 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=2525 isMainThread=true pid=5113 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1987 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=5113 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":5,"validation":1867,"configuration":48,"schema":46,"registration":21} integrityGateOutcome=healthy integrityGateMs=1717 integrityWorkerCheckMs=777 integrityWorkerLifetimeMs=1702 integrityOutsideWorkerMs=15 canonicalIndexMs=90 repairedIndexCount=0 thresholdMs=1000
+[outbound/deliver] failed to ack queued delivery 64938080-702f-4e97-b173-dbe01fc78cb6; preserved unknown-after-send state: another OpenClaw process owns state-lifecycle
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=4320 isMainThread=false pid=5113 threadId=5 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=5113 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=8768 outcome=rejected exitCode=1 error="SQLite session reclamation commit was not authorized" errorFrame="at waitForSqliteReclamationParentRelease (file:///Users/yuwang/.nvm/versions/node/v24.16.0/lib/node_modules/openclaw/dist/session-accessor.sqlite-reclamation-commit-DdiLAbAH.mjs:85:131)"
+== NVT
+**NVT 盘中重跑** · 09:31 ET · 起因：09:30 跌破 136.911（跌破2D重心，重评）
+**NVT 综合结构：中性，区间震荡**
+**结论**：⚪ 不做空 · 10-29 收盘 137 · 2D 重心 139 · 财报 10-30 · 覆盖 7/8 · 原因：跌破 2D 但没命中规则 · ⚠ short-volume = T-1 · ❌ greek-exposure
+**失效位**：站回139（2D 重心）重评
+（熔断 / 板块数据沿用 2026-10-28；完整报告 logs/2026-10-29_0931/NVT.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=2853 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=7590 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=3488 isMainThread=false pid=7590 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=2659 isMainThread=true pid=7590 threadId=0 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1562 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=7590 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":1,"validation":1430,"configuration":37,"schema":71,"registration":23} integrityGateOutcome=healthy integrityGateMs=1319 integrityWorkerCheckMs=650 integrityWorkerLifetimeMs=1313 integrityOutsideWorkerMs=6 canonicalIndexMs=48 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=7590 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=3442 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1360 isMainThread=false pid=7590 threadId=5 thresholdMs=1000
+== DELL
+**DELL 盘中重跑** · 09:41 ET · 起因：09:40 站上 485.838（收复1W重心，空头作废）
+**DELL 综合结构：偏空，但进入第一承接观察区**
+**结论**：✅ 做空 · 规则 1、3 · 持有自 10-28 · 10-29 收盘 485 · 2D 重心 494 · 财报 11-24 · 覆盖 8/8 · ⚠ short-volume = T-1
+**失效位**：站回498.5（10-28 开仓日 2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-29_0931；完整报告 logs/2026-10-29_0941/DELL.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=1317 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=9996 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1488 isMainThread=false pid=9996 threadId=3 thresholdMs=1000
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=1767 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=9996 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":0,"validation":1704,"configuration":20,"schema":33,"registration":10} integrityGateOutcome=healthy integrityGateMs=1644 integrityWorkerCheckMs=1267 integrityWorkerLifetimeMs=1637 integrityOutsideWorkerMs=7 canonicalIndexMs=27 repairedIndexCount=0 thresholdMs=1000
+[session-sqlite] slow SQLite reclamation Worker operation pid=9996 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=2653 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1448 isMainThread=false pid=9996 threadId=5 thresholdMs=1000
+== NBIS
+**NBIS 盘中重跑** · 09:50 ET · 起因：09:50 跌破 170.746（跌破2D重心，重评）
+**NBIS 综合结构：中性，区间震荡**
+**结论**：✅ 做空 · 规则 3、4 · 10-29 收盘 171 · 2D 重心 175 · 财报 11-10 · 覆盖 8/8 · ⚠ short-volume = T-1
+**失效位**：站回175（2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-29_0941；完整报告 logs/2026-10-29_0950/NBIS.reply.json）
+
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1200 isMainThread=false pid=20780 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1470 isMainThread=true pid=20780 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=606.9747500000012 isMainThread=true operation="dispatch outbound-prepared-v1 delivery platform send" pid=20780 threadId=0 thresholdMs=100
+[session-sqlite] slow SQLite reclamation Worker operation pid=20780 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=2366 outcome=resolved
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1576 isMainThread=false pid=20780 threadId=5 thresholdMs=1000
+== TEVA
+**TEVA 盘中重跑** · 10:35 ET · 起因：10:35 站上 40.9482（站回失效位，空单结束）
+**TEVA 综合结构：中性，方向待确认**
+**结论**：✅ 持有 · 10-20 规则 4 · 失效 40.95 · 10-29 收盘 40.96 · 2D 重心 39.89 · 财报 11-03 · 覆盖 8/8 · ⚠ short-volume = T-1 · ⚠ 盘中已站回失效位，按收盘定
+**失效位**：站回40.95（10-20 开仓日 2D 重心）规则失效
+（熔断 / 板块数据沿用 2026-10-29_0950；完整报告 logs/2026-10-29_1035/TEVA.reply.json）
+
