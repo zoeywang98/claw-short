@@ -79,7 +79,40 @@ for t in trades:
     t['rel'] = t['pnl'] + t['avg']       # short P&L minus what shorting the 23-name basket would have made
 for t in sorted(trades, key=lambda t: (t['entry'], t['T'])):
     print(f"  {t['T']:5s} {t['entry']} 规则 {t['rules']:8s}{' 浅' if t['qian'] else '   '} 入 {t['entry_close']:8.2f} 失效 {t['stop']:8.2f} → {t['exit'] or '持有中':10s} {t['exit_close']:8.2f} ({t['why']:4s}) 空单 {t['pnl']*100:+6.1f}% 同期平均 {t['avg']*100:+5.1f}%")
-cl = [t for t in trades if t['why'] != 'open']; op = [t for t in trades if t['why'] == 'open']
-for lab, E in (('closed', cl), ('open (marked to ' + last + ')', op), ('all', trades), ('all 浅', [t for t in trades if t['qian']]), ('all not 浅', [t for t in trades if not t['qian']])):
-    if E: print(f"{lab:28s} n {len(E):2d} 赚钱 {sum(1 for t in E if t['pnl'] > 0)/len(E)*100:3.0f}% 平均 {st.mean(t['pnl'] for t in E)*100:+5.1f}% 中位 {st.median(t['pnl'] for t in E)*100:+5.1f}% | 跑赢做空平均 {sum(1 for t in E if t['rel'] > 0)/len(E)*100:3.0f}%")
+for t in trades:   # same entry, held a fixed 5 sessions with no stop (capped at the last close)
+    t['fixed5'] = -(C[(t['T'], days[min(idx[t['entry']] + 5, idx[last])])] / t['entry_close'] - 1)
+scored = [t for t in trades if t['entry'] < last]   # entries on the last day have no outcome yet
+cl = [t for t in scored if t['why'] != 'open']; op = [t for t in scored if t['why'] == 'open']
+crowd = lambda t: bool(set(t['rules'].split('、')) & {'1', '3'})
+print(f"(entered on {last}, no outcome yet, left out below: {' '.join(t['T'] for t in trades if t['entry'] == last) or '-'})")
+for lab, E in (('closed', cl), ('open (marked to ' + last + ')', op), ('all', scored), ('all 浅', [t for t in scored if t['qian']]), ('all not 浅', [t for t in scored if not t['qian']]),
+               ('all 规则 1/3 (crowded)', [t for t in scored if crowd(t)]), ('all no 规则 1/3', [t for t in scored if not crowd(t)])):
+    if E: print(f"{lab:28s} n {len(E):2d} 赚钱 {sum(1 for t in E if t['pnl'] > 0)/len(E)*100:3.0f}% 平均 {st.mean(t['pnl'] for t in E)*100:+5.1f}% 中位 {st.median(t['pnl'] for t in E)*100:+5.1f}% | 跑赢做空平均 {sum(1 for t in E if t['rel'] > 0)/len(E)*100:3.0f}%"
+                f" | 不止损固定 5 天 赚钱 {sum(1 for t in E if t['fixed5'] > 0)/len(E)*100:3.0f}% 平均 {st.mean(t['fixed5'] for t in E)*100:+5.1f}%")
+print(f"stop distance above entry: median {st.median((t['stop'] / t['entry_close'] - 1) * 100 for t in scored):.1f}%, within 2%: {sum(1 for t in scored if t['stop'] / t['entry_close'] - 1 <= 0.02)}/{len(scored)}")
+# the 2D precondition and the crowded rules (1/3 need SI≥10% or SVR≥55%), all reports
+print('\n== by the 2D precondition (all reports, any verdict)')
+below = [e for e in R if e['close'] < e['stop2D']]
+show('close < 2D', below)
+show('  rule hit (✅ 做空)', [e for e in below if e['kind'] == 'new'])
+show('  no rule (⚪ or ✅ 持有)', [e for e in below if e['kind'] != 'new'])
+show('close ≥ 2D', [e for e in R if e['close'] >= e['stop2D']])
+show('✅ 做空 with 规则 1/3 (crowded)', [e for e in new if set(e['rules']) & {'1', '3'}])
+show('✅ 做空 without 规则 1/3', [e for e in new if not set(e['rules']) & {'1', '3'}])
+for lo, hi in ((0, 1), (1, 2), (2, 99)):
+    show(f'✅ 做空 {lo}–{hi}% below 2D', [e for e in new if lo <= (1 - e['close'] / e['stop2D']) * 100 < hi])
+# intraday rerun ✅ 做空 (logs/<date>_HHMM): entry at the rerun's intraday price; 0 = that day's close
+print('\n== intraday rerun ✅ 做空 (short P&L from the rerun price)')
+IR = []
+for d in sorted(x for x in os.listdir(LOGS) if re.fullmatch(r'\d{4}-\d{2}-\d{2}_\d{4}', x) and x >= '2026-10-19'):
+    for f in sorted(x for x in os.listdir(f'{LOGS}/{d}') if x.endswith('.reply.json') and not x.startswith('_')):
+        T = f[:-11]; t = json.load(open(f'{LOGS}/{d}/{f}')).get('result') or ''
+        m = re.search(r'\*\*结论\*\*[:：]\s*([^\n]*)', t); v = m.group(1) if m else ''
+        if not v.startswith('✅ 做空') or '持有自' in v or T not in WL or d[:10] not in idx: continue
+        px = json.load(open(f'{WS}/analysis_data/{d}/{T}.json'))['price']['derived']['close']
+        o = {k: -(C[(T, days[idx[d[:10]] + k])] / px - 1) if idx[d[:10]] + k < len(days) else None for k in (0, 1, 3, 5)}
+        IR.append(o); print(f"  {d} {T:5s} {v[:24]:24s} 入 {px:8.2f} | " + ' | '.join(f"{k}D {'   -  ' if o[k] is None else f'{o[k]*100:+5.1f}%'}" for k in (0, 1, 3, 5)))
+for k in (0, 1, 3, 5):
+    v = [o[k] for o in IR if o[k] is not None]
+    if v: print(f"  {k}D: short won {sum(1 for x in v if x > 0)}/{len(v)}, avg {st.mean(v)*100:+.1f}%")
 json.dump({'reports': R, 'trades': trades}, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'v3live.json'), 'w'), ensure_ascii=False, default=str)
