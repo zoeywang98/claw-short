@@ -1,0 +1,35 @@
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=4903 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=42147 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=3079 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=42172 threadId=0 thresholdMs=1000
+[openclaw] The CLI command failed.
+[openclaw] Reason: another OpenClaw process owns state-lifecycle
+[openclaw] Debug: set OPENCLAW_DEBUG=1 to include the stack trace.
+[openclaw] Try: openclaw doctor
+[openclaw] Help: openclaw --help
+[sqlite/transaction] slow SQLite transaction hold async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=3531 isMainThread=true operation=state.startup-checkpoint.inspect-and-claim pid=42215 threadId=0 thresholdMs=1000
+== MSFT
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**MSFT 盘中重跑** · 11:54 ET · 起因：11:52 跌破 547.617（跌破2D重心，重评）\n**MSFT 综合结构：中性，区间震荡**\n**结论**：✅ 做空 · 规则 4 · 11-05 收盘 542 · 2D 重心 554 · 财报 01-27 · 覆盖 8/8 · ⚠ short-volume = T-1\n**失效位**：站回554（2D 重心）规则失效\n（熔断 / 板块数据沿用 2026-11-04；完整报告 logs/2026-11-05_1154/MSFT.reply.json）']' returned non-zero exit status 1.
+
+== RVMD
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**RVMD 盘中重跑** · 11:54 ET · 起因：11:52 跌破 196.154（跌破2D重心，重评）\n**RVMD 综合结构：中性，区间震荡**\n**结论**：✅ 做空 · 规则 3、4 · 11-05 收盘 186 · 2D 重心 195 · 财报 11-04 · 覆盖 8/8 · ⚠ short-volume = T-1\n**失效位**：站回195（2D 重心）规则失效；收复192（1W 重心）空头作废\n（熔断 / 板块数据沿用 2026-11-04；完整报告 logs/2026-11-05_1154/RVMD.reply.json）']' timed out after 120 seconds
+
+== TEVA
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**TEVA 盘中重跑** · 11:54 ET · 起因：11:52 跌破 41.78（跌破2D重心，重评）\n**TEVA 综合结构：偏多，但回踩第一支撑区**\n**结论**：⚪ 不做空 · 11-05 收盘 41.67 · 2D 重心 41.38 · 财报 01-27 · 覆盖 8/8 · 原因：没跌破 2D 重心 · ⚠ short-volume = T-1\n**失效位**：跌破41.38（2D 重心）重评\n（熔断 / 板块数据沿用 2026-11-04；完整报告 logs/2026-11-05_1154/TEVA.reply.json）']' timed out after 120 seconds
+
+== VKTX
+⚠ analysed but post failed: Command '['openclaw', 'message', 'send', '--channel', 'discord', '--account', 'default', '--target', 'channel:1553568018200657973', '--message', '**VKTX 盘中重跑** · 11:54 ET · 起因：11:52 跌破 26.5935（跌破2D重心，重评）\n**VKTX 综合结构：中性，方向待确认**\n**结论**：✅ 做空 · 规则 3 · 11-05 收盘 25.67 · 2D 重心 26.57 · 财报 02-10 · 覆盖 8/8 · ⚠ short-volume = T-1\n**失效位**：站回26.57（2D 重心）规则失效；收复26.50（1W 重心）空头作废\n（熔断 / 板块数据沿用 2026-11-04；完整报告 logs/2026-11-05_1154/VKTX.reply.json）']' timed out after 120 seconds
+
+[outbound/deliver] outbound queue write failed; continuing without durability (channel=discord to=channel:1553568018200657973): another OpenClaw process owns state-lifecycle
+[outbound/deliver] outbound queue write failed; continuing without durability (channel=discord to=channel:1553568018200657973): another OpenClaw process owns state-lifecycle
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=10782 isMainThread=false pid=42147 threadId=3 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=4886.11262499998 isMainThread=true operation=state.write pid=42172 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=5344.247749999995 isMainThread=true operation=state.write pid=42215 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1561 isMainThread=true pid=42172 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=850.3401670000021 isMainThread=true operation=state.write pid=42215 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1964 isMainThread=true pid=42215 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=2791.239416999975 isMainThread=true operation="promote outbound-prepared-v1 delivery platform send" pid=42147 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite transaction hold async=false elapsedMs=1864 isMainThread=true pid=42147 threadId=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=2275.308625000005 isMainThread=true operation=state.write pid=42172 threadId=0 thresholdMs=100
+[state/agent-db] slow OpenClaw agent database open agentId=main elapsedMs=5366 path=/Users/yuwang/.openclaw/agents/main/agent/openclaw-agent.sqlite pid=42172 threadId=0 isMainThread=true admissionMode=async phaseDurationsMs={"open":8,"validation":2891,"configuration":35,"schema":46,"registration":2386} integrityGateOutcome=healthy integrityGateMs=2741 integrityWorkerCheckMs=1130 integrityWorkerLifetimeMs=2700 integrityOutsideWorkerMs=41 canonicalIndexMs=110 repairedIndexCount=0 thresholdMs=1000
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=576.6936249999853 isMainThread=true operation=state.write pid=42215 threadId=0 thresholdMs=100
+[sqlite/transaction] slow SQLite coordinator lock wait async=false database=/Users/yuwang/.openclaw/state/openclaw.sqlite elapsedMs=3739.8882919999887 isMainThread=true operation="mutate owned outbound-prepared-v1 delivery platform send" pid=42147 threadId=0 thresholdMs=100
+[session-sqlite] slow SQLite reclamation Worker operation pid=42147 threadId=0 isMainThread=true reclamationKind=maintenance-plan workerThreadId=5 elapsedMs=1713 outcome=resolved
