@@ -39,6 +39,8 @@ Dark Pool
 - <a–b>附近为近期主要成交节点
 - 图上 POC <p> 那一档主要是收盘参考价单（该档 <n> 万股），不算成本
 - 价格[放量|缩量][跌破|站上|回到]，当前暂按[失守成本区|守住成本区|成本区内震荡]处理
+- 当天暗池 <n> 万股（1M 日均的 <x> 倍），<p>% 成交在 <a–b>，当天重心 <c>，比开盘[低|高] <y>%、比[最高价低|最低价高] <z>%
+- [放量|没放量]，[重心没跟上价格|重心跟着价格上去了|重心没跟着价格下去|重心跟着价格下去了|暗池价位档太粗（当天只跨 <k> 档），看不出重心跟没跟上]，收盘 <close> 在这块量[下方|上方|里面]
 - <a–b>出现新增DP但价格不再[下跌|上涨]，才升级为[吸筹|派发]
 
 Options Flow
@@ -76,7 +78,7 @@ IV
 逐行口径（照做，不另找数）：
 
 - 综合结构方向：close 低于 DP 成本区且 1W、2D 重心都低于 1M → 偏空；close 高于 DP 成本区且 1W、2D 重心都高于 1M → 偏多；其它 → 中性。
-- 阶段只用这几种：偏空时，close 在承接观察区（Dark Pool 第 4 行的区间）内或距其上沿 ≤1% → "但进入第一承接观察区"；close 距"反弹首先面对"的第一个价位 ≤1% → "但反弹进入第一压力区"；否则 4H 下降 → "下跌趋势延续"，其它 → "方向待确认"。偏多时，close 在派发观察区内或距其下沿 ≤1% → "但进入第一压力观察区"；距"回落首先面对"第一个价位 ≤1% → "但回踩第一支撑区"；否则 4H 上升 → "上涨趋势延续"，其它 → "方向待确认"。中性 → "区间震荡" 或 "方向待确认"。
+- 阶段只用这几种：偏空时，close 在承接观察区（Dark Pool 观察区那一行的区间）内或距其上沿 ≤1% → "但进入第一承接观察区"；close 距"反弹首先面对"的第一个价位 ≤1% → "但反弹进入第一压力区"；否则 4H 下降 → "下跌趋势延续"，其它 → "方向待确认"。偏多时，close 在派发观察区内或距其下沿 ≤1% → "但进入第一压力观察区"；距"回落首先面对"第一个价位 ≤1% → "但回踩第一支撑区"；否则 4H 上升 → "上涨趋势延续"，其它 → "方向待确认"。中性 → "区间震荡" 或 "方向待确认"。
 - 结论行：命中规则写"✅ 做空 · 规则 <n>"（命中几条写几条，用"、"隔开），没命中写"⚪ 不做空"。" · 浅"只跟在 ✅ 做空 的规则号后面（✅ 持有 不加），两条都满足才加：close_vs_2D.below_pct ≤ 2.0；prev_session.close_below_2D 是 false。prev_session 缺失或 close_below_2D 不是 false 就不加。<提示> 只在有时写，每项用 " · " 接在后面：⚪ 写"原因：<没跌破 2D 重心|跌破 2D 但没命中规则|<MM-DD> 空单今天收盘站回失效位|<MM-DD> 空单满 10 天>"；数据 as-of 不是当天写"⚠ <层> = T-1"；核心层 FAIL 写"❌ <层>"。
 - 4H：用 template_inputs.bars_4h。last_12_halves 里 last_6 的 high 和 low 都低于 earlier_6 → 下降趋势；都高于 → 上升趋势；其它 → 震荡区间。prev_session_12_halves 按同一规则得到同一结论 → "继续处于"，否则 → "转为"。括号里写判定用的两组数："前 6 根 高 <earlier_6.high> 低 <earlier_6.low> → 近 6 根 高 <last_6.high> 低 <last_6.low>"。
 - DP成本区 = template_inputs.dark_pool.windows 里 1D、2D、1W 三个 centroid_top8 的最小值–最大值。close 低于最小值 → 低于；高于最大值 → 高于；否则 → 位于…内。
@@ -84,7 +86,8 @@ IV
 - 主要成交节点 = template_inputs.dark_pool.top6_2d_ex_close_prints.main_cluster 的 low–high（两端相同就只写一个价）。
 - "图上 POC" 那一行只在下面两种情况之一才写，否则整行删掉：1W 或 2D 的 poc 是 close_buckets_5d 里某天的收盘价那一档，而且那天该档 spike_vs_neighbors ≥ 3；或者 poc 那一档里 close_ref_prints_D 的股数占该档 D 当天 dark 量的 30% 以上。<n> = 该档在那个窗口里的 dark 总量（per_day levels 相加）。
 - 放量 / 缩量：dp_1d_vs_1m_avg ≥ 1 → 放量，< 1 → 缩量。close 低于成本区 → 跌破 → 失守成本区；高于 → 站上 → 守住成本区；位于其中 → 回到 → 成本区内震荡。
-- Dark Pool 第 4 行：偏空或中性时写承接观察区，两端是 ① 主要 Put gamma 节点（put_gamma_nodes_below_spot 第一个）和 ② 下面几个里低于 close 的最高者：最近 2 个交易日各自的最低价、vol put wall、vol gamma flip；小的在前，两端相同就只写一个价；句子用"不再下跌，才升级为吸筹"。偏多时写派发观察区，两端是 ① 主要 Call gamma 节点（call_gamma_nodes_above_spot 第一个）和 ② 下面几个里高于 close 的最低者：最近 2 个交易日各自的最高价、vol call wall、vol gamma flip；句子用"不再上涨，才升级为派发"。日线在 price.last_22_bars，墙和 flip 在 template_inputs.dealer。
+- Dark Pool 当天量那两行（ZZ 2026-11-12："当天暗池成交很多，dp重心却没跟着一起上去"）：全用 template_inputs.dark_pool.day_flow，day_flow 缺失就两行都删。第一行：<n> = dark_total（万股），<x> = vs_1m_avg（保留 2 位小数），<p> = band.share，<a–b> = band.low–band.high（两端相同只写一个价），<c> = centroid；centroid_vs_open_pct < 0 写"比开盘低"，≥ 0 写"比开盘高"，<y> 取绝对值；move 是 up 写"比最高价低 <z>%"，down 写"比最低价高 <z>%"，<z> = centroid_vs_extreme_pct 的绝对值。coarse 为 true 时第一行到"<p>% 成交在 <a–b>"就结束（不写重心和后面的比较）。第二行：vs_1m_avg ≥ 1.3 写"放量"，否则写"没放量"；coarse 为 true 写"暗池价位档太粗（当天只跨 <k> 档），看不出重心跟没跟上"，<k> = range_buckets；否则 move 是 up 时 followed 为 false 写"重心没跟上价格"、true 写"重心跟着价格上去了"；move 是 down 时 followed 为 false 写"重心没跟着价格下去"、true 写"重心跟着价格下去了"；<close> = day_flow.bar.close；close_vs_band 是 below / above / inside 写下方 / 上方 / 里面。
+- Dark Pool 观察区那一行：偏空或中性时写承接观察区，两端是 ① 主要 Put gamma 节点（put_gamma_nodes_below_spot 第一个）和 ② 下面几个里低于 close 的最高者：最近 2 个交易日各自的最低价、vol put wall、vol gamma flip；小的在前，两端相同就只写一个价；句子用"不再下跌，才升级为吸筹"。偏多时写派发观察区，两端是 ① 主要 Call gamma 节点（call_gamma_nodes_above_spot 第一个）和 ② 下面几个里高于 close 的最低者：最近 2 个交易日各自的最高价、vol call wall、vol gamma flip；句子用"不再上涨，才升级为派发"。日线在 price.last_22_bars，墙和 flip 在 template_inputs.dealer。
 - Options 第 1 行：template_inputs.options.day 的 call_premium / put_premium（UW 全日），≥10 亿写 1.23B，其余写 929M 这样的整数 M。
 - Options 第 3 行：day_vs_prior_4d 的 put_volume_ask_side / call_volume_ask_side ≥ 1.3 才算"明显增加"；括号里写"明显增加"的那一侧（都没有就写 put 侧）的今日量和前 4 日均值。分号后的短期限事实只从 tape_premium_split 的 0-7d、8-30d put 取：多腿占比（x 成）和 ask 对 bid（ask 多于 bid / 买卖对等 / bid 多于 ask，相差不到 15% 算对等），sweeps_le_30d 的 put|ask 超过 500 万美元才提 sweep。
 - tape_premium_split.source 是 flow-alerts（过去日期拿不到逐笔，用 UW flow alerts 代替）时，第 3 行分号后的短期限事实和第 4 行照常按规则写，两行末尾都加"（flow-alerts 口径）"，不要写"（缺失）"；source 是 missing 时这两处写"未明确"。

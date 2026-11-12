@@ -195,6 +195,68 @@ def _bucket_of(price, level_rows):
     return max(below) if below else None
 
 
+def day_flow(D, levels, ref, bars, vs_1m_avg):
+    """Where D's own dark volume printed against D's price move (ZZ 2026-11-12: "当天暗池成交很多，dp重心却没跟着
+    一起上去"). levels = D's price-levels rows [price, dark, regular]; ref = close-referenced block prints
+    {price: [shares, prints, conds]} (taken out, like the 2D main node); bars = daily rows [date, open, high, low, close, ...].
+    Data only; the wording rules live in daily_short/INSTRUCTIONS.md."""
+    from uwsf.layers import level_stats
+    by_date = {b[0]: b for b in bars or []}
+    dates = sorted(by_date)
+    if D not in by_date or dates.index(D) == 0 or not levels:
+        return None
+    _, o, h, l, c = by_date[D][:5]
+    pc = by_date[dates[dates.index(D) - 1]][4]
+    if None in (o, h, l, c, pc) or h <= l:
+        return None
+    minus = defaultdict(float)
+    for p, v in (ref or {}).items():
+        bk = _bucket_of(p, levels)
+        if bk is not None:
+            minus[bk] += v[0]
+    ex = {r[0]: [max((r[1] or 0.0) - minus.get(r[0], 0.0), 0.0), r[2] or 0.0] for r in levels if r[0] is not None}
+    tot_raw, tot_ex = sum(r[1] or 0.0 for r in levels), sum(v[0] for v in ex.values())
+    prices = sorted(p for p, v in ex.items() if v[0] > 0)
+    if not prices or not tot_ex:
+        return None
+    step = min((b - a for a, b in zip(prices, prices[1:]) if b > a), default=1.0)
+    width = max(0.01 * c, step)   # the densest 1%-of-price band
+    best = None
+    for i, a in enumerate(prices):
+        inside = [p for p in prices[i:] if p < a + width]
+        s = sum(ex[p][0] for p in inside)
+        if best is None or s > best[0]:
+            best = (s, inside[0], inside[-1])
+    cen = level_stats(ex)["centroid_top8"]
+    move = "up" if h / pc - 1 >= 1 - l / pc else "down"
+    # buckets are labelled by their lower edge and cheap names have few, wide ones (VTRS can trade a whole day inside
+    # one): compare the centroid with the buckets holding the day's low / high, and give no verdict when the day's
+    # range spans fewer than 5 printed buckets
+    lo_b, hi_b = _bucket_of(l, levels), _bucket_of(h, levels)
+    span = [p for p in ex if lo_b is not None and hi_b is not None and lo_b <= p <= hi_b]
+    coarse = len(span) < 5 or hi_b == lo_b
+    pos = None if coarse else (cen - lo_b) / (hi_b - lo_b)
+    return {"date": D, "dark_total": tot_raw, "vs_1m_avg": vs_1m_avg, "close_ref_removed": tot_raw - tot_ex,
+            "band": {"low": best[1], "high": best[2], "width": round(width, 2), "dark": best[0], "share": best[0] / tot_ex},
+            "centroid": cen,
+            "bar": {"open": o, "high": h, "low": l, "close": c, "prev_close": pc},
+            "move": move,
+            "centroid_vs_open_pct": (cen / o - 1) * 100,
+            "centroid_vs_extreme_pct": ((cen / h - 1) if move == "up" else (cen / l - 1)) * 100,
+            "range_buckets": len(span), "coarse": coarse,
+            "position_in_range": pos,
+            "followed": None if pos is None else (pos >= 0.5 if move == "up" else pos <= 0.5),
+            "close_vs_band": "below" if c < best[1] else "above" if c >= best[2] + step else "inside",
+            "definition": "D's price-levels minus close-referenced block prints. band = the 1%-of-close price band with the "
+                          "most of that volume (share of it); centroid = its top-8 weighted centre (bucket lower edges, as "
+                          "everywhere); bar = D's daily bar (intraday: so far); move = up if (high/prev_close - 1) >= "
+                          "(1 - low/prev_close) else down; position_in_range = (centroid - bucket of the low) / (bucket of "
+                          "the high - bucket of the low); followed = position >= 0.5 on an up move (<= 0.5 on a down move); "
+                          "coarse = the day's range spans fewer than 5 printed buckets: no position / followed; "
+                          "centroid_vs_extreme_pct is against the high on up, the low on down; close_vs_band = close "
+                          "below / above / inside the band"}
+
+
 def finviz_si(ticker, target):
     import datetime as _dt
     p = os.path.join(FINVIZ_DIR, f"{ticker}.json")
@@ -303,9 +365,11 @@ def template_inputs(snap, L):
                 "close_below_2D": (pclose < pc2d) if (pclose is not None and pc2d) else None}
     m1, d1 = win.get("1M") or {}, win.get("1D") or {}
     avg = (m1.get("dark_total") / m1.get("days_present")) if m1.get("dark_total") and m1.get("days_present") else None
+    ratio = (d1["dark_total"] / avg) if (avg and d1.get("dark_total")) else None
     out["dark_pool"] = {
         "windows": {k: pick(win.get(k) or {}, ["from", "to", "centroid_top8", "poc"]) for k in ("1D", "2D", "1W", "1M")},
-        "dp_1d_vs_1m_avg": (d1["dark_total"] / avg) if (avg and d1.get("dark_total")) else None,
+        "dp_1d_vs_1m_avg": ratio,
+        "day_flow": day_flow(D, (per_day.get(D) or {}).get("levels"), ref, daily.get("bars"), ratio),
         "close_vs_2D": {"close": close, "centroid_2D": c2d,
                         "below_pct": ((c2d - close) / close * 100) if (close and c2d) else None,
                         "definition": "(2D centroid_top8 - close) / close * 100; positive = close below the 2D centroid"},
