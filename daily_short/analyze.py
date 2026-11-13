@@ -161,7 +161,7 @@ def main(argv=None):
     png = render_chart(a.date, a.ticker, a.brief)   # dry runs draw it too, for a look before posting
     if not a.dry_run:
         if png:
-            post_chart(png, f"**{a.ticker}** 暗池灰色重心迁移（1M / 1W / 2D）· 截至 {a.date} 收盘")
+            post_chart(png, f"**{a.ticker}** 暗池灰色重心迁移（1M / 1W / 2D / 当天新增）· 截至 {a.date} 收盘")
         post(split_watch(r["result"])[0])
     return 0
 

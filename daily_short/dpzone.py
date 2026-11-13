@@ -35,6 +35,7 @@ from uwsf import layers as L  # noqa: E402
 from uwsf.client import UWClient, load_token  # noqa: E402
 
 DIR = os.path.join(HERE, "dpzone")
+NOTIFY = "<@862859550104223764> <@1231121517811728415>"   # ZZ, Olivia (ZZ 2026-11-12 "你这个要@我们"): every post pings them
 OPEN, BELL, LAST = dtime(9, 30), dtime(16, 0), dtime(16, 10)
 SLOTS = (dtime(11, 30), dtime(13, 30), dtime(15, 30))
 GRACE = timedelta(minutes=30)   # a slot missed by the scheduler is still done by a run this soon after it
@@ -125,7 +126,7 @@ def main(argv=None):
         return 0
 
     c = UWClient(load_token())
-    lines, log, undo = [], [], []
+    lines, log, undo, chart_zones = [], [], [], []
     old = {"done": list(done), "alerted": list(alerted), "tallies": dict(s.get("tallies", {}))}
     undo.append(lambda: (done.clear(), done.extend(old["done"]), alerted.clear(), alerted.extend(old["alerted"]),
                          s.update(tallies=old["tallies"])))
@@ -141,6 +142,8 @@ def main(argv=None):
             for zid, z in zones:
                 x, prev = snaps[zid], tallies.get(zid)
                 tallies[zid] = x["vol"]
+                chart_zones.append([z["ticker"], z.get("name", z["ticker"]), z["lo"], z["hi"], z["kind"], x["vol"],
+                                    max(x["vol"] - (prev or 0), 0), prev_slot if prev is not None else ""])
                 ext = NAME[z["kind"]][1]
                 since = f"{prev_slot} 以来" if prev is not None else "开盘以来（含盘前）"
                 text = (f"{z.get('name', z['ticker'])} {z['lo']:g}–{z['hi']:g}：{since}新增暗池 "
@@ -186,18 +189,28 @@ def main(argv=None):
 
     line = f"{now:%H:%M} " + " · ".join(log)
     if lines:
-        text = "\n".join(lines)
+        text = NOTIFY + " " + "\n".join(lines)
         print(text)
         if not a.dry_run:
+            posted = False
             try:
                 analyze.post(text)
+                posted = True
             except subprocess.CalledProcessError as e:   # undo so the next run retries
                 print(f"⚠ post failed, will retry next run: {e}", file=sys.stderr)
                 for u in undo:
                     u()
                 line += " (post failed)"
             except subprocess.TimeoutExpired:
+                posted = True
                 line += " (send timed out, usually delivered)"
+            if posted and chart_zones:   # ZZ 2026-11-12: each tally also posts the 4-card DP chart per ticker;
+                # detached, like watch.py -> rerun.py, so this 5-minute job's own timeout never cuts it off
+                subprocess.Popen([sys.executable, os.path.join(HERE, "dpzone_chart.py"), "--time", f"{now:%H:%M}",
+                                  "--zones", json.dumps(chart_zones, ensure_ascii=False)],
+                                 cwd=HERE, start_new_session=True, stdin=subprocess.DEVNULL,
+                                 stdout=open(os.path.join(DIR, f"chart_{D}.log"), "a"), stderr=subprocess.STDOUT)
+                line += " (charts launched)"
     else:
         print(f"NO_REPLY {line}")
     if not a.dry_run:
