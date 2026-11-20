@@ -10,9 +10,12 @@ LOGS = f'{WS}/daily_short/logs'
 SCANS = sorted(d for d in os.listdir(LOGS) if re.fullmatch(r'\d{4}-\d{2}-\d{2}', d) and d >= '2026-10-16')
 WL = sorted(f[:-11] for f in os.listdir(f'{LOGS}/{SCANS[-1]}') if f.endswith('.reply.json') and not f.startswith('_'))
 C = {}
-for T in WL:
-    for bar in json.load(open(f'{WS}/analysis_data/{SCANS[-1]}/{T}.json'))['price']['last_22_bars']:
-        C[(T, bar[0])] = bar[4]
+for d in SCANS:   # closes from every scan's brief (22 bars each), newer scans last so their bars win (2026-11-19:
+    for T in WL:  # the latest brief alone no longer reaches back to 10/16)
+        p = f'{WS}/analysis_data/{d}/{T}.json'
+        if os.path.exists(p):
+            for bar in json.load(open(p))['price']['last_22_bars']:
+                C[(T, bar[0])] = bar[4]
 days = sorted({d for (_, d) in C}); idx = {d: i for i, d in enumerate(days)}; last = days[-1]
 H = (1, 3, 5, 'now')
 def end(d, k):
@@ -27,6 +30,8 @@ def avg(d, k):
 R = []
 for d in SCANS:
     for T in WL:
+        if not os.path.exists(f'{LOGS}/{d}/{T}.reply.json'):   # 11/17's scan only got 5 names done
+            continue
         t = json.load(open(f'{LOGS}/{d}/{T}.reply.json')).get('result') or ''
         m = re.search(r'\*\*结论\*\*[:：]\s*([^\n]*)', t); v = m.group(1) if m else ''
         b = json.load(open(f'{WS}/analysis_data/{d}/{T}.json'))

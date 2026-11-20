@@ -1,0 +1,102 @@
+{
+ "duration_api_ms": 49645,
+ "stop_reason": "end_turn",
+ "session_id": "476e6fa7-3f28-47bd-bfac-d37a9514f429",
+ "total_cost_usd": 1.0437589999999999,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 115892,
+  "cache_read_input_tokens": 24975,
+  "output_tokens": 5581,
+  "output_tokens_details": {
+   "thinking_tokens": 4516
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 115892,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 5581,
+    "cache_read_input_tokens": 24975,
+    "cache_creation_input_tokens": 115892,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 115892
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 5581,
+   "cacheReadInputTokens": 24975,
+   "cacheCreationInputTokens": 115892,
+   "webSearchRequests": 0,
+   "costUSD": 1.0437589999999999,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 4516,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 115892,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 1,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**TEVA 综合结构：中性，方向待确认**\n**结论**：✅ 做空 · 规则 4 · 11-19 收盘 38.54 · 2D 重心 40.61 · 财报 01-27 · 覆盖 8/8 · ⚠ short-volume = T-1\n\n价格结构\n- 4H继续处于下降趋势（前 6 根 高 44.57 低 42.53 → 近 6 根 高 43.09 低 38.52）\n- 38.54低于39.26–41.77 DP成本区（1D / 2D / 1W 重心）\n- 反弹首先面对38.75、39.26、40.0\n\nDark Pool\n- 38.75–39.0附近为近期主要成交节点\n- 图上 POC 42.0 那一档主要是收盘参考价单（该档 852.4 万股），不算成本\n- 价格放量跌破，当前暂按失守成本区处理\n- 当天暗池 521.9 万股（1M 日均的 1.40 倍），44.0% 成交在 38.75–39.0，当天重心 39.26，比开盘低 5.0%、比最低价高 2.0%\n- 放量，重心跟着价格下去了，收盘 38.54 在这块量下方\n- 37.0–38.51出现新增DP但价格不再下跌，才升级为吸筹\n\nOptions Flow\n- Call premium 2M / Put premium 2M\n- 净方向不能直接按Put/Call判断\n- Ask-side Put明显增加（6,414 张，前 4 日均 871 张）；≤30 天 put 大单没有\n- 远月Call以卖出为主，但部分疑似spread；远月Put有单腿买入\n- 综合：短线防守性偏空，长期资金在撤离\n\nDealer Positioning\n- Net GEX为正（905,970；11-18 为 968,731）\n- Gamma flip 37.48（vol 口径；OI 口径 38.75）\n- 37.0为主要Put gamma节点\n- 跌破37.0可能触发dealer顺势卖出\n- 跌破37.48后波动可能放大\n\nDelta Exposure\n- 43.5–44.5负DEX密集\n- 反弹进入该区域可能遇到对冲供给\n- 45.0以上才开始改善\n\nIV\n- 前端IV接近30D（7 天 36.4% / 30 天 35.0%）\n- 30D IV 在一年低位（IV rank 19.0）\n- 短期 Put 不贵\n- 可以用裸Put或Put debit spread\n\n空头闸\n- Finviz：SI 2.5%（10-15）· DTC 5.1 · SI 比上期 −6.0%\n- UW：借券费 0.3%（5 日前 0.4%）· 可借 970 万股 · SVR 27.3% → 拥挤否\n\n**失效位**：站回40.61（2D 重心）规则失效；收复41.77（1W 重心）空头作废\n\n```watch\n[{\"price\": 40.6082, \"dir\": \"above\", \"label\": \"站回2D重心，规则失效\"}, {\"price\": 41.7718, \"dir\": \"above\", \"label\": \"收复1W重心，空头作废\"}]\n```",
+ "ttft_ms": 42856,
+ "type": "result",
+ "duration_ms": 49733,
+ "uuid": "8ee363d3-a727-4b3d-b170-2e7d5c679f17",
+ "ttft_stream_ms": 2274,
+ "time_to_request_ms": 86,
+ "first_content_frame_ms": 2275,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "credential_expires_at": "2026-11-23T08:49:08.671Z"
+}

@@ -100,5 +100,11 @@ done
 python3 "$HERE/summarize.py" --date "$DATE" --tickers "$TICKERS" --failed "${FAILED#,}" \
   --elapsed $(( $(date +%s) - STARTED )) $( [ $DRY -eq 1 ] && echo --dry-run ) > "$LOG/_summary.out" 2>&1 \
   && echo "✅ summary posted" || echo "❌ summary (see logs/$DATE/_summary.out)"
+# 重点 names off the watchlist (dpzone/focus.json, ZZ 2026-11-19 "googl meta"): read and posted after the summary,
+# kept out of the board / cross-section / summary (focus.py); dpzone.py watches their zones the next day
+if [ $FRESH -eq 1 ] && [ -f "$HERE/dpzone/focus.json" ]; then
+  python3 "$HERE/focus.py" --date "$DATE" --market-brief "$AN/market_brief.json" $( [ $DRY -eq 1 ] && echo --dry-run ) \
+    > "$LOG/_focus.out" 2>&1 && echo "focus · $(tail -1 "$LOG/_focus.out")" || echo "⚠ focus (see logs/$DATE/_focus.out)"
+fi
 echo "short scan $DATE: $ok ok, $fail failed"
 [ $fail -eq 0 ]

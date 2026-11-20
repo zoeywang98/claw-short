@@ -17,14 +17,28 @@ A zone runs from `start` until `until` (no `until` = until someone takes it out)
 the first run at/after 16:00 ends the zone on a close past them. State: dpzone/state_<D>.json; ended zones:
 dpzone/ended.json; log: dpzone/log_<D>.txt.
 
+Auto zones (ZZ 2026-11-19 "重点monitor这样的pattern" on the Visa request, after Visa's zone read 符合 on 11/12, 11/13
+and 11/16 and the price then fell to 400; then "还有这样的" on the VRT request): the zones that the latest post-close
+scan before D wrote in its Dark Pool line "<a–b>出现新增DP但价格不再[上涨|下跌]，才升级为[派发|吸筹]" (INSTRUCTIONS)
+are watched on D the same way, for that day only. That covers every 派发观察区, plus the 承接观察区 of ✅ names
+(做空 / 持有), where "放量但跌不下去" warns the short. min_shares = half the busiest 2D price level without
+closing-price prints, the same way Visa's 250k and VRT's 225k were set. A ticker + kind that zones.json already
+covers is skipped. In a tally, auto zones go under their own heading, and the ones still under min_shares share one
+summary line. Each auto zone posts its chart once, the first time it turns 符合 that day (tally or alert).
+重点 names (dpzone/focus.json; ZZ 2026-11-19 "googl meta"): their zone is taken whatever the conclusion or kind, from
+logs/<S>/ or, for names off the watchlist, logs/<S>-focus/ (focus.py, run after the 17:00 scan). They always get a
+full tally line and a chart at every tally, like zones.json zones.
+
 usage: dpzone.py [--dry-run] [--force]   (--force: tally now, whatever the time; with --dry-run for a manual look)
 """
 import argparse
+import glob
 import json
 import os
+import re
 import subprocess
 import sys
-from datetime import datetime, time as dtime, timedelta
+from datetime import date, datetime, time as dtime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WS = os.path.dirname(HERE)
@@ -41,6 +55,9 @@ SLOTS = (dtime(11, 30), dtime(13, 30), dtime(15, 30))
 GRACE = timedelta(minutes=30)   # a slot missed by the scheduler is still done by a run this soon after it
 STALL = timedelta(minutes=30)
 NAME = {"dist": ("派发观察区", "高", "涨不上去"), "accum": ("吸筹观察区", "低", "跌不下去")}
+SCAN_ZONE = re.compile(r"([\d.]+)\s*(?:[–-]\s*([\d.]+))?\s*出现新增\s*DP\s*但价格不再(上涨|下跌)")   # report's zone line
+SCAN_SHORT = re.compile(r"\*\*结论\*\*：\s*✅")   # ✅ 做空 / ✅ 持有
+KIND_SHORT = {"dist": "派发", "accum": "吸筹"}
 
 
 def rows(body):
@@ -94,6 +111,43 @@ def snap(c, D, now, z):
     return x
 
 
+def auto_zones(D, manual):
+    """The zones of the latest post-close scan before D (at most 5 calendar days old), as zones for D: every
+    派发观察区, and the 承接观察区 of ✅ names (做空 / 持有)."""
+    logs = os.path.join(HERE, "logs")
+    lim = (date.fromisoformat(D) - timedelta(days=5)).isoformat()
+    scans = sorted(d for d in os.listdir(logs) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) and lim <= d < D)
+    if not scans:
+        return []
+    S = scans[-1]
+    have = {(z["ticker"], z["kind"]) for z in manual}
+    focus = {z["ticker"] for z in load(os.path.join(DIR, "focus.json"), [])}
+    out = []
+    for f in sorted(glob.glob(os.path.join(logs, S, "*.reply.json")) + glob.glob(os.path.join(logs, f"{S}-focus", "*.reply.json"))):
+        T, run = os.path.basename(f).split(".")[0], os.path.basename(os.path.dirname(f))
+        if T.startswith("_"):
+            continue
+        try:
+            text = json.load(open(f)).get("result") or ""
+            m = SCAN_ZONE.search(text)
+            if not m:
+                continue
+            kind = "dist" if m.group(3) == "上涨" else "accum"
+            if (T, kind) in have or (kind == "accum" and T not in focus and not SCAN_SHORT.search(text)):
+                continue
+            a, b = float(m.group(1)), float(m.group(2) or m.group(1))
+            top = json.load(open(os.path.join(WS, "analysis_data", run, f"{T}.json")))[
+                "template_inputs"]["dark_pool"]["top6_2d_ex_close_prints"]["rows"][0][1]
+        except (OSError, ValueError, KeyError, IndexError, TypeError) as e:
+            print(f"⚠ auto zone {run} {T}: {e}", file=sys.stderr)
+            continue
+        half, step = top / 2, (5000 if top >= 20000 else 500)   # rounded like Visa's 249,319 -> 250k
+        out.append({"ticker": T, "lo": min(a, b), "hi": max(a, b), "kind": kind,
+                    "min_shares": max(int(round(half / step) * step), step),
+                    "start": D, "by": f"{S[5:]} 扫描报告", "auto": S, "focus": T in focus})
+    return sorted(out, key=lambda z: not z["focus"])   # 重点 names first
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="dpzone.py")
     ap.add_argument("--dry-run", action="store_true", help="print, do not post or record")
@@ -112,6 +166,7 @@ def main(argv=None):
         zid = f"{z['ticker']}|{z['lo']:g}-{z['hi']:g}|{z['kind']}"
         if z["start"] <= D <= (z.get("until") or "9999-12-31") and zid not in ended:
             zones.append((zid, z))
+    zones += [(f"{z['ticker']}|{z['lo']:g}-{z['hi']:g}|{z['kind']}|auto", z) for z in auto_zones(D, [z for _, z in zones])]
     if not zones:
         print("NO_REPLY no active zones")
         return 0
@@ -139,14 +194,26 @@ def main(argv=None):
             slot = f"{due[-1]:%H:%M}" if due else f"{now:%H:%M}"
             prev_slot, tallies = (done[-1] if done else None), s.setdefault("tallies", {})
             lines.append(f"**暗池区间统计** · {slot} ET")
+            auto_head, quiet = False, {}
             for zid, z in zones:
                 x, prev = snaps[zid], tallies.get(zid)
                 tallies[zid] = x["vol"]
-                chart_zones.append([z["ticker"], z.get("name", z["ticker"]), z["lo"], z["hi"], z["kind"], x["vol"],
-                                    max(x["vol"] - (prev or 0), 0), prev_slot if prev is not None else ""])
+                auto, focus = bool(z.get("auto")), bool(z.get("focus"))
+                if auto and not auto_head:
+                    auto_head = True
+                    lines.append(f"{z['by']}里的观察区（自动，只盯今天）：")
+                # manual and 重点 zones: a picture every tally; other auto zones: one, the first time the pattern shows
+                if not auto or focus or (x["ok"] and zid not in alerted):
+                    chart_zones.append([z["ticker"], z.get("name", z["ticker"]), z["lo"], z["hi"], z["kind"], x["vol"],
+                                        max(x["vol"] - (prev or 0), 0), prev_slot if prev is not None else ""])
+                if auto and not focus and (not x["bars"] or x["vol"] < z["min_shares"]):   # quiet: one summary line
+                    why = re.sub(r" [\d.]+$", "区间", x["why"]) if x["bars"] else "没有 5 分钟线"
+                    quiet.setdefault(why, []).append(z["ticker"])
+                    continue
                 ext = NAME[z["kind"]][1]
                 since = f"{prev_slot} 以来" if prev is not None else "开盘以来（含盘前）"
-                text = (f"{z.get('name', z['ticker'])} {z['lo']:g}–{z['hi']:g}：{since}新增暗池 "
+                label = (f" {KIND_SHORT[z['kind']]}" + ("（重点）" if focus else "")) if auto else ""
+                text = (f"{z.get('name', z['ticker'])} {z['lo']:g}–{z['hi']:g}{label}：{since}新增暗池 "
                         f"{wan(max(x['vol'] - (prev or 0), 0))}，今天累计 {wan(x['vol'])} / 门槛 {z['min_shares'] / 1e4:g} 万")
                 if x["bars"]:
                     text += f" · 今天最{ext} {x['px_ext']:.2f}（{x['t_ext']:%H:%M}）· 现价 {x['last']:.2f} → {x['why']}"
@@ -155,7 +222,10 @@ def main(argv=None):
                 else:
                     text += " · 没有今天的 5 分钟线"
                 lines.append(text)
-            lines.append(f"（{zones[0][1].get('by', '')} 设，每天 {' / '.join(f'{t:%H:%M}' for t in SLOTS)} 统计；"
+            if quiet:
+                lines.append("其余没到门槛：" + "；".join(f"{k} {'、'.join(v)}" for k, v in quiet.items()))
+            bys ="、".join(sorted({z.get("by", "") for _, z in zones if not z.get("auto")} - {""}))
+            lines.append(f"（{bys + ' 设，' if bys else ''}每天 {' / '.join(f'{t:%H:%M}' for t in SLOTS)} 统计；"
                          "中间符合条件会单独提醒，每个区间一天一次）")
             done.append(slot)
         else:                 # between tallies: alert the first time a zone turns 符合 today
@@ -164,7 +234,10 @@ def main(argv=None):
                 if x["ok"] and zid not in alerted:
                     alerted.append(zid)
                     ext = NAME[z["kind"]][1]
-                    lines.append(f"**{z.get('name', z['ticker'])} 暗池提醒** · {now:%H:%M} ET\n"
+                    if z.get("auto"):   # auto zones get no tally pictures until now
+                        chart_zones.append([z["ticker"], z["ticker"], z["lo"], z["hi"], z["kind"], x["vol"], None, ""])
+                    src = f"（{z['by']}里的{NAME[z['kind']][0]}）" if z.get("auto") else ""
+                    lines.append(f"**{z.get('name', z['ticker'])} 暗池提醒** · {now:%H:%M} ET{src}\n"
                                  f"{z['lo']:g}–{z['hi']:g} 今天暗池成交 {wan(x['vol'])}（门槛 {z['min_shares'] / 1e4:g} 万），"
                                  f"今天最{ext} {x['px_ext']:.2f}（{x['t_ext']:%H:%M}）以后没再创新{ext}，"
                                  f"现价 {x['last']:.2f} → {x['why']}")
