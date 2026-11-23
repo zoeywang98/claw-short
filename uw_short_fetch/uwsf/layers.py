@@ -23,6 +23,7 @@ import json
 import math
 import os
 import re
+import time
 import urllib.parse
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -297,8 +298,11 @@ class Ctx:
     """
 
     def __init__(self, client, ticker: str, D: str, cal: Calendar, cfg: Config,
-                 out_dir: str, cache_dir: str, today_ny: str, cutoff: Optional[datetime] = None):
+                 out_dir: str, cache_dir: str, today_ny: str, cutoff: Optional[datetime] = None, web: Any = None,
+                 store: Optional[str] = None):
         self.client, self.T, self.D, self.cal, self.cfg = client, ticker, D, cal, cfg
+        self.web = web   # uwweb.UWWeb (the UW site through DICloak) or None: second source for the latest windows
+        self.store = store   # sitestore root (saved site tables per session) or None: second source for earlier days
         self.raw_dir = os.path.join(out_dir, ticker, "raw")
         self.cache_dir = os.path.join(cache_dir, ticker)
         self.today_ny = today_ny
@@ -409,15 +413,180 @@ def level_stats(levels: Dict[float, List[float]], top_n: int = 8) -> Dict[str, A
     }
 
 
+WEB_TRIES = 3            # paired DICloak + API fetches of a live day until they agree
+WEB_RETRY_SLEEP = 2.0
+
+
+def compare_levels(api: Dict[float, List[float]], web: Dict[float, List[float]]) -> Dict[str, Any]:
+    """Bucket-by-bucket comparison of two price-level tables (all-zero buckets ignored)."""
+    a = {p: v for p, v in api.items() if v[0] or v[1]}
+    w = {p: v for p, v in web.items() if v[0] or v[1]}
+    keys = sorted(set(a) | set(w))
+    zero = [0.0, 0.0]
+    diff = [p for p in keys if a.get(p, zero) != w.get(p, zero)]
+    sa, sw = level_stats(a), level_stats(w)
+    out: Dict[str, Any] = {"match": not diff, "buckets": len(keys), "buckets_differ": len(diff)}
+    if diff:
+        up = sum(1 for p in diff if all(x >= y for x, y in zip(w.get(p, zero), a.get(p, zero))))
+        out.update({
+            # every differing bucket larger on one side = the two fetches saw the tape at different moments
+            "one_sided": up == len(diff) or up == 0,
+            "only_api": [p for p in diff if p not in w], "only_dicloak": [p for p in diff if p not in a],
+            "examples": [[p, a.get(p, zero)[0], w.get(p, zero)[0], a.get(p, zero)[1], w.get(p, zero)[1]] for p in diff[:6]],
+            "examples_columns": ["price", "dark_api", "dark_dicloak", "regular_api", "regular_dicloak"],
+            "dark_total": {"api": sa["dark_total"], "dicloak": sw["dark_total"]},
+            "centroid_top8": {"api": sa["centroid_top8"], "dicloak": sw["centroid_top8"]},
+            "poc": {"api": sa["poc"], "dicloak": sw["poc"]},
+        })
+    return out
+
+
+WINDOWS = (("1D", 1), ("2D", 2), ("3D", 3), ("1W", 5), ("1M", 21))
+
+
+def _sum_tables(tables: List[Dict[float, List[float]]]) -> Dict[float, List[float]]:
+    agg: Dict[float, List[float]] = {}
+    for lv in tables:
+        for p, v in lv.items():
+            a = agg.setdefault(p, [0.0, 0.0])
+            a[0] += v[0]
+            a[1] += v[1]
+    return agg
+
+
+def _end_day_levels(ctx: Ctx, days: List[str], by_day: Dict[str, Dict[float, List[float]]]
+                    ) -> Tuple[Any, Dict[float, List[float]], Dict[str, Any], Dict[str, Dict[float, List[float]]]]:
+    """The last day's price levels from the UW API, and every window ending on it from the UW site through DICloak
+    (ZZ 2026-11-22; 2D / 1W / 1M too, ZZ 2026-11-22 19:10): the site's requests (1D = large-trades Price Group,
+    2D / 3D / 1W / 1M = the stock Dark Pool page's day_range = sessions - 1) are fired together, then the API's day,
+    and each site table is compared bucket by bucket with the API's day or with the API's daily tables summed over the
+    same sessions. Identical -> the site's table for that window; otherwise the API's. A live day is retried up to
+    WEB_TRIES times, since prints keep landing between the requests. `by_day` holds the earlier days (API / cache).
+    Returns (body, day levels, check, {window label: site table} for the windows that matched)."""
+    from .uwweb import WebUnavailable, dark_levels_path, price_group_path
+    d = days[-1]
+    path, params = f"/api/darkpool/{ctx.T}/price-levels", {"date": d}
+    paths = {lab: price_group_path(ctx.T) if n == 1 else dark_levels_path(ctx.T, n - 1) for lab, n in WINDOWS}
+    check: Dict[str, Any] = {"date": d, "used": "api", "dicloak": None, "match": None, "attempts": 0, "windows": {}}
+    tries = WEB_TRIES if d >= ctx.today_ny else 1   # a finished day doesn't change between tries
+    past = [by_day.get(x, {}) for x in days[:-1]]
+    body, api, site = None, {}, {}
+    for i in range(tries):
+        check["attempts"] = i + 1
+        handle, got, err = None, None, None
+        try:
+            handle = ctx.web.start(paths)   # the site's requests are on the wire before the API's
+        except WebUnavailable as e:
+            err = str(e)
+        body = ctx.get(f"darkpool_levels_{d}", path, params, cache_date=d)
+        api = _levels(rows_of(body))
+        if handle is not None:
+            try:
+                got = ctx.web.finish(handle)
+            except WebUnavailable as e:
+                err = str(e)
+        if got is None:
+            check.update({"dicloak": f"unavailable: {err}", "windows": {}})
+            return body, api, check, {}
+        os.makedirs(ctx.raw_dir, exist_ok=True)
+        with open(os.path.join(ctx.raw_dir, f"darkpool_levels_dicloak_{d}.json"), "w") as fh:
+            json.dump({"source": "UW site via DICloak", "windows": got}, fh)
+        check["dicloak"], check["dicloak_fetched_at"] = "ok", next(iter(got.values()))["fetched_at"]
+        site, win = {}, {}
+        for lab, n in WINDOWS:
+            r = got.get(lab) or {"error": "no answer"}
+            b = r.get("body") if isinstance(r.get("body"), dict) else None
+            if r.get("error") or b is None:
+                win[lab] = {"match": None, "dicloak": r.get("error") or "empty answer"}
+                continue
+            if b.get("date") != d:
+                win[lab] = {"match": None, "dicloak": f"site's latest session is {b.get('date')}, not {d}"}
+                continue
+            site[lab] = _levels((b.get("stock_price_vol") if n == 1 else b.get("data")) or [])
+            ref = api if n == 1 else _sum_tables(past[-(n - 1):] + [api])
+            c = compare_levels(ref, site[lab])
+            win[lab] = {"match": c["match"] and bool(site[lab]), "site_request": paths[lab], "compare": c}
+        check["windows"] = win
+        if all(w["match"] for w in win.values()) or any(w["match"] is None for w in win.values()):
+            break   # all agree, or the site can't answer for this day: retrying won't change that
+        if i + 1 < tries:
+            time.sleep(WEB_RETRY_SLEEP)
+    win = check["windows"]
+    good = [lab for lab, _ in WINDOWS if (win.get(lab) or {}).get("match")]
+    check["used"] = "dicloak" if len(good) == len(WINDOWS) else ("api" if not good else "mixed")
+    check["match"] = True if len(good) == len(WINDOWS) else (
+        False if any(w.get("match") is False for w in win.values()) else None)
+    matched = {lab: site[lab] for lab in good}
+    if "1D" in matched:
+        d_body = got["1D"]["body"]
+        return {"date": d, "data": d_body.get("stock_price_vol")}, matched["1D"], check, matched
+    return body, api, check, matched
+
+
+def _pct(c: Dict[str, Any]) -> str:
+    dt = c.get("dark_total") or {}
+    return f"{(dt['dicloak'] / dt['api'] - 1) * 100:+.3f}%" if dt.get("api") else "n/a"
+
+
+def _check_extra(check: Optional[Dict[str, Any]]) -> Tuple[str, List[str]]:
+    """run_log text for the DICloak / API comparison (no spaces in the src= tag: daily_short/run.sh greps it)."""
+    if not check:
+        return "", []
+    d, win = check["date"], check.get("windows") or {}
+    if not win:
+        if check.get("attempts", 0) == 0:   # no live site request was made (point-in-time / --no-dicloak)
+            return "", []
+        return f"src={d}:api", [f"{d} price levels from the API only: DICloak {check['dicloak']}"]
+    good = [lab for lab, _ in WINDOWS if (win.get(lab) or {}).get("match")]
+    bad = [lab for lab, _ in WINDOWS if lab not in good]
+    tries = f",try{check['attempts']}" if check["attempts"] > 1 else ""
+    if not bad:
+        return f"src={d}:dicloak(=api:{'/'.join(good)}{tries})", []
+    notes = []
+    for lab in bad:
+        x = win.get(lab) or {}
+        if x.get("match") is None and "compare" not in x:
+            notes.append(f"{d} {lab}: DICloak {x.get('dicloak')}: used the API")
+            continue
+        c = x["compare"]
+        dt = c.get("dark_total") or {}
+        pct = (dt["dicloak"] / dt["api"] - 1) * 100 if dt.get("api") else float("nan")
+        why = "one side newer" if c.get("one_sided") else "mixed"
+        ct = c.get("centroid_top8") or {}
+        notes.append(f"{d} {lab}: DICloak != API after {check['attempts']} paired fetches ({c['buckets_differ']}/"
+                     f"{c['buckets']} buckets differ, {why}; dark DICloak vs API {pct:+.3f}%, centroid_top8 "
+                     f"{ct.get('dicloak')} vs {ct.get('api')}): used the API")
+    tag = f"src={d}:api" if not good else f"src={d}:dicloak({'/'.join(good)})+api({'/'.join(bad)}{tries})"
+    return tag, notes
+
+
 def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
     end = ctx.K  # price-levels is a full-day aggregate: in point-in-time mode stop at the last completed session
     days = ctx.cal.window(end, ctx.cfg.dp_days)
     by_day: Dict[str, Dict[float, List[float]]] = {}
     per_day: Dict[str, Any] = {}
     missing: List[str] = []
+    check, site_windows = None, {}
+    use_site = ctx.web is not None and not ctx.pit and days and days[-1] == end
+    day_checks: Dict[str, Any] = {}   # earlier days: saved site table vs the API's (ZZ 2026-11-22 "保存在本地")
+    src_of: Dict[str, str] = {}
     for d in days:
-        body = ctx.get(f"darkpool_levels_{d}", f"/api/darkpool/{ctx.T}/price-levels", {"date": d}, cache_date=d)
-        lv = _levels(rows_of(body))
+        if d == end and use_site:   # the last day comes with the site's windows, after every earlier day is in
+            body, lv, check, site_windows = _end_day_levels(ctx, days, by_day)
+            src_of[d] = "dicloak" if "1D" in site_windows else "api"
+        else:
+            body = ctx.get(f"darkpool_levels_{d}", f"/api/darkpool/{ctx.T}/price-levels", {"date": d}, cache_date=d)
+            lv = _levels(rows_of(body))
+            src_of[d] = "api"
+            saved = None
+            if ctx.store:
+                from .sitestore import get as saved_table
+                saved = saved_table(ctx.T, d, ctx.store)
+            if saved is not None:
+                c = compare_levels(lv, saved)
+                day_checks[d] = {"match": c["match"] and bool(saved), "compare": c}
+                if day_checks[d]["match"]:
+                    lv, src_of[d] = saved, "dicloak"
         if not lv:
             missing.append(d)
             continue
@@ -425,6 +594,7 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
         st = level_stats(lv)
         per_day[d] = {
             "as_of": body.get("date") if isinstance(body, dict) else None,
+            "source": src_of[d],
             "n_levels": len(lv),
             "dark_total": st["dark_total"], "regular_total": st["regular_total"], "dp_pct": st["dp_pct"],
             "centroid_top8": st["centroid_top8"], "top8_prices": [r["price"] for r in st["top8"]],
@@ -433,16 +603,17 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
     if end not in by_day:
         return FAIL(f"empty payload for {end}")
     windows = {}
-    for label, n in (("1D", 1), ("2D", 2), ("3D", 3), ("1W", 5), ("1M", 21)):
+    for label, n in WINDOWS:
         wd = days[-n:]
-        agg: Dict[float, List[float]] = {}
-        for d in wd:
-            for p, v in by_day.get(d, {}).items():
-                a = agg.setdefault(p, [0.0, 0.0])
-                a[0] += v[0]
-                a[1] += v[1]
+        # dicloak = the site's own window table (equal to this sum), or every day in it from the site
+        agg = site_windows[label] if label in site_windows else _sum_tables([by_day.get(d, {}) for d in wd])
+        src = "dicloak" if (label in site_windows or all(src_of.get(d) == "dicloak" for d in wd)) else "api"
         windows[label] = {"from": wd[0], "to": wd[-1], "days": len(wd),
-                          "days_present": sum(1 for d in wd if d in by_day), **level_stats(agg)}
+                          "days_present": sum(1 for d in wd if d in by_day), "source": src, **level_stats(agg)}
+    if day_checks:
+        check = check or {"date": end, "used": "api", "dicloak": "not asked (point-in-time or --no-dicloak)",
+                          "match": None, "attempts": 0, "windows": {}}
+        check["days"] = day_checks
     snapshots = {}
     for label, k in (("end", 0), ("end-5", 5), ("end-21", 21)):
         if len(days) > k and days[-1 - k] in per_day:
@@ -453,10 +624,21 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
                           f"so windows end at the last completed session {end}")
     if missing:
         notes.append(f"missing days: {', '.join(missing)}")
-    extra = f"days={len(by_day)}/{len(days)}"
+    src_extra, src_notes = _check_extra(check)
+    notes += src_notes
+    past = [d for d in days if d != end]
+    if ctx.store:
+        src_extra += (" " if src_extra else "") + f"site_days={sum(1 for d in past if src_of.get(d) == 'dicloak')}/{len(past)}"
+        for d, x in sorted(day_checks.items()):
+            if not x["match"]:
+                c = x["compare"]
+                notes.append(f"{d} single day: saved DICloak table != API ({c['buckets_differ']}/{c['buckets']} buckets "
+                             f"differ, dark DICloak vs API {_pct(c)}): used the API")
+    extra = f"days={len(by_day)}/{len(days)}" + (f" {src_extra}" if src_extra else "")
     return LayerResult(ok=True, as_of=per_day[end]["as_of"] or end, rows=per_day[end]["n_levels"],
                        extra=extra, notes=notes, data={
                            "window_end": end,
+                           "source_check": check,
                            "definition": {
                                "dp_pct": "dark_pool_volume / (dark_pool_volume + regular_volume) per UW price bucket",
                                "top8": "8 buckets with the most dark_pool_volume in the window",
@@ -464,6 +646,7 @@ def layer_darkpool_levels(ctx: Ctx) -> LayerResult:
                                "windows": "1D = window_end, 2D / 3D = last 2 / 3 sessions, 1W = last 5 sessions, 1M = last 21 sessions (bucket volumes summed)",
                                "poc": "bucket with the most dark_pool_volume in the window (dominant grey node)",
                                "snapshots": "single sessions: window_end, 5 and 21 sessions earlier",
+                               "source": "windows[w].source / per_day[d].source: api, or dicloak = the UW site's own table read through the logged-in DICloak tab (1D: large-trades Price Group; 2D / 3D / 1W / 1M: the stock Dark Pool page, day_range = sessions - 1), used only for windows ending on the site's latest session and only when it equals the API's bucket for bucket (ZZ 2026-11-22); earlier single days are always the API's; source_check = the comparison",
                            },
                            "windows": windows, "snapshots": snapshots, "per_day": per_day})
 

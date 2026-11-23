@@ -64,7 +64,8 @@ ok=0; fail=0; FAILED=""; STARTED=$(date +%s)
 if [ $FRESH -eq 1 ]; then
   for T in ${TICKERS//,/ }; do
     python3 fetch.py --quiet --tickers "$T" --date "$DATE" --out "$RUNS/tickers/$T" > "$LOG/$T.fetch.out" 2>&1
-    echo "$T fetch · $(usage_line "$RUNS/tickers/$T/$DATE/run_log.txt")"
+    # src= : the day's dark pool price levels came from the UW site via DICloak (equal to the API's) or the API (ZZ 2026-11-22)
+    echo "$T fetch · $(usage_line "$RUNS/tickers/$T/$DATE/run_log.txt") · $(grep -o 'src=[^ ]*' "$RUNS/tickers/$T/$DATE/run_log.txt" 2>/dev/null | head -1)"
   done
   # Finviz short interest for the 空头闸 line (ZZ 2026-10-17); reads the logged-in DICloak Finviz window.
   # Exit 1 = some tickers unknown to Finviz (the rest are saved); any failure only makes the posts say "没拉到".

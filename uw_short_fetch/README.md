@@ -71,6 +71,24 @@ history/flow_iv/<T>.json      每个收完盘的交易日的 flow-IV（按 premi
 | short-volume | `/api/shorts/{t}/volume-and-ratio` | 数据在 `si` 键下 |
 | short-data | `/api/shorts/{t}/data` | 取最新时间戳，另附每日序列 |
 
+### 暗池价位的第二来源：DICloak 里的 UW 网站（ZZ 2026-11-22）
+
+ZZ："同时 fetch darkpool centroid from dicloak and uw api，比较是否一致，如果一致，优先返回 dicloak 的数据"；同一天又问"2D / 1W / 1M 的也可以用网页吗"。
+
+- 网站上有两个接口：
+  - large-trades 页的 Price Group：`https://phx.unusualwhales.com/api/flow/levels/{t}/volume-price-group`，只有最近一个交易日（带 date 也没用）。`stock_price_vol` 和 API 的 price-levels 是同一套格子、同一个数（2026-11-20 比了 10 只，逐档相同）
+  - 个股 Dark Pool 页（`/stock/{t}/darkpool`）：`/api/flow/dark/price_levels/{t}?day_range=N`，最近 N+1 个交易日的合计：0 = 1D，1 = 2D，2 = 3D，4 = 1W，20 = 1M。和 API 每天的表加起来逐档相同（2026-11-22 比了 6 只）。永远截到最近一个交易日，指定日期无效
+- 所以只有截到网站最近一天的窗口能取两份。取到窗口最后一天 D 时，网站的 5 个请求（1D 用 Price Group，2D / 3D / 1W / 1M 用 Dark Pool 页）由 DICloak 里登录着的 unusualwhales.com 标签页一起发出（`uwsf/uwweb.py`，走 `workspace-claw-general/dicloak_common/dicloak_browser.py`，凭据不出浏览器，页面显示不变），紧接着发 API 那份 D。网站的 1D 和 API 的 D 比，其余窗口和 API 每天的表在同样几天上的合计比，逐档比暗池量和 lit 量。哪个窗口完全相同，那个窗口就用网站那份；不同就用 API 那份。D 还是当天的话（17:00 扫描、盘中重跑、盘中图），盘后成交还在进来，最多成对重取 3 次，间隔 2 秒
+- D 以前的每一天，用本地存下来的网站数（ZZ 2026-11-22："这个你只要每天跑，保存在本地，就可以了吧，不用依赖api"）：
+  - 网站的窗口两两相减就是单日：day_range k 减 day_range k-1 = 往前第 k 个交易日（整数，精确）。`site_capture.py` 一次取 day_range 0..K，拆成 K+1 个单日，存进 `history/dp_levels_site/<T>.json`（`uwsf/sitestore.py`）。只在网站最新一天的盘后交易结束（20:00 ET）以后取，这样每个请求看到的是同一份成交；差值有负数的那天不存
+  - 每个工作日 20:30 ET 跑一次（`daily_short/site_capture.sh`，定时任务"claw-short 暗池网站存档"，`--backfill 5` 重存最近 6 天，漏一晚会自己补上）。2026-11-22 回填了 25 只（名单 23 只 + dpzone 的 GOOGL、V）10/22–11/20 共 22 个交易日，550 天全部和 API 逐档相同
+  - 存的每一天在存的时候和 API 那天的表比一次，取数（darkpool-levels 层）时再比一次：相同就用存的网站数（`per_day[d].source = dicloak`），不同就用 API 的并 @ZZ。run_log 那一行末尾的 `site_days=21/21` 是 D 以前用了网站数的天数。所以"前一天的 2D 重心"（`close_vs_2D.prev_session`）和 1M / 1W 里更早的天现在也是网站的数；`--asof` 时间点模式同样用存的数（窗口截到前一天，正好都存过）
+  - 窗口的 `source`：用了网站自己的窗口表，或者窗口里每一天都是网站数，记 dicloak；否则记 api
+- 网站那几份存在 `raw/darkpool_levels_dicloak_<D>.json`。用了哪份记在 snapshot 的 `darkpool-levels.data.source_check`、`windows[w].source` 和 `per_day[D].source`。run_log 那一行末尾是 `src=<D>:dicloak(=api:1D/2D/3D/1W/1M)`（全部一致），或者 `src=<D>:dicloak(...)+api(...)`、`src=<D>:api`，后两种另起 note 说原因：DICloak 不可用、网站最新一天不是 D，或者两份不一致（几档不同、暗池量差多少、两边重心）。brief 不带这些字段，给模型的输入不变
+- 不一致时（两边都有数，成对重取后还是不同）在 #claw-short @ZZ（ZZ 2026-11-22："如果有不一致的，@我提醒"，`uwsf/dpalert.py`）。每次取数最多发一条，列出每只票哪个窗口、几档不同、暗池量差多少、两边重心、像不像时间差。同一只票同一天盘中、盘后各最多提醒一次，记在 `.dp_source_alerts.json`。DICloak 不可用、网站最新一天不是 D 这两种不提醒，只记在 run_log。`--no-alert` 关掉提醒；发帖失败只记在 run_log 开头的 note 里，不影响取数
+- 需要 DICloak 里那个 UW 的 profile 开着、已登录，并且那个窗口打开了 View > Developer > Allow JavaScript from Apple Events。没有 unusualwhales.com 标签页时，会在 `.uwweb_state.json` 记住的 profile 里开一个。任何一步不行都只用 API，不影响别的层
+- `--asof` 时间点模式不取网站（网站只有最新一天）；`--no-dicloak` 关掉这一步。单独看网站某只票当天的数：`python3 -m uwsf.uwweb NVDA`
+
 ## 补充数据
 
 lit-blocks、ohlc-daily（含 HV20 序列）、ohlc-5m、oi-change、option-contracts（仅实时；含 chain_depth：全链有效合约的不同 strike 数 nstrk，THIN = nstrk < 45）、iv-rv（`/api/stock/{t}/volatility/realized`：IV30 日序列 + 按窗口末日重排的 21 日 RV）、oi-per-strike、options-volume、interpolated-iv、option-sentiment（AVAR，作为上行尾部的替代指标）、unusualness（活跃度，仅实时）、options-pulse（开仓买入笔数）、multi-leg（领口 / roll 的形状）、flow-per-strike 和 net-prem-ticks（历史 flow）、flow-alerts（UW 按规则触发的期权告警，可以查历史，也可以截到分钟）、spot-gex（逐分钟的 spot gamma/charm/vanna）、greek-exposure-strike、offlit-levels（DP 的第二视角）、contract-history（关键合约的 OI 历史）、rr-skew（25Δ）、screener。
@@ -92,7 +110,7 @@ option-trades 的聚合里另有 flow_iv：call/put 各自按 premium 加权的�
 
 - greek-exposure、SI、short-volume、short-data 都按日期取 max(date) ≤ D 的那一行，不按位置取第一行或最后一行
 - ohlc/1d 实际返回是新的在前（spec 写的是旧的在前），而且每天 3 行（pr/r/po），只保留 r
-- darkpool price-levels 的数字字段是字符串；档位网格是每美元 X.00 和 X.75 两档，每天一致
+- darkpool price-levels 的数字字段是字符串；档位网格是每美元 X.00 和 X.75 两档，每天一致（网站 Price Group 把每格写成 "$X–$X+0.25"，其实一格一直到下一个标签）
 - darkpool 和 lit-flow 一旦带上 `older_than`，就会忽略 `date` 参数，所以翻页时按纽约日期过滤，跨到前一天就停
 - flow-per-strike 直接返回数组；option-contract historic 的数据在 `chains` 键下；gex-levels 的 `data` 是字典
 - option-contracts 单次最多 500 行，超过时按到期日拆开拉

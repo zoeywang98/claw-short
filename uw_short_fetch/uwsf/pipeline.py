@@ -77,6 +77,10 @@ def parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
     ap.add_argument("--flow-days", type=int, default=5)
     ap.add_argument("--skip", default="", help="comma-separated layer names to skip (logged as FAIL)")
     ap.add_argument("--no-cache", action="store_true", help="refetch past dates instead of using cache/")
+    ap.add_argument("--no-dicloak", action="store_true",
+                    help="price levels from the API only: skip the UW site check through DICloak (uwsf/uwweb.py)")
+    ap.add_argument("--no-alert", action="store_true",
+                    help="don't @ZZ in #claw-short when DICloak and the API disagree (uwsf/dpalert.py)")
     ap.add_argument("--quiet", action="store_true")
     return ap.parse_args(argv)
 
@@ -367,14 +371,26 @@ def main(argv: Optional[List[str]] = None) -> int:
     etf = run_layer("sector-etf-flows", False, fetch_etf_flows, mctx, sectors)
     flags = L.calendar_flags(D)
 
+    # ZZ 2026-11-22: the last day's dark pool price levels also come from the UW site through DICloak; used when
+    # identical to the API's (layers._end_day_levels). Not in point-in-time mode: the site has the latest session only.
+    web = None
+    if not args.no_dicloak and cutoff is None and "darkpool-levels" not in skip:
+        from .uwweb import UWWeb
+        web = UWWeb()
+    # earlier days: the site's tables saved by site_capture.py (ZZ 2026-11-22 "每天跑，保存在本地"), checked against the API
+    from .sitestore import DIR as SITE_DIR
+    store = None if args.no_dicloak else SITE_DIR
+    dp_checks: Dict[str, Any] = {}
     all_lines: List[str] = []
     summary: Dict[str, Any] = {}
     net_gamma: Dict[str, Optional[float]] = {}
     all_core_ok = True
     for i, T in enumerate(tickers, 1):
         before = client.network_requests
-        ctx = Ctx(client, T, D, cal, cfg, out_dir, cache_dir, today_ny, cutoff)
+        ctx = Ctx(client, T, D, cal, cfg, out_dir, cache_dir, today_ny, cutoff, web=web, store=store)
         res, derived = run_ticker(ctx, screener, skip)
+        dl = res.get("darkpool-levels")
+        dp_checks[T] = dl.data.get("source_check") if (dl and dl.ok and isinstance(dl.data, dict)) else None
         lines, core_ok, sup_ok, sup_n = ticker_log(T, res, derived, pit=cutoff is not None)
         all_core_ok &= core_ok == len(CORE_LAYERS)
         ge = res.get("greek-exposure")
@@ -400,6 +416,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         say(f"[{i}/{len(tickers)}] {T}: core {core_ok}/{len(CORE_LAYERS)}, supplemental {sup_ok}/{sup_n} "
             f"({client.network_requests - before} requests)")
 
+    if (web is not None or store) and not args.no_alert:   # ZZ 2026-11-22 "如果有不一致的，@我提醒"
+        from .dpalert import notify
+        note = notify(dp_checks, D, datetime.now(NY))
+        if note:
+            head_notes.append(note)
     usage = client.last_usage
     head = [
         f"UW short-engine fetch · target {D}" + (f" as of {cutoff:%H:%M} ET" if cutoff else "")

@@ -1,6 +1,7 @@
 """Offline tests for the payload quirks. Run: python3 -m unittest discover -s tests"""
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -438,6 +439,283 @@ class PointInTime(unittest.TestCase):
         ctx, _ = make_ctx(lambda path, p: {"data": [{"x": 1}]}, cutoff=CUT)
         self.assertFalse(L.layer_option_contracts(ctx).ok)
         self.assertFalse(L.layer_unusualness(ctx).ok)
+
+
+def api_levels(path, p):   # API: strings; D has two buckets, the other days one each
+    if p["date"] == D:
+        return {"date": D, "data": [{"price": "100.0", "dark_pool_volume": "300", "regular_volume": "100"},
+                                    {"price": "100.75", "dark_pool_volume": "100", "regular_volume": "50"}]}
+    return {"date": p["date"], "data": [{"price": "99.0", "dark_pool_volume": "10", "regular_volume": "5"}]}
+
+
+SESSIONS = {"1D": 1, "2D": 2, "3D": 3, "1W": 5, "1M": 21}
+
+
+def site_rows(label, d=D, extra=0):
+    """The site's table for a window ending on D (sum of api_levels over the window), as ints."""
+    agg = {}
+    for day in DAYS[-SESSIONS[label]:]:
+        for r in api_levels("", {"date": day})["data"]:
+            a = agg.setdefault(r["price"], [0, 0])
+            a[0] += int(r["dark_pool_volume"]); a[1] += int(r["regular_volume"])
+    rows = [{"price": str(float(k)), "dark_pool_volume": v[0], "regular_volume": v[1]} for k, v in agg.items()]
+    rows[0]["dark_pool_volume"] += extra
+    rows.append({"price": "120", "dark_pool_volume": 0, "regular_volume": 0})   # all-zero buckets are ignored
+    if label == "1D":   # large-trades Price Group
+        return {"date": d, "stock_price_vol": rows, "opt_price_vol": [{"price": "100", "call_volume": 5}]}
+    return {"date": d, "data": rows}   # stock Dark Pool page, day_range = sessions - 1
+
+
+class FakeWeb:
+    """Stands in for uwweb.UWWeb. `rounds`: one {label: body | Exception-message str} per paired fetch."""
+
+    def __init__(self, rounds=None, fail=None, d=D):
+        self.rounds, self.fail, self.batches = rounds, fail, []
+        self.d = d
+
+    def start(self, paths):
+        from uwsf.uwweb import WebUnavailable
+        self.batches.append(dict(paths))
+        if self.fail:
+            raise WebUnavailable(self.fail)
+        return {"n": len(self.batches), "paths": paths}
+
+    def finish(self, h, timeout=45):
+        rnd = (self.rounds[min(h["n"], len(self.rounds)) - 1] if self.rounds else {})
+        out = {}
+        for lab in h["paths"]:
+            b = rnd.get(lab, site_rows(lab, d=self.d))
+            out[lab] = {"url": h["paths"][lab], "status": 200, "fetched_at": "t", "error": b if isinstance(b, str) else None,
+                        "body": None if isinstance(b, str) else b}
+        return out
+
+
+class DicloakSource(unittest.TestCase):
+    """ZZ 2026-11-22: price levels from DICloak (the UW site) and the API; identical -> DICloak's, per window."""
+
+    def setUp(self):
+        self._sleep, L.WEB_RETRY_SLEEP = L.WEB_RETRY_SLEEP, 0
+
+    def tearDown(self):
+        L.WEB_RETRY_SLEEP = self._sleep
+
+    def run_layer(self, web, today="2026-09-27", cutoff=None):
+        ctx, client = make_ctx(api_levels, today=today, cutoff=cutoff)
+        ctx.web = web
+        return L.layer_darkpool_levels(ctx), ctx
+
+    def test_identical_uses_dicloak_for_every_window(self):
+        web = FakeWeb()
+        r, ctx = self.run_layer(web)
+        self.assertTrue(r.ok, r.reason)
+        chk = r.data["source_check"]
+        self.assertEqual((chk["used"], chk["match"], chk["attempts"], chk["dicloak"]), ("dicloak", True, 1, "ok"))
+        self.assertEqual({k: w["source"] for k, w in r.data["windows"].items()},
+                         {k: "dicloak" for k in ("1D", "2D", "3D", "1W", "1M")})
+        self.assertEqual(r.data["per_day"][D]["source"], "dicloak")
+        self.assertEqual(r.data["per_day"]["2026-09-24"]["source"], "api")
+        self.assertEqual(len(web.batches), 1)   # one paired fetch, all five site requests in it
+        self.assertEqual(web.batches[0]["1D"], "/api/flow/levels/TEST/volume-price-group")
+        self.assertEqual(web.batches[0]["2D"], "/api/flow/dark/price_levels/TEST?day_range=1")
+        self.assertEqual(web.batches[0]["1W"], "/api/flow/dark/price_levels/TEST?day_range=4")
+        self.assertEqual(web.batches[0]["1M"], "/api/flow/dark/price_levels/TEST?day_range=20")
+        self.assertIn(f"src={D}:dicloak(=api:1D/2D/3D/1W/1M)", r.extra)
+        self.assertAlmostEqual(r.data["windows"]["1D"]["centroid_top8"], (100 * 300 + 100.75 * 100) / 400)
+        self.assertEqual(r.data["windows"]["2D"]["dark_total"], 410)
+        self.assertTrue(os.path.exists(os.path.join(ctx.raw_dir, f"darkpool_levels_dicloak_{D}.json")))
+        self.assertTrue(os.path.exists(os.path.join(ctx.raw_dir, f"darkpool_levels_{D}.json")))   # the API's too
+
+    def test_one_window_differs_on_finished_day(self):
+        web = FakeWeb([{"1W": site_rows("1W", extra=7)}])
+        r, _ = self.run_layer(web)                       # today 09-27 > D: one paired fetch
+        chk = r.data["source_check"]
+        self.assertEqual((chk["used"], chk["match"], chk["attempts"]), ("mixed", False, 1))
+        self.assertEqual(r.data["windows"]["1W"]["source"], "api")
+        self.assertEqual(r.data["windows"]["2D"]["source"], "dicloak")
+        self.assertEqual(r.data["windows"]["1W"]["dark_total"], 440)   # the API's sum, not the site's 447
+        self.assertTrue(chk["windows"]["1W"]["compare"]["one_sided"])
+        self.assertIn(f"src={D}:dicloak(1D/2D/3D/1M)+api(1W)", r.extra)
+        self.assertTrue(any("1W: DICloak != API" in n for n in r.notes))
+
+    def test_day_differs_uses_api_day(self):
+        web = FakeWeb([{"1D": site_rows("1D", extra=7)}])
+        r, _ = self.run_layer(web)
+        self.assertEqual(r.data["per_day"][D]["source"], "api")
+        self.assertEqual(r.data["windows"]["1D"]["dark_total"], 400)
+
+    def test_live_day_retries_until_they_agree(self):
+        web = FakeWeb([{"1D": site_rows("1D", extra=7), "2D": site_rows("2D", extra=7)}, {}])
+        r, _ = self.run_layer(web, today=D)
+        chk = r.data["source_check"]
+        self.assertEqual((chk["used"], chk["attempts"]), ("dicloak", 2))
+        self.assertIn(",try2)", r.extra)
+        web = FakeWeb([{"1M": site_rows("1M", extra=7)}])
+        r, _ = self.run_layer(web, today=D)
+        self.assertEqual((r.data["source_check"]["used"], r.data["source_check"]["attempts"]), ("mixed", L.WEB_TRIES))
+
+    def test_unavailable_other_session_or_error_uses_api(self):
+        r, _ = self.run_layer(FakeWeb(fail="no unusualwhales.com tab in any open DICloak profile"))
+        chk = r.data["source_check"]
+        self.assertEqual((chk["used"], chk["match"]), ("api", None))
+        self.assertIn("unavailable: no unusualwhales.com tab", chk["dicloak"])
+        self.assertIn(f"src={D}:api", r.extra)
+        self.assertTrue(r.ok)
+        self.assertTrue(all(w["source"] == "api" for w in r.data["windows"].values()))
+        r, _ = self.run_layer(FakeWeb(d="2026-09-28"))
+        self.assertIn("latest session is 2026-09-28", r.data["source_check"]["windows"]["1D"]["dicloak"])
+        self.assertEqual(r.data["source_check"]["used"], "api")
+        web = FakeWeb([{"1M": "HTTP 500 from the site: 'x'"}], d=D)
+        r, _ = self.run_layer(web, today=D)
+        self.assertEqual((r.data["source_check"]["used"], r.data["source_check"]["attempts"]), ("mixed", 1))  # no retry
+        self.assertEqual(r.data["windows"]["1M"]["source"], "api")
+        self.assertTrue(any("1M: DICloak HTTP 500" in n for n in r.notes))
+
+    def test_no_web_and_point_in_time_skip_dicloak(self):
+        r, _ = self.run_layer(None)
+        self.assertIsNone(r.data["source_check"])
+        self.assertNotIn("src=", r.extra)
+        self.assertTrue(all(w["source"] == "api" for w in r.data["windows"].values()))
+        web = FakeWeb()
+        r, _ = self.run_layer(web, cutoff=CUT)
+        self.assertEqual(web.batches, [])
+
+    def test_compare_levels(self):
+        a = {100.0: [300.0, 100.0], 101.0: [0.0, 0.0]}
+        self.assertTrue(L.compare_levels(a, {100.0: [300.0, 100.0]})["match"])   # all-zero buckets ignored
+        c = L.compare_levels(a, {100.0: [290.0, 100.0], 102.0: [5.0, 0.0]})
+        self.assertEqual((c["match"], c["buckets_differ"], c["one_sided"], c["only_dicloak"]), (False, 2, False, [102.0]))
+
+
+class DicloakAlert(unittest.TestCase):
+    """ZZ 2026-11-22 "如果有不一致的，@我提醒": one @ZZ post per fetch run, each (date, ticker, phase) once."""
+
+    def setUp(self):
+        self._sleep, L.WEB_RETRY_SLEEP = L.WEB_RETRY_SLEEP, 0
+        self.state = os.path.join(tempfile.mkdtemp(), "alerts.json")
+        self.sent = []
+
+    def tearDown(self):
+        L.WEB_RETRY_SLEEP = self._sleep
+
+    def check(self, web, today="2026-09-27"):
+        ctx, _ = make_ctx(api_levels, today=today)
+        ctx.web = web
+        return L.layer_darkpool_levels(ctx).data["source_check"]
+
+    def notify(self, checks, now):
+        from uwsf import dpalert
+        return dpalert.notify(checks, D, now, state_file=self.state, sender=self.sent.append)
+
+    def test_alert_once_per_ticker_and_phase(self):
+        bad = self.check(FakeWeb([{"1W": site_rows("1W", extra=7), "1M": site_rows("1M", extra=-3)}]))
+        good = self.check(FakeWeb())
+        down = self.check(FakeWeb(fail="no unusualwhales.com tab"))
+        close = L.datetime(2026, 9, 25, 17, 1, tzinfo=L.NY)
+        note = self.notify({"AAA": bad, "BBB": good, "CCC": down}, close)
+        self.assertEqual(len(self.sent), 1)
+        msg = self.sent[0]
+        self.assertTrue(msg.startswith("<@862859550104223764> 暗池价位 DICloak 和 API 不一致（09/25 17:01 取数）"))
+        self.assertIn("- AAA 1W（截至 09/25）：", msg)
+        self.assertIn("- AAA 1M（截至 09/25）：", msg)
+        self.assertIn("一边比另一边新", msg)
+        self.assertNotIn("BBB", msg)
+        self.assertNotIn("CCC", msg)          # unavailable is not a disagreement
+        self.assertIn("alerted @ZZ", note)
+        self.assertIsNone(self.notify({"AAA": bad}, close))   # same day, same phase: already alerted
+        self.assertEqual(len(self.sent), 1)
+        self.notify({"AAA": bad}, L.datetime(2026, 9, 25, 11, 30, tzinfo=L.NY))   # 盘中 is a separate phase
+        self.assertEqual(len(self.sent), 2)
+
+    def test_failed_post_is_reported_not_raised(self):
+        from uwsf import dpalert
+        bad = self.check(FakeWeb([{"2D": site_rows("2D", extra=7)}]))
+
+        def boom(text):
+            raise subprocess.TimeoutExpired("openclaw", 120)
+        note = dpalert.notify({"AAA": bad}, D, L.datetime(2026, 9, 25, 17, 1, tzinfo=L.NY),
+                              state_file=self.state, sender=boom)
+        self.assertIn("alert failed", note)
+        self.assertFalse(os.path.exists(self.state))   # not marked as alerted: the next run tries again
+
+
+class SiteHistory(unittest.TestCase):
+    """ZZ 2026-11-22 "每天跑，保存在本地": single sessions from the site's windows, saved, used for earlier days."""
+
+    def setUp(self):
+        self._sleep, L.WEB_RETRY_SLEEP = L.WEB_RETRY_SLEEP, 0
+        self.root = tempfile.mkdtemp()
+
+    def tearDown(self):
+        L.WEB_RETRY_SLEEP = self._sleep
+
+    def test_singles_from_cumulative_windows(self):
+        from uwsf import sitestore as S
+        r0 = {100.0: [5.0, 1.0]}
+        r1 = {100.0: [8.0, 1.0], 99.0: [2.0, 2.0]}
+        r2 = {100.0: [8.0, 4.0], 99.0: [3.0, 2.0]}
+        one, bad = S.singles({0: r0, 1: r1, 2: r2}, ["d1", "d2", "d3"])
+        self.assertEqual(one["d3"], {100.0: [5.0, 1.0]})
+        self.assertEqual(one["d2"], {100.0: [3.0, 0.0], 99.0: [2.0, 2.0]})
+        self.assertEqual(one["d1"], {100.0: [0.0, 3.0], 99.0: [1.0, 0.0]})
+        self.assertEqual(bad, {})
+        one, bad = S.singles({0: r1, 1: r0}, ["d1", "d2"])          # a window smaller than the one before
+        self.assertIn("negative", bad["d1"])
+        self.assertNotIn("d1", one)
+
+    def test_put_get_and_session_over(self):
+        from uwsf import sitestore as S
+        self.assertEqual(S.put("TEST", {"2026-09-24": ({99.0: [10.0, 5.0], 98.0: [0.0, 0.0]}, "t", "day_range 1-0")},
+                               self.root), ["2026-09-24"])
+        self.assertEqual(S.get("TEST", "2026-09-24", self.root), {99.0: [10.0, 5.0]})
+        self.assertIsNone(S.get("TEST", "2026-09-23", self.root))
+        self.assertEqual(S.put("TEST", {"2026-09-24": ({99.0: [10.0, 5.0]}, "t2", "x")}, self.root), [])   # unchanged
+        self.assertFalse(S.session_over(D, L.datetime(2026, 9, 25, 17, 0, tzinfo=L.NY)))
+        self.assertTrue(S.session_over(D, L.datetime(2026, 9, 25, 20, 30, tzinfo=L.NY)))
+
+    def save_days(self, extra_on=None):
+        from uwsf import sitestore as S
+        tables = {}
+        for d in DAYS[:-1]:
+            lv = L._levels(api_levels("", {"date": d})["data"])
+            if d == extra_on:
+                lv[99.0][0] += 1
+            tables[d] = (lv, "t", "day_range")
+        S.put("TEST", tables, self.root)
+
+    def layer(self, web=None, cutoff=None, today="2026-09-27"):
+        ctx, _ = make_ctx(api_levels, today=today, cutoff=cutoff)
+        ctx.web, ctx.store = web, self.root
+        return L.layer_darkpool_levels(ctx)
+
+    def test_earlier_days_from_saved_site_tables(self):
+        self.save_days()
+        r = self.layer(FakeWeb())
+        self.assertEqual([r.data["per_day"][d]["source"] for d in DAYS], ["dicloak"] * 5)
+        self.assertTrue(all(w["source"] == "dicloak" for w in r.data["windows"].values()))
+        self.assertIn("site_days=4/4", r.extra)
+        self.assertTrue(all(x["match"] for x in r.data["source_check"]["days"].values()))
+
+    def test_saved_day_differs_uses_api_and_alerts(self):
+        from uwsf import dpalert
+        self.save_days(extra_on="2026-09-23")
+        r = self.layer(FakeWeb())
+        self.assertEqual(r.data["per_day"]["2026-09-23"]["source"], "api")
+        self.assertEqual(r.data["windows"]["3D"]["source"], "dicloak")   # the site's own 3D table matched the API sum
+        self.assertEqual(r.data["windows"]["2D"]["source"], "dicloak")
+        self.assertIn("site_days=3/4", r.extra)
+        self.assertTrue(any("2026-09-23 single day: saved DICloak table != API" in n for n in r.notes))
+        items = dpalert.mismatches("TEST", r.data["source_check"])
+        self.assertEqual([(i["label"], i["date"]) for i in items], [("day", "2026-09-23")])
+        self.assertIn("- TEST 09/23 单日：", dpalert.message(items, "11/23 17:01"))
+
+    def test_point_in_time_uses_saved_days_without_the_site(self):
+        self.save_days()
+        web = FakeWeb()
+        r = self.layer(web, cutoff=CUT)   # windows end at 09-24; the site is not asked
+        self.assertEqual(web.batches, [])
+        self.assertEqual(r.data["windows"]["2D"]["source"], "dicloak")
+        self.assertNotIn("src=", r.extra)
+        self.assertIn("site_days=", r.extra)
 
 
 if __name__ == "__main__":
