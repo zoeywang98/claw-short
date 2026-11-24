@@ -16,11 +16,15 @@ and when they agree use DICloak's. The comparison and the choice live in layers.
   leaves the browser and what the tab shows does not change. JavaScript from Apple Events runs in an isolated world,
   whose cross-origin fetch works only without credentials:'include'.
 - Needs the DICloak profile with unusualwhales.com open (logged in) and View > Developer > Allow JavaScript from
-  Apple Events on in that window. With no unusualwhales.com tab, one is opened in the profile remembered in
-  .uwweb_state.json. Any problem raises WebUnavailable; the caller then uses the API alone.
+  Apple Events on in that window. Any unusualwhales.com page works (the login is in localStorage), so an open tab
+  is used as it is, light pages before the live large-trades feed. With no unusualwhales.com tab, a light one
+  (OPEN_PATH) is opened in the background in the profile remembered in .uwweb_state.json and closed again by close()
+  or at exit (ZZ 2026-11-24: "large-trades 这种吃内存的你fetch好就关了，不要一直开着占用内存"); tabs the person
+  opened are never closed. Any problem raises WebUnavailable; the caller then uses the API alone.
 """
 from __future__ import annotations
 
+import atexit
 import json
 import os
 import sys
@@ -32,7 +36,8 @@ from typing import Any, Dict, Optional
 
 SITE = "https://unusualwhales.com/"
 PHX = "https://phx.unusualwhales.com"
-OPEN_PATH = "large-trades"
+OPEN_PATH = "robots.txt"   # the page we open ourselves: plain text on the site's origin, next to no memory
+HEAVY = ("/large-trades",)  # live-feed pages (ZZ 2026-11-24): used only when nothing lighter is open, never opened
 DICLOAK_COMMON = os.environ.get("DICLOAK_COMMON", "/Users/yuwang/.openclaw/workspace-claw-general/dicloak_common")
 STATE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".uwweb_state.json")
 CHUNK = 200_000
@@ -92,8 +97,23 @@ class UWWeb:
     def __init__(self, open_tab: bool = True, state_file: str = STATE):
         self.open_tab, self.state_file = open_tab, state_file
         self.tab = None
+        self.opened = None   # the tab this object opened itself; close() closes it, nothing else is ever closed
+        self._atexit = False
         self.down: Optional[str] = None   # set once DICloak proved unusable: later calls fail fast
         self._lock = threading.RLock()
+
+    def close(self) -> None:
+        """Close the tab this object opened, if any (ZZ 2026-11-24: don't leave UW pages open eating memory).
+        Safe to call more than once; also registered to run at exit."""
+        with self._lock:
+            t, self.opened = self.opened, None
+            if t is not None and self.tab == t:
+                self.tab = None
+        if t is not None:
+            try:
+                _db().close_tab(t)
+            except Exception:   # already closed by hand, browser gone: nothing left to free
+                pass
 
     # -- the tab ---------------------------------------------------------------
     def _remembered(self) -> Optional[str]:
@@ -120,7 +140,7 @@ class UWWeb:
             raise WebUnavailable(f"could not list the DICloak tabs: {e}") from None
         uw = [t for t in tabs if t.url.startswith(SITE)]
         if uw:
-            uw.sort(key=lambda t: not t.url.startswith(SITE + OPEN_PATH))   # the large-trades tab first
+            uw.sort(key=lambda t: any(h in t.url for h in HEAVY))   # light pages first; a live feed only if alone
             self._remember(db, uw[0].pid)
             return uw[0]
         want = self._remembered()
@@ -128,20 +148,25 @@ class UWWeb:
         if pid is None or not self.open_tab:
             raise WebUnavailable("no unusualwhales.com tab in any open DICloak profile")
         try:
-            db.open_tab(pid, SITE + OPEN_PATH)
+            new = db.open_tab(pid, SITE + OPEN_PATH, background=True)   # the person's page stays in front
         except db.BrowserError as e:
             raise WebUnavailable(f"could not open an unusualwhales.com tab: {e}") from None
+        self.opened = new
+        if not self._atexit:
+            atexit.register(self.close)
+            self._atexit = True
         deadline = time.time() + OPEN_TAB_WAIT
         while time.time() < deadline:
-            time.sleep(2)
-            for t in db.list_tabs([pid], timeout=5):
-                if t.url.startswith(SITE):
-                    try:
-                        if db.run_js(t, "document.readyState === 'complete' && !!localStorage.getItem('app-session')",
-                                     timeout=10):
-                            return t
-                    except db.BrowserError:
-                        pass
+            time.sleep(1)
+            try:
+                if db.run_js(new, "document.readyState === 'complete' && !!localStorage.getItem('app-session')",
+                             timeout=10):
+                    return new
+            except db.TabGone:
+                break
+            except db.BrowserError:
+                pass
+        self.close()
         raise WebUnavailable("the new unusualwhales.com tab did not load a logged-in page")
 
     def _js(self, code: str, timeout: float = 15.0):
@@ -152,6 +177,8 @@ class UWWeb:
             try:
                 return db.run_js(self.tab, code, timeout=timeout, url_prefix=SITE)
             except db.TabGone:
+                if self.tab == self.opened:
+                    self.opened = None   # ours was closed by hand: nothing left for close() to do
                 self.tab = None   # closed or navigated off the site: look again once
             except (db.NotAuthorized, db.JavaScriptOff, db.NotAnswering) as e:
                 raise WebUnavailable(f"{type(e).__name__}: {e}") from None

@@ -415,6 +415,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         all_lines += lines
         say(f"[{i}/{len(tickers)}] {T}: core {core_ok}/{len(CORE_LAYERS)}, supplemental {sup_ok}/{sup_n} "
             f"({client.network_requests - before} requests)")
+    if web is not None:
+        web.close()   # a UW tab we opened goes as soon as the fetch is done (ZZ 2026-11-24); the person's tabs stay
 
     if (web is not None or store) and not args.no_alert:   # ZZ 2026-11-22 "如果有不一致的，@我提醒"
         from .dpalert import notify

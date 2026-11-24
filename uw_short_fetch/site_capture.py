@@ -108,6 +108,7 @@ def main(argv=None):
         note = dpalert.notify_items(items, datetime.now(NY))
         if note:
             print(note)
+    web.close()   # a UW tab we opened goes as soon as the capture is done (ZZ 2026-11-24); also runs at exit
     print(f"done · {len(tickers) - len(problems)}/{len(tickers)} names · {len(items)} sessions differ from the API · "
           f"UW API requests {client.network_requests}, cache hits {client.cache_hits}")
     return 1 if (problems or items) else 0

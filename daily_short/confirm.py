@@ -35,6 +35,25 @@ def verdict(text):
     return m.group(1).strip() if m else ""
 
 
+OI_LABEL = re.compile(r"→\s*(put 买开|call 写开|call 买开|put 写开|平仓|看不出)")
+OI_FLAG = " · ⚠ 次日 OI 没确认空头"
+
+
+def oi_flag(text):
+    """ZZ 2026-11-23 ("好的"): a ✅ whose next-day OI shows no bearish new position gets a warning at the end of its
+    结论 line; the tier is not changed. Same reading as the 10/19–11/20 test (analysis_data/backtest-2026-10-18/v3_live/
+    oi_2026-11-23): the Options Flow verdicts count as confirmed only when they are put 买开 / call 写开 and nothing
+    bullish; call 买开 / put 写开 / 平仓 / 看不出 or a mix are not. No verdict at all (OI missing) → no flag."""
+    m = re.search(r"^\*\*结论\*\*[:：].*$", text or "", re.M)
+    if not m or "✅" not in m.group(0) or "→ ⚪" in m.group(0) or OI_FLAG in m.group(0):
+        return text
+    sec = text.split("Options Flow", 1)[1].split("Dealer Positioning", 1)[0] if "Options Flow" in text else ""
+    labels = set(OI_LABEL.findall(sec))
+    if not labels or (labels & {"put 买开", "call 写开"} and not labels & {"call 买开", "put 写开"}):
+        return text
+    return text[:m.end()] + OI_FLAG + text[m.end():]
+
+
 def scan_names(L_date, only):
     log = os.path.join(HERE, "logs", L_date)
     out = []
@@ -223,6 +242,10 @@ def main(argv=None):
         with open(os.path.join(an_dir, f"{T}.json"), "w") as f:
             json.dump(L_round(data), f, ensure_ascii=False, separators=(",", ":"))
         r = claude(system, json.dumps(L_round(data), ensure_ascii=False))
+        if not r.get("is_error") and r.get("result"):
+            flagged = oi_flag(r["result"])
+            if flagged != r["result"]:
+                r["result_model"], r["result"] = r["result"], flagged   # keep the model's own text for audits
         with open(os.path.join(log_dir, f"{T}.reply.json"), "w") as f:
             json.dump(r, f, ensure_ascii=False, indent=1)
         if not r.get("is_error") and r.get("result"):
@@ -234,9 +257,10 @@ def main(argv=None):
 
     lines, problems = [], []
     for T, v, r in results:
-        new = verdict(r.get("result")) if not r.get("is_error") else f"昨晚 {v[:12]} → ❌ 确认失败"
-        lines.append(f"{T}：{new[:60]}")
-    header = (f"**盘前确认 · {D}**（{L_date} 收盘扫描的 {len(results)} 只，用今早公布的次日 OI 补齐 §6）\n" + "\n".join(lines))
+        new = verdict(r.get("result")) if not r.get("is_error") else f"{L_date[5:]} 收盘 {v[:12]} · ❌ 盘前确认失败"
+        lines.append(f"{T}：{new}")   # whole line: the cut used to drop the pre-market part (Olivia 2026-11-23)
+    header = (f"**盘前确认 · {D}**（{len(results)} 只的档位都是 {L_date[5:]} 收盘判的，盘前价不改档，今天收盘再判；"
+              f"今早只补次日 OI、今天的 gamma、借券和盘前价。\"⚠ 次日 OI 没确认空头\"只是提示，不改档）\n" + "\n".join(lines))
     print(header)
     if not a.dry_run:
         problems += post(header)

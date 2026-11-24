@@ -86,7 +86,7 @@ ZZ："同时 fetch darkpool centroid from dicloak and uw api，比较是否一�
   - 窗口的 `source`：用了网站自己的窗口表，或者窗口里每一天都是网站数，记 dicloak；否则记 api
 - 网站那几份存在 `raw/darkpool_levels_dicloak_<D>.json`。用了哪份记在 snapshot 的 `darkpool-levels.data.source_check`、`windows[w].source` 和 `per_day[D].source`。run_log 那一行末尾是 `src=<D>:dicloak(=api:1D/2D/3D/1W/1M)`（全部一致），或者 `src=<D>:dicloak(...)+api(...)`、`src=<D>:api`，后两种另起 note 说原因：DICloak 不可用、网站最新一天不是 D，或者两份不一致（几档不同、暗池量差多少、两边重心）。brief 不带这些字段，给模型的输入不变
 - 不一致时（两边都有数，成对重取后还是不同）在 #claw-short @ZZ（ZZ 2026-11-22："如果有不一致的，@我提醒"，`uwsf/dpalert.py`）。每次取数最多发一条，列出每只票哪个窗口、几档不同、暗池量差多少、两边重心、像不像时间差。同一只票同一天盘中、盘后各最多提醒一次，记在 `.dp_source_alerts.json`。DICloak 不可用、网站最新一天不是 D 这两种不提醒，只记在 run_log。`--no-alert` 关掉提醒；发帖失败只记在 run_log 开头的 note 里，不影响取数
-- 需要 DICloak 里那个 UW 的 profile 开着、已登录，并且那个窗口打开了 View > Developer > Allow JavaScript from Apple Events。没有 unusualwhales.com 标签页时，会在 `.uwweb_state.json` 记住的 profile 里开一个。任何一步不行都只用 API，不影响别的层
+- 需要 DICloak 里那个 UW 的 profile 开着、已登录，并且那个窗口打开了 View > Developer > Allow JavaScript from Apple Events。任何 unusualwhales.com 页面都能用（登录信息在 localStorage 里），有就直接用，先用轻的页面，large-trades 这种实时页面排在最后。一个都没有时，在 `.uwweb_state.json` 记住的 profile 里后台开一个 `robots.txt`（同一个网站下的纯文本页，几乎不占内存），取完就关；进程退出时也会关（ZZ 2026-11-24："large-trades 这种吃内存的你fetch好就关了，不要一直开着占用内存"）。人自己开的页面不关。11-24 实测：robots.txt 页取的 NVDA 1D / 2D 和 dashboard 页逐字节相同，开页 + 取数 4 秒。任何一步不行都只用 API，不影响别的层
 - `--asof` 时间点模式不取网站（网站只有最新一天）；`--no-dicloak` 关掉这一步。单独看网站某只票当天的数：`python3 -m uwsf.uwweb NVDA`
 
 ## 补充数据
