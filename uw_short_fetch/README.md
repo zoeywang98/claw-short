@@ -9,7 +9,7 @@
 
 ```bash
 cd uw_short_fetch
-python3 fetch.py                                      # 默认名单 23 个票，最近一个交易日
+python3 fetch.py                                      # 默认名单 24 个票，最近一个交易日
 python3 fetch.py --group optics,ai_infra              # 只跑指定分组
 python3 fetch.py --tickers NBIS,AXTI                  # 指定票（不用默认名单）
 python3 fetch.py --tickers NBIS --date 2026-09-24     # 历史日期（只提供实时数据的端点会记 FAIL）
@@ -25,7 +25,7 @@ API token 先读环境变量 `UW_API_TOKEN`，没有的话再读 `~/.openclaw/.e
 ## 默认名单（`uwsf/watchlist.py`）
 
 - optics 光模块/光学：LITE COHR AAOI GLW AEHR
-- ai_infra AI基建/电力：VRT NVT NBIS DELL FLEX
+- ai_infra AI基建/电力：VRT NVT NBIS DELL FLEX AMD（AMD 2026-11-24 加，ZZ "amd加列表里"）
 - software 软件/企服：MSFT META IBM NOW DDOG MDB
 - pharma 医药：MRK RVMD CRVS VKTX TEVA VTRS
 - commodity_etf 商品ETF：SLV

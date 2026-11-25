@@ -325,8 +325,8 @@ class Watchlist(unittest.TestCase):
     def test_default_list(self):
         from uwsf import watchlist as W
         all_t = W.tickers_of(W.resolve_groups())
-        self.assertEqual(len(all_t), 23)
-        self.assertEqual(len(set(all_t)), 23)
+        self.assertEqual(len(all_t), 24)   # AMD added 2026-11-24 (ZZ "amd加列表里")
+        self.assertEqual(len(set(all_t)), 24)
         self.assertTrue(all(t == t.upper() for t in all_t))
         self.assertEqual(W.tickers_of(W.resolve_groups("optics,商品ETF")), ["LITE", "COHR", "AAOI", "GLW", "AEHR", "SLV"])
         self.assertEqual(W.group_of("NBIS"), "AI基建/电力")

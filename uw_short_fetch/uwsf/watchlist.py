@@ -6,7 +6,7 @@ from typing import Dict, List
 # slug -> (label, tickers)
 WATCHLIST: Dict[str, Dict[str, object]] = {
     "optics": {"label": "光模块/光学", "tickers": ["LITE", "COHR", "AAOI", "GLW", "AEHR"]},
-    "ai_infra": {"label": "AI基建/电力", "tickers": ["VRT", "NVT", "NBIS", "DELL", "FLEX"]},
+    "ai_infra": {"label": "AI基建/电力", "tickers": ["VRT", "NVT", "NBIS", "DELL", "FLEX", "AMD"]},   # AMD: ZZ 2026-11-24 "amd加列表里"
     "software": {"label": "软件/企服", "tickers": ["MSFT", "META", "IBM", "NOW", "DDOG", "MDB"]},
     "pharma": {"label": "医药", "tickers": ["MRK", "RVMD", "CRVS", "VKTX", "TEVA", "VTRS"]},
     "commodity_etf": {"label": "商品ETF", "tickers": ["SLV"]},
