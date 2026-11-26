@@ -25,7 +25,7 @@ API token 先读环境变量 `UW_API_TOKEN`，没有的话再读 `~/.openclaw/.e
 ## 默认名单（`uwsf/watchlist.py`）
 
 - optics 光模块/光学：LITE COHR AAOI GLW AEHR
-- ai_infra AI基建/电力：VRT NVT NBIS DELL FLEX AMD（AMD 2026-11-24 加，ZZ "amd加列表里"）
+- ai_infra AI基建/电力：VRT NVT NBIS DELL FLEX AMD MU（AMD 2026-11-24 加，ZZ "amd加列表里"；MU 2026-11-25 加，ZZ "加上mu"）
 - software 软件/企服：MSFT META IBM NOW DDOG MDB
 - pharma 医药：MRK RVMD CRVS VKTX TEVA VTRS
 - commodity_etf 商品ETF：SLV
